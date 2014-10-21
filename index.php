@@ -8,13 +8,42 @@ if ((float)PCRE_VERSION<7.9)
 
 $f3->config('config.ini');
 
-//Home page
-$f3->route('GET /',
-    function() {
-        echo 'Hello, world!';
-    }
+//Codificacion
+$f3->set('ENCODING','UTF8');
+
+//Se declara la conexion a la base de datos
+$db=new DB\SQL(
+    'mysql:host=localhost;port=3306;dbname=reportame',
+    'root',
+    'sqlnetos'
 );
 
+//Admin Add
+$f3->route('GET /user/new',
+  function($f3) {
+  }
+);
+
+//Home page
+$f3->route('GET /',
+    function($f3) use  ($db) {
+	//Se indica que el contenido del template lo tomara de home.html
+	$f3->set('content','home.html');
+	
+	//Se realiza una consulta a la base de datos
+	//$f3->set('result',$db->exec('SELECT alias FROM usuario'));
+	
+	$user=new DB\SQL\Mapper($db,'usuario');
+	$user->load(array('alias=?','wolkmx'));
+	
+	$f3->set('nombre',$user);
+	
+	
+	echo Template::instance()->render('layout.html');
+	
+	
+    }
+);
 
 /*
 $f3->route('GET /',
