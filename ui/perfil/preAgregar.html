@@ -1,0 +1,31 @@
+<span class="error">{{ @flash }}</span>
+	<form id="agregar" name="agregar" action="perfilPost" method="post">
+		<span>Usuario/email: </span><input id="user_i" type="text" name="userEmail">
+		<span>Clave: </span><input id="clave_i" type="password" name="clave">
+		<input class="send" type="button" value="Enviar">
+	</form> 
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+ /*Codigo javascript para enviar los datos a la funcion correspondiente */
+	$(".send").click(function(){
+	//Se obtiene el formulario padre del boton
+	var form = $(this).closest("form");
+	//Se obtienen los datos del formulario seleccionado
+        var data = { type:form.attr('action'), user : $('#user_i').val(), clave :  $('#clave_i').val() };
+        
+        $.ajax({
+               type: 'POST',
+               url: form.attr('action'), 
+               data: data,
+               }).done(function(html){
+                       $( "#content" ).html( html );
+               });
+	        
+	});
+	
+});
+ 
+</script>

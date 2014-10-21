@@ -256,5 +256,176 @@ $f3->route('GET /userref',
 );
 */
 
+/**
+ * @author Oscar Galindez <oscarabreu19@gmail.com>
+ * @todo Controlador para el manejo del CRUD de la tabla 'perfiles'
+ */
+$f3->route('GET  @perfil: /perfil',
+	function($f3) use ($db) {
+    
+            //-- Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!
+            new Session();
+            
+            //-- Obtiene la peticion
+            $request = $f3->get("REQUEST");
+
+            /**
+             * Maneja las cuatro opciones 
+             * del CRUD
+             * ---
+             * 1:   Listar: muestra el contenido de la tabla 
+             *      con todos los registros
+             *      [En el caso de 'perfil' solo los perfiles 
+             *      del usuario en sesion] 
+             * -
+             * 2:   Pre-Agregar: monta un formulario vacio para 
+             *      agregar un nuevo registro
+             * -
+             * 3:   Agregar: carga en DB un nuevo registro
+             * -
+             * 4:   Consultar: se muestra el contenido
+             *      del registro previamente creado
+             * -
+             * 5:   Editar: modifica en BD el contenido en la 
+             *      vista 'Consultar' 
+             * -
+             * 6:   Pre-Eliminar: se muestra el contenido
+             *      del registro previamente creado sin 
+             *      opcion para modificar.
+             * -
+             * 7:   Eliminar: elimina en DB un registro 
+             *      seleccionado 
+             */
+            switch ( $request['menuOpc'] )
+            {
+                case '1':   //-- Listar
+                    
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //-- Se hace la consulta de la tabla
+                        $todosLosRegistros = $db->exec('SELECT * FROM perfil WHERE usuario_id= '. $f3->get('SESSION.id') .';');
+
+                        //-- Carga el arreglo de respuesta en 'SESSION'
+                        $f3->set( 'todosLosRegistros', $todosLosRegistros );
+
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+
+                        //-- Preparamos la vista
+                        $f3->set('content','perfil/index.html');
+                        $f3->set('menu','menu.html');
+                        echo Template::instance()->render('layout.html');
+
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
+                    break;
+
+                case '2':   //-- Pre-Agregar
+                    
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        // Inicializamos la variable
+                        $f3->set('flash',null);
+                        
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+
+                        //-- Preparamos la vista
+                        $f3->set('content','perfil/preAgregar.html');
+                        $f3->set('menu','menu.html');
+                        echo Template::instance()->render('layout.html');
+
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
+                    break;
+                
+                case '3':   //-- Agregar
+                    die('Agregar');
+                    break;
+                
+                case '4':   //-- Consultar
+                    die('Consultar');
+                    break;
+                
+                case '5':   //-- Editar
+                    die('Editar');
+                    break;
+                
+                case '6':   //-- Pre-Eliminar
+                    die('Pre-Eliminar');
+                    break;
+                
+                case '7':   //-- Eliminar
+                    die('Eliminar');
+                    break;
+                    
+                default:
+                    break;
+            }
+		
+	}
+);
+
+$f3->route('POST @perfilPost: /perfilPost [ajax]',
+	function($f3) use ($db){
+    
+		//Se obtienen los datos enviados por el formulario
+		$formulario = $f3->get("REQUEST");
+		
+		/*echo "<pre>";
+		print_r($formulario);
+		echo "</pre>";*/
+		
+		/*Se consulta la base de datos para ver si existe un usuario con este email y clave*/
+//		$usuario = $db->exec('SELECT * FROM Usuario WHERE (alias LIKE "'.$formulario['user'].'" OR email LIKE "'.$formulario['user'].'") AND password="'.$formulario['clave'].'"');
+		
+		$f3->set('flash',Null);
+                
+                $f3->set('flash','Usuario o clave incorrecta');
+                echo Template::instance()->render('/pane/preAgregar.html');
+		
+//		if(count($usuario)){
+//			//Si encuentra el usuario se inicia la sesion con los datos del usuario.
+//			new Session();
+//			
+//			$f3->set('SESSION.user',$usuario[0]['alias']);
+//			$f3->set('SESSION.id',$usuario[0]['idUsuario']);
+//			
+//			//echo "--".$f3->get('SESSION.user')."--";
+//			
+//			//Se redirige al usuario a la ruta de panel de control
+//			//$f3->reroute('@miPanel'); 
+//			echo '<script language="javascript" type="text/javascript">window.location.href="mipanel/";</script>';
+//			
+//		}else{
+//		//Si no encuentra el usuario volvera a mostrar el formulario con un mensaje de advertencia llamado flash
+//			$f3->set('flash','Usuario o clave incorrecta por favor ingrese los datos nuevamente');
+//			echo Template::instance()->render('loginform.html');
+//
+//		}
+	}
+);
 
 $f3->run();
