@@ -1,0 +1,46 @@
+<span id="tabs_registr_sesion">
+	<span>Login</span>
+	<span>Registrarse</span>
+</span>
+<div id="iniciar">
+<span class="error">{{ @flash }}</span>
+	<form id="registro_form" name="inicio_sesion" action="iniciarsesion" method="post">
+		<span>Usuario/email: </span><input id="user_i" type="text" name="userEmail">
+		<span>Clave: </span><input id="clave_i" type="password" name="clave">
+		<input class="send" type="button" value="Enviar">
+	</form> 
+</div>
+<div id="registrarse">
+	<form name="registro_sesion" action="registrousuario" method="post">
+		<span>Usuario: </span><input id="user_r" type="text" name="user">
+		<span>Email: </span><input id="email_r" type="text" name="email">
+		<span>Clave: </span><input id="clave_r" type="password" name="clave">
+		<input class="send" type="button" value="Enviar">
+	</form> 
+</div>	
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+ /*Codigo javascript para enviar los datos a la funcion correspondiente */
+	$(".send").click(function(){
+	//Se obtiene el formulario padre del boton
+	var form = $(this).closest("form");
+	//Se obtienen los datos del formulario seleccionado
+	if(form.attr('action') == "registrousuario"){
+		var data = { type:form.attr('action'), user : $('#user_r').val(), clave :  $('#clave_r').val(), email: $('#email_').val() };	
+	}else{
+		var data = { type:form.attr('action'), user : $('#user_i').val(), clave :  $('#clave_i').val() };	
+	}
+		 $.ajax({
+			type: 'POST',
+			url: form.attr('action'), 
+			data: data,
+			}).done(function(html){
+				$( "#content" ).html( html );
+			});
+	});
+	
+});
+ 
+</script>	

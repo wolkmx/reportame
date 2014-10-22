@@ -1,16 +1,33 @@
 <h1>Bienvenido a la pagina inicial</h1>
+<p><a class="form_inicio_registro" id="iniciof" href="#">Iniciar Sesion</a></p>
+<p><a class="form_inicio_registro" id="registrof" href="#">Registrarse</a></p>
+
+<div id="content"></div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+ /*Codigo javascript para refrescar la seccion principal "content" para mostrar el formulario de registro/inicio de sesion */
+	$(".form_inicio_registro").click(function(){
+		 $.ajax({
+			type: 'POST',
+			url: '/login', 
+			}).done(function(html){
+				$( "#content" ).html( html );
+			});
+	});
+	
+	
+});
+ 
+</script>
+
 <p><a href="#" >Registrarte como usuario normal</a></p>
 <p><a href="#">Registrate como usuario gobierno</a></p>
 
 {{ @nombre->email }}
 
-<p>
-Inicia sesion
-	<form>
-	Usuario: <input type="text" label="usuario"/>
-	Clave: <input type="text" label="clave"/>
 
-
-	</form>
-</p>
 
