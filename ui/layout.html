@@ -10,7 +10,11 @@
 		<script src="ui/js/jquery-2.1.1.min.js"></script>
 	</head>
 	<body>
+	<check if="{{ @usuario !== '' }}">
+		<true><include href="{{ @menu }}" /></true>
+	</check>
 		<include href="{{ @content }}" />
+		
 	</body>
 	<footer>
 		El footer

@@ -15,6 +15,7 @@
 		<span>Usuario: </span><input id="user_r" type="text" name="user">
 		<span>Email: </span><input id="email_r" type="text" name="email">
 		<span>Clave: </span><input id="clave_r" type="password" name="clave">
+		<span>Repita su clave: </span><input id="rclave_r" type="password" name="rclave">
 		<input class="send" type="button" value="Enviar">
 	</form> 
 </div>	
@@ -28,7 +29,7 @@ $(document).ready(function(){
 	var form = $(this).closest("form");
 	//Se obtienen los datos del formulario seleccionado
 	if(form.attr('action') == "registrousuario"){
-		var data = { type:form.attr('action'), user : $('#user_r').val(), clave :  $('#clave_r').val(), email: $('#email_').val() };	
+		var data = { type:form.attr('action'), user : $('#user_r').val(), clave :  $('#clave_r').val(), email: $('#email_r').val() };
 	}else{
 		var data = { type:form.attr('action'), user : $('#user_i').val(), clave :  $('#clave_i').val() };	
 	}
