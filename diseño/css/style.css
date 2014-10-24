@@ -1,0 +1,112 @@
+body{
+	padding: 0;
+	margin: 0;
+	font-family: 'Roboto';
+}
+
+.bck-parallax{
+	
+	background-attachment:fixed;
+	background-repeat: no-repeat; 
+	background-size:cover;
+	background-position: center;
+
+}
+.alto{
+	min-height: 700px;
+	background-image: url(../images/fondo.jpg);
+}
+
+.azul{
+background-color: #108dd1;
+height: 500px;
+}
+h1{
+	font-weight: 500;
+	color: whitesmoke;
+	font-size: 40px;
+	text-align: center;
+}
+.espacio{
+padding: 60px 0;
+box-sizing:border-box;
+}
+
+.medio{
+    margin-top: 46px;
+    text-align: center;
+}
+.pt20{
+	padding-top: 60px;
+} 
+
+.navbar{
+background-color: #353535 !important;
+opacity: 0.8;
+ min-height: 97px;
+}
+
+.color-grande{
+background-color: whitesmoke;
+width: 40%;
+text-align: center;
+margin: 10px auto;
+
+}
+
+#mapa{
+	height: 500px;
+		background-image: url(../images/mapa.jpg);
+}
+
+.usuarios{
+	background-image: url("../images/avila.jpg");
+	min-height: 500px;
+}
+
+.tipografia h3{
+	color: whitesmoke;
+	font-weight: 500;
+	font-size: 35px;
+	
+}
+
+.usuario1{
+    background-color: #108dd1;
+}
+
+.lai{
+	font-weight: 300;
+}
+
+.container a{
+	text-decoration: none;
+}
+
+.usuario2{
+	background-color: #38ff00;
+
+}
+
+.color-fondo{
+opacity: 0.7;
+ padding: 20px 0;
+text-align: center;
+}
+
+.color-fondo:hover{
+	opacity: 1;
+}
+.usuario3{
+	background-color: #db2209;
+}
+
+#moverlo{
+	position: relative;
+}
+
+.navbar-default .navbar-nav > li > a {
+	color: whitesmoke !important;
+	font-size: 17px;
+}
+
