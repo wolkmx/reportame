@@ -53,7 +53,25 @@ $f3->route('GET @home: /',
 	
 	$f3->set('nombre',$user);
 	
+	//Consulta a la base de datos para obtener una lista con los eventos
 	
+	$fechainicial = date ("Y-m-d H:i:s",time());
+	$fechaanterior = date('Y-m-d H:i:s', strtotime('-1 day', strtotime( date("Y-m-d H:i:s",time()) )));
+	
+	$eventos = $db->exec('SELECT e.*, p.* FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil WHERE (e.created_at BETWEEN "'.$fechaanterior.'" AND "'.$fechainicial.'")');
+	
+	$f3->set('eventosrecientes',$eventos);
+	
+	//echo count($eventos);
+	/*foreach($eventos as $evento):
+		echo $evento['idEvento'];
+	endforeach;
+	
+	
+	echo "<pre>";
+	print_r($eventos);
+	echo "</pre>";
+	die();*/
 	echo Template::instance()->render('layout.html');
 	
 	

@@ -29,5 +29,57 @@ $(document).ready(function(){
 
 {{ @nombre->email }}
 
+<div id="map" style="height:380px;"></div>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+var eventosrecientes = [];
+
+	<repeat group="{{ @eventosrecientes }}" key="{{ @k }}" value="{{ @evento }}">
+	eventosrecientes[{{ @k }}]=[];
+		<repeat group="{{ @evento }}" key = "{{ @key }}" value="{{ @atributo }}">
+			 eventosrecientes[{{ @k }}]["{{ @key }}"] = "{{ @atributo }}";
+		</repeat>
+	</repeat>
+
+//alert(eventosrecientes[0]["firtsName"]);
+//alert(eventosrecientes["eventos"][0]["idEvento"]);
+
+
+	//Se inicializa el mapa para mostrarlo en una posicion generica para que se vea latinoamerica
+	var map = null;
+	var osmUrl = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+							osmAttribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+							osm = new L.TileLayer(osmUrl, {maxZoom: 18, attribution: osmAttribution});
+				
+	var mapLayer = new L.TileLayer(osmUrl);
+	
+	map = new L.Map('map').setView([ 14.216108846888353, -81.123046875], 5);;
+	map.addLayer(mapLayer);
+	
+	//Se obtiene la posicion del usuario desde el navegador y se coloca el mapa en ese punto
+	map.locate({setView : true, maxZoom : 15});
+	
+	//Se deben agregar los ultimos 10 eventos en markers 
+
+	//alert(eventosrecientes[0]["lat"]);
+	
+	for (index = 0; index < eventosrecientes.length; ++index) {
+		var marker = L.marker([eventosrecientes[index]["lat"], eventosrecientes[index]["lon"]]).addTo(map);
+	}
+	
+	/* Funcion para obtener latitud y longitud del mapa
+	map.on('click', function(e) {
+		alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng);
+	});*/
+	
+});	
+
+
+
+</script>
+
 
 
