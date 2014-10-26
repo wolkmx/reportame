@@ -11,10 +11,23 @@
 	<span id='cerrar_datos_reporte_home' style='display:none;'>Cerrar</span>
 </div>
 
-<div id="map" style="height:380px;"></div>
+<div id='mapa'>
+
+	<div id='search_home'>
+		<input id='search_home_input' name='search' input type="text" x-webkit-speech />
+		<input id='search_home_send' type='button' value='Buscar' />
+	</div>
+
+	<div id="map" style="height:380px;"></div>
+
+
+</div>
+
 
 <script type="text/javascript">
-
+//Se declaran globalmente los markers y el mapa para que pueda ser referenciado a lo largo de los scripts
+var evento = [];
+var map = null;
 $(document).ready(function(){
 
 
@@ -43,7 +56,7 @@ var eventosrecientes = [];
 
 
 	//Se inicializa el mapa para mostrarlo en una posicion generica para que se vea latinoamerica
-	var map = null;
+	
 	var osmUrl = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
 							osmAttribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
 							osm = new L.TileLayer(osmUrl, {maxZoom: 18, attribution: osmAttribution});
@@ -60,24 +73,25 @@ var eventosrecientes = [];
 
 	//alert(eventosrecientes[0]["lat"]);
 	
-	var evento = [];
+	//var evento = [];
 	var index;
 
 	for (index = 0; index < eventosrecientes.length; ++index) {
 
-	//Se crea una instancia del indice para que este dentro del contexto de la variable	
-	var i = index;
-	//Se crea un marker para indicar los eventos encontrados, se le agrega el titulo del tipo de evento y la enfermedad y se agrega un on clic para mostrar el div con la informacion del evento
-	/*evento[index] = L.marker([eventosrecientes[index]["lat"], eventosrecientes[index]["lon"]],{ title: eventosrecientes[index]["categoriaName"]+': '+eventosrecientes[index]["name"] }).addTo(map).on('click', function(){ 
-			$('#info_evento_home').html(eventosrecientes[i]["name"] );
-		 } );*/
+		//Se crea una instancia del indice para que este dentro del contexto de la variable	
+		var i = index;
+		//Se crea un marker para indicar los eventos encontrados, se le agrega el titulo del tipo de evento y la enfermedad y se agrega un on clic para mostrar el div con la informacion del evento
+		/*evento[index] = L.marker([eventosrecientes[index]["lat"], eventosrecientes[index]["lon"]],{ title: eventosrecientes[index]["categoriaName"]+': '+eventosrecientes[index]["name"] }).addTo(map).on('click', function(){ 
+				$('#info_evento_home').html(eventosrecientes[i]["name"] );
+			 } );*/
 
-evento[index] = L.marker([eventosrecientes[index]["lat"], eventosrecientes[index]["lon"]],{ title: eventosrecientes[index]["categoriaName"]+': '+eventosrecientes[index]["name"] }).addTo(map);
+		evento[index] = L.marker([eventosrecientes[index]["lat"], eventosrecientes[index]["lon"]],{ title: eventosrecientes[index]["categoriaName"]+': '+eventosrecientes[index]["name"] }).addTo(map);
 		
 evento[index].indice = index;
 
 
 	}
+
 	for(var j = 0; j < eventosrecientes.length; j++){
 	
 	evento[j].on('click', function(){ 
@@ -96,6 +110,7 @@ evento[index].indice = index;
 		*/
 		var contenido =  "<ul><li><span class='titulo_dato_home'>Tipo de reporte:<span> "+eventosrecientes[this.indice]['categoriaName']+"</li><li><span class='titulo_dato_home'>Enfermedad:<span> "+eventosrecientes[this.indice]['name']+"</li><li><span class='titulo_dato_home'>Usuario que Reporta:<span> "+eventosrecientes[this.indice]['alias']+"</li><li><span class='titulo_dato_home'>Reportado el:<span> "+eventosrecientes[this.indice]['created_at']+"</li></ul>";
 			/*$('#info_evento_home img').fadeIn();*/
+			$('#info_evento_home').css('height','0px');
 			$('#info_evento_home').css('height','135px');
 			$('#cerrar_datos_reporte_home').fadeIn('slow');
 			$('#datos_reporte_home').html(contenido);
