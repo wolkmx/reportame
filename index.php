@@ -58,7 +58,9 @@ $f3->route('GET @home: /',
 	$fechainicial = date ("Y-m-d H:i:s",time());
 	$fechaanterior = date('Y-m-d H:i:s', strtotime('-1 day', strtotime( date("Y-m-d H:i:s",time()) )));
 	
-	$eventos = $db->exec('SELECT e.*, p.* FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil WHERE (e.created_at BETWEEN "'.$fechaanterior.'" AND "'.$fechainicial.'")');
+	//Se hace una consulta para recuperar el evento, el perfil, la categoria y la enfermedad, asi como el usuario
+	//Esta consulta se debe simplificar solo obtener la informacion del evento y luego con ajax hacer una consulta especifica cuando se de clic en el evento.
+	$eventos = $db->exec('SELECT e.*, p.*, en.name, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario WHERE (e.created_at BETWEEN "'.$fechaanterior.'" AND "'.$fechainicial.'")');
 	
 	$f3->set('eventosrecientes',$eventos);
 	
@@ -72,6 +74,7 @@ $f3->route('GET @home: /',
 	print_r($eventos);
 	echo "</pre>";
 	die();*/
+
 	echo Template::instance()->render('layout.html');
 	
 	
