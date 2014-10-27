@@ -1,0 +1,9 @@
+/*Hoja de estilo temporal para el home*/
+
+#search_home{
+	display: block;
+	margin-left: 55px;
+	margin-top: 9px;
+	position: absolute;
+	z-index: 1000;
+}
