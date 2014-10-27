@@ -12,12 +12,31 @@ $(document).ready(function(){
 	$('#search_home_send').click(function(){
 		
 		//Obtengo el valor que escribo la persona en el campo, elimino espacios y lo convierno a mayusculas
-		var busqueda = (($('#search_home_input').val()).trim()).toUpperCase();
+		var busqueda = (($('#search_home_input').val()).trim()).toUpperCase(); 
+		
 		//Si al menos tiene mas de tres letras buscare
 		if(busqueda.length > 3){
-			$('#info_evento_home').css('height','0px');
+			
 			//Se envia la cadena a un controlador para que busque solo los marcadores correspondientes
-			var data = { busquedaajax : busqueda };
+			/*@todo falta optimizar esta declaracion*/
+			var data = { busquedaajax : busqueda, ciudadano: 1, gobierno: 0 };
+		
+			$('#info_evento_home').css('height','0px');
+			
+			/*Se revisa si estan seleccionados los botones de ciudadano y gobierno*/
+			if( $("#search_ciudadano").is(':checked') &&  $("#search_gobierno").is(':checked')) {  
+				data = { busquedaajax : busqueda, ciudadano: 1, gobierno: 1 };
+			} else {  
+				//Si no estan los dos seleccionados se debe verificar cual de los dos esta seleccionado para buscarlo
+				if($("#search_gobierno").is(':checked')){
+					data = { busquedaajax : busqueda, ciudadano: 0, gobierno: 1 };
+				}else{
+					$("#search_ciudadano").attr('checked', true);  
+				}
+				 
+			} 
+			
+			
 			$.ajax({
 			type: 'POST',
 			data: data,

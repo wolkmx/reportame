@@ -186,7 +186,22 @@ $f3->route('POST @busquedaHome: /busquedaHome [ajax]',
 		$fechaanterior = date('Y-m-d H:i:s', strtotime('-1 day', strtotime( date("Y-m-d H:i:s",time()) )));
 //echo $busqueda['busquedaajax'];
 //die();
-		$eventos = $db->exec('SELECT e.*, p.*, en.name, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario WHERE (e.created_at BETWEEN "'.$fechaanterior.'" AND "'.$fechainicial.'") AND UPPER(en.name) LIKE "'.$busqueda['busquedaajax'].'"');
+		
+		//Se revisa si se buscara reportes solo de ciudadano y gobierno
+		$tipousuario = "";
+		
+		if($busqueda['ciudadano'] && $busqueda['gobierno']){
+			$tipousuario .= 'AND (u.tipoUsuario = 2 OR u.tipoUsuario = 3) ';
+		}else{
+			if($busqueda['ciudadano']){
+			$tipousuario .= 'AND u.tipoUsuario = 2 ';
+			}
+			if($busqueda['gobierno']){
+				$tipousuario .= 'AND u.tipoUsuario = 3 ';
+			}
+		}
+		
+		$eventos = $db->exec('SELECT e.*, p.*, en.name, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario WHERE (e.created_at BETWEEN "'.$fechaanterior.'" AND "'.$fechainicial.'") AND UPPER(en.name) LIKE "'.$busqueda['busquedaajax'].'" '.$tipousuario);
 	
 	//Se inicia la cadena con el formato de json
 	$objetojson = '{"objeto": [{';
