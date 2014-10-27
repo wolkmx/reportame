@@ -53,7 +53,28 @@ $f3->route('GET @home: /',
 	
 	$f3->set('nombre',$user);
 	
+	//Consulta a la base de datos para obtener una lista con los eventos
 	
+	$fechainicial = date ("Y-m-d H:i:s",time());
+	$fechaanterior = date('Y-m-d H:i:s', strtotime('-1 day', strtotime( date("Y-m-d H:i:s",time()) )));
+	
+	//Se hace una consulta para recuperar el evento, el perfil, la categoria y la enfermedad, asi como el usuario
+	//Esta consulta se debe simplificar solo obtener la informacion del evento y luego con ajax hacer una consulta especifica cuando se de clic en el evento.
+	$eventos = $db->exec('SELECT e.*, p.*, en.name, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario WHERE (e.created_at BETWEEN "'.$fechaanterior.'" AND "'.$fechainicial.'")');
+	
+	$f3->set('eventosrecientes',$eventos);
+	
+	//echo count($eventos);
+	/*foreach($eventos as $evento):
+		echo $evento['idEvento'];
+	endforeach;
+	
+	
+	echo "<pre>";
+	print_r($eventos);
+	echo "</pre>";
+	die();*/
+
 	echo Template::instance()->render('layout.html');
 	
 	
@@ -147,6 +168,73 @@ $f3->route('POST @registrousuario: /registrousuario [ajax]',
 		echo '<script language="javascript" type="text/javascript">window.location.href="mipanel/";</script>'; 
 	}
 );
+
+
+/*Ruta para recibir la peticion ajax para buscar una enfermedad en especifico y refrescar el mapa*/
+$f3->route('POST @busquedaHome: /busquedaHome [ajax]',
+	function($f3) use ($db) {
+		$busqueda = $f3->get("REQUEST");
+		
+		/*echo "<pre>";
+		print_r($busqueda);
+		echo "</pre>";
+		die();*/
+
+		//Consulta a la base de datos para obtener una lista con los eventos
+	
+		$fechainicial = date ("Y-m-d H:i:s",time());
+		$fechaanterior = date('Y-m-d H:i:s', strtotime('-1 day', strtotime( date("Y-m-d H:i:s",time()) )));
+//echo $busqueda['busquedaajax'];
+//die();
+		
+		//Se revisa si se buscara reportes solo de ciudadano y gobierno
+		$tipousuario = "";
+		
+		if($busqueda['ciudadano'] && $busqueda['gobierno']){
+			$tipousuario .= 'AND (u.tipoUsuario = 2 OR u.tipoUsuario = 3) ';
+		}else{
+			if($busqueda['ciudadano']){
+			$tipousuario .= 'AND u.tipoUsuario = 2 ';
+			}
+			if($busqueda['gobierno']){
+				$tipousuario .= 'AND u.tipoUsuario = 3 ';
+			}
+		}
+		
+		$eventos = $db->exec('SELECT e.*, p.*, en.name, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario WHERE (e.created_at BETWEEN "'.$fechaanterior.'" AND "'.$fechainicial.'") AND UPPER(en.name) LIKE "'.$busqueda['busquedaajax'].'" '.$tipousuario);
+	
+	//Se inicia la cadena con el formato de json
+	$objetojson = '{"objeto": [{';
+	//Se obitnene la longitud de la columna
+	$lastKey = count($eventos)-1;
+
+	foreach($eventos as $k => $evento):
+		$objetojson.= '"'.$k.'":[{';
+		//Se obtiene el total de keys
+		$lastKeyinner = count($evento)-1;
+		$aux = 0;
+		foreach($evento as $key => $event ):
+			//Se inicializa
+			$objetojson.='"'.$key.'":"'.$event.'"';
+			if($lastKeyinner != $aux){
+				$objetojson.= ',';
+			}
+			$aux++;
+		endforeach;
+		$objetojson.= '}]';
+		if($k != $lastKey){
+			$objetojson.= ',';
+		}
+	endforeach;
+	$objetojson .= '}],"length":"'.count($eventos).'"}';
+//die();
+	echo $objetojson;
+
+	}
+);
+
+/*----*/
+
 
 /*Ruta para mostrar al usuario su panel de control*/
 $f3->route('GET  @miPanel: /mipanel',
