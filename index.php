@@ -273,6 +273,24 @@ $f3->route('GET  @logout: /logout',
 	}
 );
 
+/*Ruta para cerrar la seccion quienes somos */
+$f3->route('GET  @quienessomos: /quienessomos',
+	function($f3) {
+	
+		//Se indica que el contenido del template lo tomara de home.html
+		$f3->set('content','quienessomos.html');
+		
+		/*Se obtiene el arreglo de la sesion para saber si existe el key user*/
+	$sesion = $f3->get('SESSION');
+	/*Si no existe se declara nula*/
+	if(!array_key_exists("user",$sesion)){
+		$f3->set('usuario','');
+	}
+		
+		echo Template::instance()->render('layout.html');
+	}
+);
+
 /*
 $f3->route('GET /',
 	function($f3) {

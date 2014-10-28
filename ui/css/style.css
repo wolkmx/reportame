@@ -19,7 +19,7 @@ body{
 
 .azul{
 background-color: #108dd1;
-height: 500px;
+min-height: 500px;
 }
 h1{
 	font-weight: 500;
@@ -27,8 +27,19 @@ h1{
 	font-size: 40px;
 	text-align: center;
 }
+
+
+
+
+.mb20{
+	margin-bottom: 58px !important;
+}
 .espacio{
 padding: 60px 0;
+box-sizing:border-box;
+}
+.espacio1{
+padding: 60px 20px;
 box-sizing:border-box;
 }
 
@@ -107,6 +118,12 @@ opacity: 0.7;
 text-align: center;
 }
 
+.color-dos{
+	opacity: 0.7;
+ padding: 20px 0;
+text-align: center;
+}
+
 .color-fondo:hover{
 	opacity: 1;
 }
@@ -147,7 +164,9 @@ text-align: center;
 .information p{
 	font-size: 23px;
 }
-
+.ocultar{
+	display: none;
+}
 
 .sprite{
     background-image: url("../images/socialmedia.png");
@@ -172,19 +191,67 @@ footer{
 background-color:#999999;
 color:whitesmoke;
 margin:40px 0 0 auto;
-  padding: 20px 40px;
+padding: 20px 40px;
+  text-align: center;
+}
+
+footer .container img{
+	margin: auto;
 }
 
 @media (max-width: 767px) {
-#mapa{
-width:80%;
-margin:auto;
-}
+	#mapa{
+	width:80%;
+	margin:auto;
+	}
 
 	.medio {
-	margin-top:0;
-	
-font-size: 34px;
+	top:0;	
+	font-size: 34px;
+	}
 }
+
+/*QUIENES SOMOS*/
+.imagen-quienes{
+    background-image: url("../images/quienessomos.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    min-height: 500px;
 }
+
+.contenedor-quienes{
+	position: relative;
+}
+
+.contenedor-quienes h2{
+    color: whitesmoke;
+    font-family: arial;
+    font-size: 40px;
+    font-weight: bold;
+    position: absolute;
+    text-shadow: 4px 2px 2px #000;
+    top: 228px;
+}
+
+.bl2{
+	border-left: 2px solid #fff;
+}
+
+.informacion{
+	color: whitesmoke;
+	font-family: roboto;
+	font-weight: 100;
+	font-size: 28px;
+	text-align: justify;
+}
+h4{
+	font-family: 'Roboto';
+	font-weight: 500;
+	font-size: 40px;
+	text-align: center;
+	margin-bottom: 84px;
+}
+
+
+
 
