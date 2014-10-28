@@ -238,15 +238,26 @@ $f3->route('POST @busquedaHome: /busquedaHome [ajax]',
 
 /*Ruta para mostrar al usuario su panel de control*/
 $f3->route('GET  @miPanel: /mipanel',
-	function($f3) {
+	function($f3) use ($db) {
 	/*Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!*/
 	new Session();
 	//echo "--".$f3->get('SESSION.user')."--";
 		/*Se verifica si el usuario tiene la sesion iniciada*/
 		if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user'))){
 			$f3->set('content','panel/paneldecontrol.html');
+			$f3->set('formularioreporte','panel/formularioreporte.html');
 			$f3->set('menu','menu.html');
 			$f3->set('usuario',$f3->get('SESSION.user'));
+			
+			//Consulta a la base de datos para obtener una lista con los eventos
+			$fechainicial = date ("Y-m-d H:i:s",time());
+			$fechaanterior = date('Y-m-d H:i:s', strtotime('-1 day', strtotime( date("Y-m-d H:i:s",time()) )));
+			
+			//Se hace una consulta para recuperar el evento, el perfil, la categoria y la enfermedad, asi como el usuario
+			//Esta consulta se debe simplificar solo obtener la informacion del evento y luego con ajax hacer una consulta especifica cuando se de clic en el evento.
+			$eventos = $db->exec('SELECT e.*, p.*, en.name, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario WHERE (e.created_at BETWEEN "'.$fechaanterior.'" AND "'.$fechainicial.'")');
+			
+			$f3->set('eventosrecientes',$eventos);
 			
 			echo Template::instance()->render('layout.html');
 		}else{
