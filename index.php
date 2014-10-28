@@ -260,7 +260,7 @@ $f3->route('GET /userref',
  * @author Oscar Galindez <oscarabreu19@gmail.com>
  * @todo Controlador para el manejo del CRUD de la tabla 'perfiles'
  */
-$f3->route('GET  @perfil: /perfil',
+$f3->route('GET|POST @perfil: /perfil',
 	function($f3) use ($db) {
     
             //-- Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!
@@ -268,7 +268,7 @@ $f3->route('GET  @perfil: /perfil',
             
             //-- Obtiene la peticion
             $request = $f3->get("REQUEST");
-
+            
             /**
              * Maneja las cuatro opciones 
              * del CRUD
@@ -303,8 +303,11 @@ $f3->route('GET  @perfil: /perfil',
                     //-- Se verifica si el usuario tiene la sesion iniciada
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
-                        //-- Se hace la consulta de la tabla
-                        $todosLosRegistros = $db->exec('SELECT * FROM perfil WHERE usuario_id= '. $f3->get('SESSION.id') .';');
+                        //-- Se arma la consulta
+                        $consulta = 'SELECT * FROM perfil WHERE usuario_id= '. $f3->get('SESSION.id') .';';
+                        
+                        //-- Se hace la consulta
+                        $todosLosRegistros = $db->exec( $consulta );
 
                         //-- Carga el arreglo de respuesta en 'SESSION'
                         $f3->set( 'todosLosRegistros', $todosLosRegistros );
@@ -362,15 +365,154 @@ $f3->route('GET  @perfil: /perfil',
                     break;
                 
                 case '3':   //-- Agregar
-                    die('Agregar');
+                    
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //--    Fijamos la fecha
+                        $fecha = date("Y-m-d H:i:s");
+                        
+                        //--    Llama al modelo
+                        $f3->set('perfil',new DB\SQL\Mapper($db,'perfil'));
+                        
+                        //--    Cargamos los valores que tenemos del formulario
+                        $f3->get('perfil')->copyFrom('POST');
+                        
+                        //--    Agrega datos que no vienen del
+                        //      formulario pero que son necesarios
+                        $f3->get('perfil')->set('usuario_id',$f3->get('SESSION.id'));
+                        $f3->get('perfil')->set('updated_at',$fecha);
+                        $f3->get('perfil')->set('created_at',$fecha);
+                        
+                        //--    Salva en BD
+                        $f3->get('perfil')->save();
+                        
+                        //-- Prepara los datos para la vista
+                        $f3->get('perfil')->copyTo('POST');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash','El perfil fue creado satisfactoriamente');
+                        
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+                        
+                        //-- Preparamos la vista
+                        $f3->set('content','perfil/preEditar.html');
+                        
+                        //-- Agrega el menu
+                        $f3->set('menu','menu.html');
+                        
+                        //-- Llama a la vista
+                        echo Template::instance()->render('layout.html');
+
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
                     break;
                 
                 case '4':   //-- Consultar
-                    die('Consultar');
+
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //-- Llama al modelo
+                        $f3->set('perfil',new DB\SQL\Mapper($db,'perfil'));
+
+                        //-- Carga al objeto
+                        $f3->get('perfil')->load(array('idPerfil=?',$request['id']));
+
+                        //-- Prepara los datos para la vista
+                        $f3->get('perfil')->copyTo('POST');
+
+                        // Inicializamos la variable
+                        $f3->set('flash',NULL);
+
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+
+                        //-- Preparamos la vista
+                        $f3->set('content','perfil/preEditar.html');
+
+                        //-- Agrega el menu
+                        $f3->set('menu','menu.html');
+
+                        //-- Llama a la vista
+                        echo Template::instance()->render('layout.html');
+
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
                     break;
                 
                 case '5':   //-- Editar
-                    die('Editar');
+                
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //--    Llama al modelo
+                        $f3->set('perfil',new DB\SQL\Mapper($db,'perfil'));
+                        
+                        //-- Carga al objeto
+                        $f3->get('perfil')->load(array('idPerfil=?',$request['id']));
+                        
+                        //--    Cargamos los valores que tenemos del formulario
+                        $f3->get('perfil')->copyFrom('POST');
+                        
+                        //--    Agrega datos que no vienen del
+                        //      formulario pero que son necesarios
+                        $f3->get('perfil')->set('updated_at',date("Y-m-d H:i:s"));
+                        
+                        //--    Salva en BD
+                        $f3->get('perfil')->save();
+                        
+                        //-- Prepara los datos para la vista
+                        $f3->get('perfil')->copyTo('POST');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash','El perfil fue creado satisfactoriamente');
+                        
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+                        
+                        //-- Preparamos la vista
+                        $f3->set('content','perfil/preEditar.html');
+                        
+                        //-- Agrega el menu
+                        $f3->set('menu','menu.html');
+                        
+                        //-- Llama a la vista
+                        echo Template::instance()->render('layout.html');
+                        
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
                     break;
                 
                 case '6':   //-- Pre-Eliminar
@@ -385,46 +527,6 @@ $f3->route('GET  @perfil: /perfil',
                     break;
             }
 		
-	}
-);
-
-$f3->route('POST @perfilPost: /perfilPost [ajax]',
-	function($f3) use ($db){
-    
-		//Se obtienen los datos enviados por el formulario
-		$formulario = $f3->get("REQUEST");
-		
-		/*echo "<pre>";
-		print_r($formulario);
-		echo "</pre>";*/
-		
-		/*Se consulta la base de datos para ver si existe un usuario con este email y clave*/
-//		$usuario = $db->exec('SELECT * FROM Usuario WHERE (alias LIKE "'.$formulario['user'].'" OR email LIKE "'.$formulario['user'].'") AND password="'.$formulario['clave'].'"');
-		
-		$f3->set('flash',Null);
-                
-                $f3->set('flash','Usuario o clave incorrecta');
-                echo Template::instance()->render('/pane/preAgregar.html');
-		
-//		if(count($usuario)){
-//			//Si encuentra el usuario se inicia la sesion con los datos del usuario.
-//			new Session();
-//			
-//			$f3->set('SESSION.user',$usuario[0]['alias']);
-//			$f3->set('SESSION.id',$usuario[0]['idUsuario']);
-//			
-//			//echo "--".$f3->get('SESSION.user')."--";
-//			
-//			//Se redirige al usuario a la ruta de panel de control
-//			//$f3->reroute('@miPanel'); 
-//			echo '<script language="javascript" type="text/javascript">window.location.href="mipanel/";</script>';
-//			
-//		}else{
-//		//Si no encuentra el usuario volvera a mostrar el formulario con un mensaje de advertencia llamado flash
-//			$f3->set('flash','Usuario o clave incorrecta por favor ingrese los datos nuevamente');
-//			echo Template::instance()->render('loginform.html');
-//
-//		}
 	}
 );
 

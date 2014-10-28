@@ -1,31 +1,35 @@
-<span class="error">{{ @flash }}</span>
-	<form id="agregar" name="agregar" action="perfilPost" method="post">
-		<span>Usuario/email: </span><input id="user_i" type="text" name="userEmail">
-		<span>Clave: </span><input id="clave_i" type="password" name="clave">
-		<input class="send" type="button" value="Enviar">
-	</form> 
-</div>
+<div>
+    <span>
+        Agregar
+    </span>
+    <br>
+    <span class="error">{{ @flash }}</span>
+    <form id="nuevoPerfilForm" name="nuevoPerfilForm" action="perfil" method="post">
 
-<script type="text/javascript">
-$(document).ready(function(){
+        <span>¿Se reporta a usted mismo? </span>
+            <input type="radio" name="owner" value="1">Si <input type="radio" name="owner" value="0">No
+        <br>
+        <span>Nombre: </span><input type="text" name="firtsName"><br>
+        <span>Apellido: </span><input type="text" name="lastName"><br>
+        <span>Teléfono: </span><input type="text" name="phone"><br>
+        <span>Teléfono Movil: </span><input type="text" name="cellphone"><br>
+        <span>Fecha de Nacimiento: </span><input type="text" name="birthday"><br>
+        <span>Pais: </span><input type="text" name="country"><br>
+        <span>Ciudad: </span><input type="text" name="city"><br>
+        <span>Municipio: </span><input type="text" name="municipio"><br>
+        <span>Sexo: </span>
+            <input type="radio" name="sex" value="1">Masculino <input type="radio" name="sex" value="0">Femenino
+        <br>
+        <span>Profesión: </span><input type="text" name="profesion"><br>
+        <span>Numero de Identificación: </span><input type="text" name="documentType"><br>
+        <span>Estado Civil: </span><input type="text" name="estadoCivil"><br>
+        <span>Numero dei Hijos: </span><input type="text" name="numeroHijos"><br>
+        <span>Peso: </span><input type="text" name="peso"><br>
+        <span>Tipo de Sangre: </span><input type="text" name="tipoSangre"><br>
 
- /*Codigo javascript para enviar los datos a la funcion correspondiente */
-	$(".send").click(function(){
-	//Se obtiene el formulario padre del boton
-	var form = $(this).closest("form");
-	//Se obtienen los datos del formulario seleccionado
-        var data = { type:form.attr('action'), user : $('#user_i').val(), clave :  $('#clave_i').val() };
+        <input type="hidden" value="3" name="menuOpc" >
+
+        <input class="send" type="submit" value="Crear">
         
-        $.ajax({
-               type: 'POST',
-               url: form.attr('action'), 
-               data: data,
-               }).done(function(html){
-                       $( "#content" ).html( html );
-               });
-	        
-	});
-	
-});
- 
-</script>
+    </form> 
+</div>

@@ -51,10 +51,10 @@
                         </check>
                     </td>
                     <td>
-                        <a href="/perfil?menuOpc=4">Consultar/Editar</a>
+                        <a href="/perfil?menuOpc=4&id={{ trim(@cadaRegistro['idPerfil']) }}">Consultar/Editar</a>
                     </td>
                     <td>
-                        <a href="/perfil?menuOpc=6">Eliminar</a>
+                        <a href="/perfil?menuOpc=6&id={{ trim(@cadaRegistro['idPerfil']) }}">Eliminar</a>
                     </td>
                 </tr>
             </repeat>
