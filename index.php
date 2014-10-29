@@ -259,6 +259,14 @@ $f3->route('GET  @miPanel: /mipanel',
 			
 			$f3->set('eventosrecientes',$eventos);
 			
+			/*Se cargan enfermedades*/
+			$en = $db->exec('SELECT en.idEnfermedad, en.name FROM Enfermedad AS en ORDER BY en.name ASC');
+			
+			foreach($en as $e):
+				$enfermedades[$e["idEnfermedad"]] = $e["name"];
+			endforeach;
+			$f3->set('enfermedades',$enfermedades);
+			
 			echo Template::instance()->render('layout.html');
 		}else{
 			/*Si no se reenvia al home*/
