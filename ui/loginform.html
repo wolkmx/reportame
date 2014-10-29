@@ -1,31 +1,63 @@
-<span id="tabs_registr_sesion">
-	<span>Login</span>
-	<span>Registrarse</span>
-</span>
-<div id="iniciar">
-<span class="error">{{ @flash }}</span>
-	<form id="registro_form" name="inicio_sesion" action="iniciarsesion" method="post">
-		<span>Usuario/email: </span><input id="user_i" type="text" name="userEmail">
-		<span>Clave: </span><input id="clave_i" type="password" name="clave">
-		<input class="send" type="button" value="Enviar">
-	</form> 
+<ul class="nav nav-tabs" role="tablist" id="tabs_registr_sesion">
+
+	<li><a href="#" role="tab" data-toggle="tab">Login</a></li>
+	<li><a href="#" role="tab" data-toggle="tab">Registrarse</a></li>
+</ul>
+<div class="container">
+	<div class="row encerrado">
+		<div class="col-md-12 form-group">
+			<div id="iniciar" >
+					<span class="error">{{ @flash }}</span>
+					<form id="registro_form" name="inicio_sesion" action="iniciarsesion" method="post" class="form-vertical" role="form">
+			
+						<span>Usuario/email: </span><br>
+						<input id="user_i" type="text" name="userEmail" placeholder="Usuario/email" class="form-control" /><br>
+						<span>Clave: </span><br>
+						<input id="clave_i" type="password" name="clave" placeholder="Clave" class="form-control" /><br>
+						<buttom class="btn btn-primary send" type="buttom" value="Enviar"> Enviar
+							  
+						</buttom>
+							  
+						
+					</form> 
+			</div>
+		</div>
+	</div>
 </div>
-<div id="registrarse">
-	<form name="registro_sesion" action="registrousuario" method="post">
-		<span>Usuario: </span><input id="user_r" type="text" name="user">
-		<span>Email: </span><input id="email_r" type="text" name="email">
-		<span>Clave: </span><input id="clave_r" type="password" name="clave">
-		<span>Repita su clave: </span><input id="rclave_r" type="password" name="rclave">
-		<input class="send" type="button" value="Enviar">
-	</form> 
-</div>	
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 form-group">
+			<div id="registrarse">
+				<form name="registro_sesion" action="registrousuario" method="post">
+					<span>Usuario: </span><br>
+					<input id="user_r" type="text" name="user" placeholder="Usuario" class="form-control"><br>
+					<span>Email: </span><br>
+					<input id="email_r" type="text" name="email" placeholder="Email" class="form-control"><br>
+					<span>Clave: </span><br>
+					<input id="clave_r" type="password" name="clave" placeholder="Clave" class="form-control"><br>
+					<span>Repita su clave: </span><br>
+					<input id="rclave_r" type="password" name="rclave" placeholder="Repita su clave" class="form-control"><br>
+					<buttom class="btn btn-primary send" type="submit" value="Enviar"> Enviar
+					</buttom>
+				</form> 
+			</div>	
+		</div>
+	</div>
+</div>
 
 <script type="text/javascript">
 $(document).ready(function(){
 
+
+	/*CODIGO PARA LOS TABS*/
+
+
+
  /*Codigo javascript para enviar los datos a la funcion correspondiente */
-	$(".send").click(function(){
+	$(".send").click(function(event){
 	//Se obtiene el formulario padre del boton
+
 	var form = $(this).closest("form");
 	//Se obtienen los datos del formulario seleccionado
 	if(form.attr('action') == "registrousuario"){
