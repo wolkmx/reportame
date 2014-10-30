@@ -266,7 +266,14 @@ margin:auto;
 .encerrado{
 
 }
+/* DESCARGAR */
 
+.imagen-descargar{
+	    background-image: url("../images/quienessomos.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    min-height: 500px;
+}
 
 
 
