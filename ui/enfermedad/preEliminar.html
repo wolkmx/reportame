@@ -1,0 +1,29 @@
+<div>
+    
+    <span>
+        Eliminar
+    </span>
+    
+    <br>
+    
+    <span class="error">{{ @flash }}</span>
+    
+    <form action="enfermedad" method="post">
+        
+        <span>Nombre: </span><input type="text" name="name" value="{{ @POST.name }}" disabled><br>
+        
+        <span>Apellido: </span><input type="text" name="color" value="{{ @POST.color }}" disabled><br>
+        
+        <span>Imagen Ping: </span><input type="text" name="imagePing" value="{{ @POST.imagePing }}" disabled><br>
+        
+        <span>Imagen Ping Shadow: </span><input type="text" name="imagePingShadow" value="{{ @POST.imagePingShadow }}" disabled><br>
+        
+        <input type="hidden" value="7" name="menuOpc">
+        
+        <input type="hidden" value="{{ @POST.idEnfermedad }}" name="id">
+        
+        <input class="send" type="submit" value="Eliminar">
+        
+    </form> 
+    
+</div>
