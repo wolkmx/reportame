@@ -1,0 +1,43 @@
+<span class="error">{{ @flash }}</span>
+
+<check if="{{ @todosLosRegistros!=0 }}">
+
+    <true>
+    
+        <table border="1">
+            
+            <tr>
+                <th>Nombre</th>
+                <th>Color</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+            
+            <repeat group="{{ @todosLosRegistros }}" value="{{ @cadaRegistro }}">
+                <tr>
+                    <td>
+                        {{ trim(@cadaRegistro['name']) }}
+                    </td>
+                    <td>
+                        {{ trim(@cadaRegistro['color']) }}
+                    </td>                    
+                    <td>
+                        <a href="/categoria?menuOpc=4&id={{ trim(@cadaRegistro['idCategoria']) }}">Consultar/Editar</a>
+                    </td>
+                    <td>
+                        <a href="/categoria?menuOpc=6&id={{ trim(@cadaRegistro['idCategoria']) }}">Eliminar</a>
+                    </td>
+                </tr>
+            </repeat>
+            
+        </table>
+    
+    </true>
+    
+    <false>
+        <span>no hay registros</span>
+    </false>
+    
+</check>
+
+<a href="/categoria?menuOpc=2">Agregar Nuevo Perfil</a>

@@ -1,0 +1,25 @@
+<div>
+    <span>
+        Agregar
+    </span>
+    <br>
+    <span class="error">{{ @flash }}</span>
+    
+    <form action="enfermedad" method="post" enctype="multipart/form-data">
+
+        <span>Nombre: </span><input type="text" name="name"><br>
+        
+        <span>Color: </span><input type="text" name="color"><br>
+        
+        <span>Imagen Ping: </span><input type="file" name="imagePing"><br>
+        
+        <span>Imagen Ping Shadow: </span><span>Imagen Ping: </span><input type="file" name="imagePingShadow"><br>
+
+        <input type="hidden" value="3" name="menuOpc" >
+        
+        <input type="hidden" name="MAX_FILE_SIZE" value="2000000"> 
+
+        <input class="send" type="submit" value="Crear">
+        
+    </form> 
+</div>

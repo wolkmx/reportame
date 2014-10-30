@@ -1,0 +1,17 @@
+<div>
+    <span>
+        Agregar
+    </span>
+    <br>
+    <span class="error">{{ @flash }}</span>
+    <form action="categoria" method="post">
+
+        <span>Nombre: </span><input type="text" name="name"><br>
+        <span>Color: </span><input type="text" name="color"><br>
+
+        <input type="hidden" value="3" name="menuOpc" >
+
+        <input class="send" type="submit" value="Crear">
+        
+    </form> 
+</div>
