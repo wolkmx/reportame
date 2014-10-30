@@ -205,8 +205,8 @@ $f3->route('POST @registrousuario: /registrousuario [ajax]',
 	}
 );
 
-/*Ruta para recibir la peticion ajax para buscar una enfermedad en especifico y refrescar el mapa*/
-$f3->route('POST @existePerfil: /existePerfil [ajax]',
+/*Ruta para recibir la peticion ajax para buscar si existe el perfil del usuario*/
+$f3->route('POST @existeMiPerfil: /existeMiPerfil [ajax]',
 	function($f3) use ($db) {
 	/*Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!*/
 	new Session();
@@ -242,6 +242,62 @@ $f3->route('POST @existePerfil: /existePerfil [ajax]',
 			
 		}else{
 			$objetojson = '{"existe": "0"}';
+			echo $objetojson;
+		}
+		
+		}
+	}
+
+);
+
+/*Ruta para recibir la peticion ajax para buscar una los perfiles del usuario*/
+$f3->route('POST @existenPerfiles: /existenPerfiles [ajax]',
+	function($f3) use ($db) {
+	/*Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!*/
+	new Session();
+	//echo "--".$f3->get('SESSION.user')."--";
+		/*Se verifica si el usuario tiene la sesion iniciada*/
+		if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user'))){
+			$f3->set('usuario',$f3->get('SESSION.user'));
+			
+			/*Se consulta la base de datos para ver si existe un perfil propio para este usuario*/
+		$perfiles = $db->exec('SELECT * FROM Perfil WHERE usuario_id = "'.$f3->get('SESSION.id').'" AND owner = "0"');
+		//Si trae un registro debe regresar el valor de este perfil
+		if(count($perfiles)){
+		//if(false){
+		//echo 'SELECT * FROM Perfil WHERE usuario_id = "'.$f3->get('SESSION.id').'" AND owner = "0"';
+		/*echo "<pre>";
+		print_r($usuarios);
+		echo "</pre>";
+		die();*/
+			//Se inicia la cadena con el formato de json
+			$objetojson = '{"objeto": [{';
+			$lastKey = count($perfiles)-1;
+			
+			foreach($perfiles as $k => $perfil):
+				$lastKeyinner = count($perfil)-1;
+				$aux = 0;
+				$objetojson.= '"'.$k.'":[{';
+				foreach($perfil as $key => $value):
+						//Se inicializa
+						$objetojson.='"'.$key.'":"'.$value.'"';
+						if($lastKeyinner != $aux){
+							$objetojson.= ',';
+						}
+						$aux++;
+				endforeach;
+				$objetojson.= '}]';
+				if($k != $lastKey){
+							$objetojson.= ',';
+						}
+			endforeach;
+			$objetojson .= '}],"existe":"1", "length": "'.count($perfiles).'"}';
+			
+			echo $objetojson;
+			
+		}else{
+			$objetojson = '{"existe": "0", "lenght" : "0"}';
+			echo $objetojson;
 		}
 		
 		}
@@ -338,6 +394,10 @@ $f3->route('GET  @miPanel: /mipanel',
 			$eventos = $db->exec('SELECT e.*, p.*, en.name, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario WHERE (e.created_at BETWEEN "'.$fechaanterior.'" AND "'.$fechainicial.'")');
 			
 			$f3->set('eventosrecientes',$eventos);
+			
+			//Se buscan los perfiles asociados al usuario
+			$perfiles = $db->exec('SELECT * FROM Perfil WHERE usuario_id = "'.$f3->get('SESSION.id').'" AND owner = "0"');
+			$f3->set('perfiles',$perfiles);
 			
 			/*Se cargan enfermedades*/
 			$en = $db->exec('SELECT en.idEnfermedad, en.name FROM Enfermedad AS en ORDER BY en.name ASC');

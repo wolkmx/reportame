@@ -48,6 +48,13 @@
 			<a href="" class="list-group-item list-group-item-info">Paso 4</a>
 			<div id='datos_reporte_4' style='display:none;' class="centrado">
 				<span class="preguntas">Esta informacion se utilizara para generar estadisticas para brindar soluciones para todos</span>
+				<div id="perfiles" style="display:none;">
+					<select id="enfermedad_reporte">
+						<repeat group="{{ @perfiles }}" key="{{@key}}" value="{{ @perfil }}">
+							 <option value="{{ @key }}">{{@perfil}}</option>
+						</repeat>
+					</select>
+				</div>
 				<p><strong>Datos obligatorios:</strong><p>
 				<p><input id="opcion_mujer" type="radio" name="sexo" value="0"> Mujer<br>
 				<input id="opcion_hombre" type="radio" name="sexo" value="1" checked>Hombre</p>

@@ -76,12 +76,11 @@ $(document).ready(function(){
 	//@todo falta agregar la opcion de cargar los perfiles existentes
 	//Si es propio
 	if($('input[name=group1]:checked', '#reporte_formulario').val() == "propio"){
+		$("#perfiles").hidde();
 		//Se hace la consulta via ajax para saber si ya tiene su perfil creado
-		var data = 'asdasd';
 		$.ajax({
 			type: 'POST',
-			data: data,
-			url: '/existePerfil', 
+			url: '/existeMiPerfil', 
 			}).done(function(respuesta){
 				var x = JSON.parse(respuesta);
 				//alert(x['objeto'][0]['idPerfil']+"--"+x['existe']);
@@ -114,6 +113,7 @@ $(document).ready(function(){
 					$("#tipoSangre_reporte").val(x['objeto'][0]['tipoSangre']);
 					
 				}else{
+					
 					//alert("No existe");
 				}
 				
@@ -122,7 +122,29 @@ $(document).ready(function(){
 		
 	}else{
 		//Si es de otra persona se debe buscar si existen perfiles existentes
-		
+		$("#owner").val(0);
+		//Funcion ajax que revisa si existen perfiles asociados a este usuario y que no sea el propio
+		$.ajax({
+			type: 'POST',
+			url: '/existenPerfiles', 
+			}).done(function(respuesta){
+				var x = JSON.parse(respuesta);
+				//alert(x['objeto'][0]['idPerfil']+"--"+x['existe']);
+				//Si existen perfiles se debe mostrar un selec con los perfiles que existen
+				if(x['existe']){
+				//alert("entro");
+					//Si existen mas perfiles se debe mostrar un select con los perfiles existentes
+					$("#perfiles").show();
+					//Se construyen la lista desplegable correspondiente
+					var lista = "<option value='volvo'>Volvo</option>";
+					$("#opciones_reporte").html(lista);
+					
+					
+				}else{
+					//Si no existe ningun perfil se debera mostrar un mensaje que informe al usuario de que debe crear nuevos perfiles
+				}
+				
+			});
 	}
  }
  
