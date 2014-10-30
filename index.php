@@ -309,15 +309,28 @@ $f3->route('GET|POST @perfil: /perfil',
                         //-- Se hace la consulta
                         $todosLosRegistros = $db->exec( $consulta );
 
-                        //-- Carga el arreglo de respuesta en 'SESSION'
-                        $f3->set( 'todosLosRegistros', $todosLosRegistros );
+                        //-- Si tiene registros
+                        if(count($todosLosRegistros)!=0 ):
+                            //-- Carga el arreglo de respuesta en 'SESSION'
+                            $f3->set( 'todosLosRegistros', $todosLosRegistros );
+                        else:
+                            //-- Carga el arreglo de respuesta en 'SESSION'
+                            $f3->set( 'todosLosRegistros', 0 );
+                        endif;
 
                         //-- Datos del usuario en sesion
                         $f3->set('usuario',$f3->get('SESSION.user'));
 
                         //-- Preparamos la vista
                         $f3->set('content','perfil/index.html');
+                        
+                        //-- Carga el menu
                         $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash',null);
+                        
+                        //-- Llama la vista
                         echo Template::instance()->render('layout.html');
 
                     }
@@ -339,15 +352,19 @@ $f3->route('GET|POST @perfil: /perfil',
                     //-- Se verifica si el usuario tiene la sesion iniciada
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
-                        // Inicializamos la variable
-                        $f3->set('flash',null);
-                        
                         //-- Datos del usuario en sesion
                         $f3->set('usuario',$f3->get('SESSION.user'));
 
                         //-- Preparamos la vista
                         $f3->set('content','perfil/preAgregar.html');
+                        
+                        //-- Carga el menu
                         $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash',null);
+                        
+                        //-- Llama la vista
                         echo Template::instance()->render('layout.html');
 
                     }
@@ -390,9 +407,6 @@ $f3->route('GET|POST @perfil: /perfil',
                         //-- Prepara los datos para la vista
                         $f3->get('perfil')->copyTo('POST');
                         
-                        // Inicializamos la variable
-                        $f3->set('flash','El perfil fue creado satisfactoriamente');
-                        
                         //-- Datos del usuario en sesion
                         $f3->set('usuario',$f3->get('SESSION.user'));
                         
@@ -401,6 +415,9 @@ $f3->route('GET|POST @perfil: /perfil',
                         
                         //-- Agrega el menu
                         $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash','El perfil fue creado satisfactoriamente');
                         
                         //-- Llama a la vista
                         echo Template::instance()->render('layout.html');
@@ -433,9 +450,6 @@ $f3->route('GET|POST @perfil: /perfil',
                         //-- Prepara los datos para la vista
                         $f3->get('perfil')->copyTo('POST');
 
-                        // Inicializamos la variable
-                        $f3->set('flash',NULL);
-
                         //-- Datos del usuario en sesion
                         $f3->set('usuario',$f3->get('SESSION.user'));
 
@@ -445,6 +459,9 @@ $f3->route('GET|POST @perfil: /perfil',
                         //-- Agrega el menu
                         $f3->set('menu','menu.html');
 
+                        // Inicializamos la variable
+                        $f3->set('flash',NULL);
+                        
                         //-- Llama a la vista
                         echo Template::instance()->render('layout.html');
 
@@ -486,9 +503,6 @@ $f3->route('GET|POST @perfil: /perfil',
                         //-- Prepara los datos para la vista
                         $f3->get('perfil')->copyTo('POST');
                         
-                        // Inicializamos la variable
-                        $f3->set('flash','El perfil fue creado satisfactoriamente');
-                        
                         //-- Datos del usuario en sesion
                         $f3->set('usuario',$f3->get('SESSION.user'));
                         
@@ -497,6 +511,9 @@ $f3->route('GET|POST @perfil: /perfil',
                         
                         //-- Agrega el menu
                         $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash','El perfil fue modificado satisfactoriamente');
                         
                         //-- Llama a la vista
                         echo Template::instance()->render('layout.html');
@@ -516,12 +533,985 @@ $f3->route('GET|POST @perfil: /perfil',
                     break;
                 
                 case '6':   //-- Pre-Eliminar
-                    die('Pre-Eliminar');
+                
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //--    Llama al modelo
+                        $f3->set('perfil',new DB\SQL\Mapper($db,'perfil'));
+                        
+                        //-- Carga al objeto
+                        $f3->get('perfil')->load(array('idPerfil=?',$request['id']));
+                        
+                        //--    Cargamos los valores que tenemos del formulario
+                        $f3->get('perfil')->copyTo('POST');
+                        
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+                        
+                        //-- Preparamos la vista
+                        $f3->set('content','perfil/preEliminar.html');
+                        
+                        //-- Agrega el menu
+                        $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash',"¿Seguro que quiere eliminar?");
+                        
+                        //-- Llama a la vista
+                        echo Template::instance()->render('layout.html');
+                        
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
                     break;
                 
                 case '7':   //-- Eliminar
-                    die('Eliminar');
+                
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //--    Llama al modelo
+                        $f3->set('perfil',new DB\SQL\Mapper($db,'perfil'));
+                        
+                        //-- Arma la consulta
+                        $consulta = 'DELETE FROM perfil WHERE idPerfil='.$request['id'].';';
+                        
+                        //-- Eliminar el registro
+                        $db->exec($consulta);
+                        
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+                        
+                        //-- Preparamos la vista
+                        $f3->set('content','perfil/preEliminar.html');
+                        
+                        //-- Agrega el menu
+                        $f3->set('menu','menu.html');
+                        
+                        //-- Se arma la consulta
+                        $consulta = 'SELECT * FROM perfil WHERE usuario_id= '. $f3->get('SESSION.id') .';';
+                        
+                        //-- Se hace la consulta
+                        $todosLosRegistros = $db->exec( $consulta );
+
+                        //-- Si tiene registros
+                        if(count($todosLosRegistros)!=0 ):
+                            //-- Carga el arreglo de respuesta en 'SESSION'
+                            $f3->set( 'todosLosRegistros', $todosLosRegistros );
+                        else:
+                            //-- Carga el arreglo de respuesta en 'SESSION'
+                            $f3->set( 'todosLosRegistros', 0 );
+                        endif;
+
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+
+                        //-- Preparamos la vista
+                        $f3->set('content','perfil/index.html');
+                        
+                        //-- Agrega el menu
+                        $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash',"El registro ".$request['id']." fue eliminado satisfactorio.");
+                        
+                        //-- Llama a la vista
+                        echo Template::instance()->render('layout.html');
+                        
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
+                default:
                     break;
+            }
+		
+	}
+);
+
+/**
+ * @author Oscar Galindez <oscarabreu19@gmail.com>
+ * @todo Controlador para el manejo del CRUD de la tabla 'categoria'
+ */
+$f3->route('GET|POST @categoria: /categoria',
+	function($f3) use ($db) {
+    
+            //-- Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!
+            new Session();
+            
+            //-- Obtiene la peticion
+            $request = $f3->get("REQUEST");
+            
+            /**
+             * Maneja las cuatro opciones 
+             * del CRUD
+             * ---
+             * 1:   Listar: muestra el contenido de la tabla 
+             *      con todos los registros
+             * -
+             * 2:   Pre-Agregar: monta un formulario vacio para 
+             *      agregar un nuevo registro
+             * -
+             * 3:   Agregar: carga en DB un nuevo registro
+             * -
+             * 4:   Consultar: se muestra el contenido
+             *      del registro previamente creado
+             * -
+             * 5:   Editar: modifica en BD el contenido en la 
+             *      vista 'Consultar' 
+             * -
+             * 6:   Pre-Eliminar: se muestra el contenido
+             *      del registro previamente creado sin 
+             *      opcion para modificar.
+             * -
+             * 7:   Eliminar: elimina en DB un registro 
+             *      seleccionado 
+             */
+            switch ( $request['menuOpc'] )
+            {
+                case '1':   //-- Listar
+                    
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //-- Se arma la consulta
+                        $consulta = 'SELECT * FROM categoria;';
+                        
+                        //-- Se hace la consulta
+                        $todosLosRegistros = $db->exec( $consulta );
+                        
+                        //-- Si tiene registros
+                        if(count($todosLosRegistros)!=0 ):
+                            //-- Carga el arreglo de respuesta en 'SESSION'
+                            $f3->set( 'todosLosRegistros', $todosLosRegistros );
+                        else:
+                            //-- Carga el arreglo de respuesta en 'SESSION'
+                            $f3->set( 'todosLosRegistros', 0 );
+                        endif;
+                        
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+
+                        //-- Preparamos la vista
+                        $f3->set('content','categoria/index.html');
+                        
+                        //-- Carga el menu
+                        $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash',null);
+                        
+                        //-- Llama la vista
+                        echo Template::instance()->render('layout.html');
+
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
+                    break;
+
+                case '2':   //-- Pre-Agregar
+                    
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+                        
+                        //-- Preparamos la vista
+                        $f3->set('content','categoria/preAgregar.html');
+                        
+                        //-- Carga el menu
+                        $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash',null);
+                        
+                        //-- Llama la vista
+                        echo Template::instance()->render('layout.html');
+
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
+                    break;
+                
+                case '3':   //-- Agregar
+                    
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //--    Fijamos la fecha
+                        $fecha = date("Y-m-d H:i:s");
+                        
+                        //--    Llama al modelo
+                        $f3->set('categoria',new DB\SQL\Mapper($db,'categoria'));
+                        
+                        //--    Cargamos los valores que tenemos del formulario
+                        $f3->get('categoria')->copyFrom('POST');
+                        
+                        //--    Agrega datos que no vienen del
+                        //      formulario pero que son necesarios
+                        $f3->get('categoria')->set('updated_at',$fecha);
+                        $f3->get('categoria')->set('created_at',$fecha);
+                        
+                        //--    Salva en BD
+                        $f3->get('categoria')->save();
+                        
+                        //-- Prepara los datos para la vista
+                        $f3->get('categoria')->copyTo('POST');
+                        
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+                        
+                        //-- Preparamos la vista
+                        $f3->set('content','categoria/preEditar.html');
+                        
+                        //-- Agrega el menu
+                        $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash','El categoria fue creado satisfactoriamente');
+                        
+                        //-- Llama a la vista
+                        echo Template::instance()->render('layout.html');
+
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
+                    break;
+                
+                case '4':   //-- Consultar
+
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //-- Llama al modelo
+                        $f3->set('categoria',new DB\SQL\Mapper($db,'categoria'));
+
+                        //-- Carga al objeto
+                        $f3->get('categoria')->load(array('idCategoria=?',$request['id']));
+
+                        //-- Prepara los datos para la vista
+                        $f3->get('categoria')->copyTo('POST');
+
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+
+                        //-- Preparamos la vista
+                        $f3->set('content','categoria/preEditar.html');
+
+                        //-- Agrega el menu
+                        $f3->set('menu','menu.html');
+
+                        // Inicializamos la variable
+                        $f3->set('flash',NULL);
+                        
+                        //-- Llama a la vista
+                        echo Template::instance()->render('layout.html');
+
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
+                    break;
+                
+                case '5':   //-- Editar
+                
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //--    Llama al modelo
+                        $f3->set('categoria',new DB\SQL\Mapper($db,'categoria'));
+                        
+                        //-- Carga al objeto
+                        $f3->get('categoria')->load(array('idCategoria=?',$request['id']));
+                        
+                        //--    Cargamos los valores que tenemos del formulario
+                        $f3->get('categoria')->copyFrom('POST');
+                        
+                        //--    Agrega datos que no vienen del
+                        //      formulario pero que son necesarios
+                        $f3->get('categoria')->set('updated_at',date("Y-m-d H:i:s"));
+                        
+                        //--    Salva en BD
+                        $f3->get('categoria')->save();
+                        
+                        //-- Prepara los datos para la vista
+                        $f3->get('categoria')->copyTo('POST');
+                        
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+                        
+                        //-- Preparamos la vista
+                        $f3->set('content','categoria/preEditar.html');
+                        
+                        //-- Agrega el menu
+                        $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash','El categoria fue modificada satisfactoriamente');
+                        
+                        //-- Llama a la vista
+                        echo Template::instance()->render('layout.html');
+                        
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
+                    break;
+                
+                case '6':   //-- Pre-Eliminar
+                
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //--    Llama al modelo
+                        $f3->set('categoria',new DB\SQL\Mapper($db,'categoria'));
+                        
+                        //-- Carga al objeto
+                        $f3->get('categoria')->load(array('idCategoria=?',$request['id']));
+                        
+                        //--    Cargamos los valores que tenemos del formulario
+                        $f3->get('categoria')->copyTo('POST');
+                        
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+                        
+                        //-- Preparamos la vista
+                        $f3->set('content','categoria/preEliminar.html');
+                        
+                        //-- Agrega el menu
+                        $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash',"¿Seguro que quiere eliminar?");
+                        
+                        //-- Llama a la vista
+                        echo Template::instance()->render('layout.html');
+                        
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
+                    break;
+                
+                case '7':   //-- Eliminar
+                
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //--    Llama al modelo
+                        $f3->set('categoria',new DB\SQL\Mapper($db,'categoria'));
+                        
+                        //-- Arma la consulta
+                        $consulta = 'DELETE FROM categoria WHERE idCategoria='.$request['id'].';';
+                        
+                        //-- Eliminar el registro
+                        $db->exec($consulta);
+                        
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+                        
+                        //-- Preparamos la vista
+                        $f3->set('content','categoria/preEliminar.html');
+                        
+                        //-- Agrega el menu
+                        $f3->set('menu','menu.html');
+                        
+                        //-- Se arma la consulta
+                        $consulta = 'SELECT * FROM categoria;';
+                        
+                        //-- Se hace la consulta
+                        $todosLosRegistros = $db->exec( $consulta );
+
+                        //-- Si tiene registros
+                        if(count($todosLosRegistros)!=0 ):
+                            //-- Carga el arreglo de respuesta en 'SESSION'
+                            $f3->set( 'todosLosRegistros', $todosLosRegistros );
+                        else:
+                            //-- Carga el arreglo de respuesta en 'SESSION'
+                            $f3->set( 'todosLosRegistros', 0 );
+                        endif;
+
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+
+                        //-- Preparamos la vista
+                        $f3->set('content','categoria/index.html');
+                        
+                        //-- Agrega el menu
+                        $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash',"El registro ".$request['id']." fue eliminado satisfactorio.");
+                        
+                        //-- Llama a la vista
+                        echo Template::instance()->render('layout.html');
+                        
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
+                default:
+                    break;
+            }
+		
+	}
+);
+
+/**
+ * @author Oscar Galindez <oscarabreu19@gmail.com>
+ * @todo Controlador para el manejo del CRUD de la tabla 'enfermedad'
+ */
+$f3->route('GET|POST @enfermedad: /enfermedad',
+	function($f3) use ($db) {
+    
+            //-- Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!
+            new Session();
+            
+            //-- Obtiene la peticion
+            $request = $f3->get("REQUEST");
+            
+            /**
+             * Maneja las cuatro opciones 
+             * del CRUD
+             * ---
+             * 1:   Listar: muestra el contenido de la tabla 
+             *      con todos los registros
+             * -
+             * 2:   Pre-Agregar: monta un formulario vacio para 
+             *      agregar un nuevo registro
+             * -
+             * 3:   Agregar: carga en DB un nuevo registro
+             * -
+             * 4:   Consultar: se muestra el contenido
+             *      del registro previamente creado
+             * -
+             * 5:   Editar: modifica en BD el contenido en la 
+             *      vista 'Consultar' 
+             * -
+             * 6:   Pre-Eliminar: se muestra el contenido
+             *      del registro previamente creado sin 
+             *      opcion para modificar.
+             * -
+             * 7:   Eliminar: elimina en DB un registro 
+             *      seleccionado 
+             */
+            switch ( $request['menuOpc'] )
+            {
+                case '1':   //-- Listar
+                    
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //-- Se arma la consulta
+                        $consulta = 'SELECT * FROM enfermedad;';
+                        
+                        //-- Se hace la consulta
+                        $todosLosRegistros = $db->exec( $consulta );
+                        
+                        //-- Si tiene registros
+                        if(count($todosLosRegistros)!=0 ):
+                            //-- Carga el arreglo de respuesta en 'SESSION'
+                            $f3->set( 'todosLosRegistros', $todosLosRegistros );
+                        else:
+                            //-- Carga el arreglo de respuesta en 'SESSION'
+                            $f3->set( 'todosLosRegistros', 0 );
+                        endif;
+                        
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+
+                        //-- Preparamos la vista
+                        $f3->set('content','enfermedad/index.html');
+                        
+                        //-- Carga el menu
+                        $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash',null);
+                        
+                        //-- Llama la vista
+                        echo Template::instance()->render('layout.html');
+
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
+                    break;
+
+                case '2':   //-- Pre-Agregar
+                    
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+                        
+                        //-- Preparamos la vista
+                        $f3->set('content','enfermedad/preAgregar.html');
+                        
+                        //-- Carga el menu
+                        $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash',null);
+                        
+                        //-- Llama la vista
+                        echo Template::instance()->render('layout.html');
+
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
+                    break;
+                
+                case '3':   //-- Agregar
+                    
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //--    Fijamos la fecha
+                        $fecha = date("Y-m-d H:i:s");
+                        
+                        //--    Llama al modelo
+                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'enfermedad'));
+                        
+                        //--    Cargamos los valores que tenemos del formulario
+                        $f3->get('enfermedad')->copyFrom('POST');
+                        
+                        //--    Agrega datos que no vienen del
+                        //      formulario pero que son necesarios
+                        
+                        $f3->get('enfermedad')->set('updated_at',$fecha);
+                        $f3->get('enfermedad')->set('created_at',$fecha);
+                        
+                        //--    Manejo de archivo 
+                        $rutaDirectorio = $_SERVER['DOCUMENT_ROOT'].'/uploads/';
+                        
+                        //-- Manejo de 'imagePing'
+                        $uploadFile = $rutaDirectorio . basename($_FILES['imagePing']['name']);
+                
+                        $nombre_archivo = $_FILES['imagePing']['name'];
+                        $tipo_archivo = $_FILES['imagePing']['type'];
+                        $tamano_archivo = $_FILES['imagePing']['size'];
+                        //compruebo si las características del archivo son las que deseo
+                        if (!((strpos($tipo_archivo, "gif") || strpos($tipo_archivo, "jpeg")) && ($tamano_archivo < 2000000))) {
+                            $mensaje = "La extensión o el tamaño de los archivos no es correcta. <br><br><table><tr><td><li>Se permiten archivos .gif o .jpg<br><li>se permiten archivos de 100 Kb máximo.</td></tr></table>";
+                        }else{
+                            if (move_uploaded_file($_FILES['imagePing']['tmp_name'], $uploadFile)){
+                               $mensaje = "El archivo ha sido cargado correctamente.";
+                            }else{
+                               $mensaje = "Ocurrió algún error al subir el fichero. No pudo guardarse.";
+                            }
+                        }
+                        
+                        //-- Manejo de 'imagePingShadow'
+                        $uploadFileShadow = $rutaDirectorio . basename($_FILES['imagePingShadow']['name']);
+                
+                        $nombre_archivoShadow = $_FILES['imagePingShadow']['name'];
+                        $tipo_archivoShadow = $_FILES['imagePingShadow']['type'];
+                        $tamano_archivoShadow = $_FILES['imagePingShadow']['size'];
+                        //compruebo si las características del archivo son las que deseo
+                        if (!((strpos($tipo_archivoShadow, "gif") || strpos($tipo_archivoShadow, "jpeg")) && ($tamano_archivoShadow < 2000000))) {
+                            $mensaje = "La extensión o el tamaño de los archivos no es correcta. Se permiten archivos .gif o .jpg se permiten archivos de 100 Kb máximo.";
+                        }else{
+                            if (move_uploaded_file($_FILES['imagePingShadow']['tmp_name'], $uploadFileShadow)){
+                               $mensaje = "El archivo ha sido cargado correctamente.";
+                            }else{
+                               $mensaje = "Ocurrió algún error al subir el fichero. No pudo guardarse.";
+                            }
+                        } 
+
+                        //-- Guarda el nombre del archivo
+                        if( $nombre_archivo != '' ):
+                            $f3->get('enfermedad')->set('imagePing',$nombre_archivo);
+                        endif;
+                        
+                        if( $nombre_archivoShadow != '' ):
+                            $f3->get('enfermedad')->set('imagePingShadow',$nombre_archivoShadow);
+                        endif;
+                        
+                        //--    Salva en BD
+                        $f3->get('enfermedad')->save();
+                        
+                        //-- Prepara los datos para la vista
+                        $f3->get('enfermedad')->copyTo('POST');
+                        
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+                        
+                        //-- Preparamos la vista
+                        $f3->set('content','enfermedad/preEditar.html');
+                        
+                        //-- Agrega el menu
+                        $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash','El enfermedad fue creado satisfactoriamente. '.$mensaje);
+                        
+                        //-- Llama a la vista
+                        echo Template::instance()->render('layout.html');
+
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
+                    break;
+                
+                case '4':   //-- Consultar
+
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //-- Llama al modelo
+                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'enfermedad'));
+
+                        //-- Carga al objeto
+                        $f3->get('enfermedad')->load(array('idEnfermedad=?',$request['id']));
+
+                        //-- Prepara los datos para la vista
+                        $f3->get('enfermedad')->copyTo('POST');
+                        
+                        //--    Ruta de la carpeta de imagenes
+                        $f3->set('dir',$_SERVER['DOCUMENT_ROOT'].'/uploads/');
+                        
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+
+                        //-- Preparamos la vista
+                        $f3->set('content','enfermedad/preEditar.html');
+
+                        //-- Agrega el menu
+                        $f3->set('menu','menu.html');
+
+                        // Inicializamos la variable
+                        $f3->set('flash',NULL);
+                        
+                        //-- Llama a la vista
+                        echo Template::instance()->render('layout.html');
+
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
+                    break;
+                
+                case '5':   //-- Editar
+                
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //--    Llama al modelo
+                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'enfermedad'));
+                        
+                        //-- Carga al objeto
+                        $f3->get('enfermedad')->load(array('idEnfermedad=?',$request['id']));
+                        
+                        //--    Cargamos los valores que tenemos del formulario
+                        $f3->get('enfermedad')->copyFrom('POST');
+                        
+                        //--    Agrega datos que no vienen del
+                        //      formulario pero que son necesarios
+                        $f3->get('enfermedad')->set('updated_at',date("Y-m-d H:i:s"));
+                        
+                        //--    Manejo de archivo 
+                        $rutaDirectorio = $_SERVER['DOCUMENT_ROOT'].'/uploads/';
+                        
+                        //-- Manejo de 'imagePing'
+                        $uploadFile = $rutaDirectorio . basename($_FILES['imagePing']['name']);
+                
+                        $nombre_archivo = $_FILES['imagePing']['name'];
+                        $tipo_archivo = $_FILES['imagePing']['type'];
+                        $tamano_archivo = $_FILES['imagePing']['size'];
+                        
+                        //compruebo si las características del archivo son las que deseo
+                        if (!((strpos($tipo_archivo, "gif") || strpos($tipo_archivo, "jpeg")) && ($tamano_archivo < 2000000))) {
+                            $mensaje = "La extensión o el tamaño de los archivos no es correcta. Se permiten archivos .gif o .jpg se permiten archivos de 100 Kb máximo.";
+                        }else{
+                            if (move_uploaded_file($_FILES['imagePing']['tmp_name'], $uploadFile)){
+                               $mensaje = "El archivo ha sido cargado correctamente.";
+                            }else{
+                               $mensaje = "Ocurrió algún error al subir el fichero. No pudo guardarse.";
+                            }
+                        }
+                        
+                        //-- Manejo de 'imagePingShadow'
+                        $uploadFileShadow = $rutaDirectorio . basename($_FILES['imagePingShadow']['name']);
+                
+                        $nombre_archivoShadow = $_FILES['imagePingShadow']['name'];
+                        $tipo_archivoShadow = $_FILES['imagePingShadow']['type'];
+                        $tamano_archivoShadow = $_FILES['imagePingShadow']['size'];
+                        //compruebo si las características del archivo son las que deseo
+                        if (!((strpos($tipo_archivoShadow, "gif") || strpos($tipo_archivoShadow, "jpeg")) && ($tamano_archivoShadow < 2000000))) {
+                            $mensaje = "La extensión o el tamaño de los archivos no es correcta. <br><br><table><tr><td><li>Se permiten archivos .gif o .jpg<br><li>se permiten archivos de 100 Kb máximo.</td></tr></table>";
+                        }else{
+                            if (move_uploaded_file($_FILES['imagePingShadow']['tmp_name'], $uploadFileShadow)){
+                               $mensaje = "El archivo ha sido cargado correctamente.";
+                            }else{
+                               $mensaje = "Ocurrió algún error al subir el fichero. No pudo guardarse.";
+                            }
+                        } 
+
+                        //-- Guarda el nombre del archivo
+                        if( $nombre_archivo != '' ):
+                            $f3->get('enfermedad')->set('imagePing',$nombre_archivo);
+                        endif;
+                        
+                        if( $nombre_archivoShadow != '' ):
+                            $f3->get('enfermedad')->set('imagePingShadow',$nombre_archivoShadow);
+                        endif;
+                        
+                        //--    Salva en BD
+                        $f3->get('enfermedad')->save();
+                        
+                        //-- Prepara los datos para la vista
+                        $f3->get('enfermedad')->copyTo('POST');
+                        
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+                        
+                        //-- Preparamos la vista
+                        $f3->set('content','enfermedad/preEditar.html');
+                        
+                        //-- Agrega el menu
+                        $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash','El enfermedad fue modificada satisfactoriamente');
+                        
+                        //-- Llama a la vista
+                        echo Template::instance()->render('layout.html');
+                        
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
+                    break;
+                
+                case '6':   //-- Pre-Eliminar
+                
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //--    Llama al modelo
+                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'enfermedad'));
+                        
+                        //-- Carga al objeto
+                        $f3->get('enfermedad')->load(array('idEnfermedad=?',$request['id']));
+                        
+                        //--    Cargamos los valores que tenemos del formulario
+                        $f3->get('enfermedad')->copyTo('POST');
+                        
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+                        
+                        //-- Preparamos la vista
+                        $f3->set('content','enfermedad/preEliminar.html');
+                        
+                        //-- Agrega el menu
+                        $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash',"¿Seguro que quiere eliminar?");
+                        
+                        //-- Llama a la vista
+                        echo Template::instance()->render('layout.html');
+                        
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
+                    break;
+                
+                case '7':   //-- Eliminar
+                
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //--    Llama al modelo
+                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'enfermedad'));
+                        
+                        //-- Arma la consulta
+                        $consulta = 'DELETE FROM enfermedad WHERE idEnfermedad='.$request['id'].';';
+                        
+                        //-- Eliminar el registro
+                        $db->exec($consulta);
+                        
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+                        
+                        //-- Preparamos la vista
+                        $f3->set('content','enfermedad/preEliminar.html');
+                        
+                        //-- Agrega el menu
+                        $f3->set('menu','menu.html');
+                        
+                        //-- Se arma la consulta
+                        $consulta = 'SELECT * FROM enfermedad;';
+                        
+                        //-- Se hace la consulta
+                        $todosLosRegistros = $db->exec( $consulta );
+
+                        //-- Si tiene registros
+                        if(count($todosLosRegistros)!=0 ):
+                            //-- Carga el arreglo de respuesta en 'SESSION'
+                            $f3->set( 'todosLosRegistros', $todosLosRegistros );
+                        else:
+                            //-- Carga el arreglo de respuesta en 'SESSION'
+                            $f3->set( 'todosLosRegistros', 0 );
+                        endif;
+
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+
+                        //-- Preparamos la vista
+                        $f3->set('content','enfermedad/index.html');
+                        
+                        //-- Agrega el menu
+                        $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash',"El registro ".$request['id']." fue eliminado satisfactorio.");
+                        
+                        //-- Llama a la vista
+                        echo Template::instance()->render('layout.html');
+                        
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
                     
                 default:
                     break;

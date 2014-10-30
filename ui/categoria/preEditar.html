@@ -1,0 +1,25 @@
+<div>
+    
+    <span>
+        Editar
+    </span>
+    
+    <br>
+    
+    <span class="error">{{ @flash }}</span>
+    
+    <form action="categoria" method="post">
+        
+        <span>Nombre: </span><input type="text" name="name" value="{{ @POST.name }}"><br>
+        
+        <span>Color: </span><input type="text" name="color" value="{{ @POST.color }}"><br>
+        
+        <input type="hidden" value="5" name="menuOpc" >
+        
+        <input type="hidden" value="{{ @POST.idCategoria }}" name="id" >
+        
+        <input class="send" type="submit" value="Modificar">
+        
+    </form> 
+    
+</div>
