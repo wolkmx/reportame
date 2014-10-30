@@ -77,8 +77,16 @@ $(document).ready(function(){
 	//Si es propio
 	if($('input[name=group1]:checked', '#reporte_formulario').val() == "propio"){
 		//Se hace la consulta via ajax para saber si ya tiene su perfil creado
-		alert("es propio");
-		event.stopPropagation();
+		var data = 'asdasd';
+		$.ajax({
+			type: 'POST',
+			data: data,
+			url: '/existePerfil', 
+			}).done(function(respuesta){
+				alert(respuesta);
+			});
+
+		
 	}else{
 		alert("es de otra persona");
 	}

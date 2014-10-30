@@ -169,6 +169,15 @@ $f3->route('POST @registrousuario: /registrousuario [ajax]',
 	}
 );
 
+/*Ruta para recibir la peticion ajax para buscar una enfermedad en especifico y refrescar el mapa*/
+$f3->route('POST @existePerfil: /existePerfil [ajax]',
+	function($f3) use ($db) {
+		$busqueda = $f3->get("REQUEST");
+		echo 'entro';
+	}
+
+);
+
 
 /*Ruta para recibir la peticion ajax para buscar una enfermedad en especifico y refrescar el mapa*/
 $f3->route('POST @busquedaHome: /busquedaHome [ajax]',
