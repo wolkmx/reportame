@@ -112,6 +112,10 @@ cursor:pointer;
 
 }
 
+.titulo_pasos{
+	text-align: center;
+}
+
 .color-fondo{
 opacity: 0.7;
  padding: 20px 0;
@@ -275,5 +279,11 @@ margin:auto;
     min-height: 500px;
 }
 
+/* panel */
+
+.centrado{
+
+	padding: 20px 40px;
+}
 
 
