@@ -47,12 +47,10 @@ $(document).ready(function(){
 				//la manera de accederlos es la siguiente x['objeto'][0][0][0]['descripcion']
 				//alert('termino la busqueda'+x['objeto'][0][0][0]['descripcion']);
 				//alert(evento.length);
-				//Se eliminan los markers anteriores
-				for(i=0;i < evento.length ; i++){
-					map.removeLayer(evento[i]);
-				}
-				//Se destruye el array que existia anteriormente
-				evento = [];
+				
+				//Funcion para eliminar los eventos
+				eliminareventos();
+				
 				//alert(x.length);
 				//Se crean los nuevos markers
 				/*@todo se debe dejar una sola funcion que realice este trabajo*/
@@ -86,6 +84,25 @@ $(document).ready(function(){
 		}
 
 	});
+
+/*Funcion para refrescar el mapa del usuario y colocar un punto en la ubicacion actual del usuario*/
+	$('#reportar_evento').click(function(){
+		
+		//Se limpian los eventos
+		eliminareventos();
+		pinUbicacion();
+		
+		//alert('dio clic');
+		$('#info_evento_home').css('height','0px');
+		$('#reporte_panel').css('height',"");
+		$('#datos_reporte_1').show();
+		
+	});
+	
+
+	
+	
+/*Reconocimiento de voz*/	
 /*
 var recognition = new webkitSpeechRecognition();
 recognition.onresult = function(event) { 
@@ -94,4 +111,26 @@ recognition.onresult = function(event) {
 recognition.start();*/
 
 });
+
+//Funcion para colocar un marker con la posicion actual del usuario
+function pinUbicacion(){
+	evento[0] = L.marker(map.getCenter(),{animate: true}).addTo(map);
+	evento[0].bindPopup("<b>&iquestEsta no es tu ubicaci\u00f3n?</b><br> Prueba dando clic en <br/>otra parte del mapa ;) <br/>").openPopup()
+	
+	
+	$('#latitud_logintud_reporte').val(map.getCenter());
+	
+}
+	
+//Funcion para eliminar los eventos
+//Se eliminan los markers anteriores
+function eliminareventos(){
+
+	for(i=0;i < evento.length ; i++){
+		map.removeLayer(evento[i]);
+	}
+	//Se destruye el array que existia anteriormente
+	evento = [];	
+
+}
 
