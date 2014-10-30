@@ -65,8 +65,8 @@ $(document).ready(function(){
   //Funcion para verificar el paso 3
  function pasoTres(event){
 	if($("#descripcion_reporte").val() == "" || $("#descripcion_reporte").val() == null ){
-		alert("Comparte un poco de informacion sobre este evento, hace cuanto lo detectaron, es recurrente, etc.");
-		event.stopPropagation();
+		/*alert("Comparte un poco de informacion sobre este evento, hace cuanto lo detectaron, es recurrente, etc.");
+		event.stopPropagation();*/
 	}
  }
  
@@ -83,7 +83,7 @@ $(document).ready(function(){
 			data: data,
 			url: '/existePerfil', 
 			}).done(function(respuesta){
-				alert(respuesta);
+				//alert(respuesta);
 			});
 
 		

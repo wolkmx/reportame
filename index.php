@@ -172,8 +172,24 @@ $f3->route('POST @registrousuario: /registrousuario [ajax]',
 /*Ruta para recibir la peticion ajax para buscar una enfermedad en especifico y refrescar el mapa*/
 $f3->route('POST @existePerfil: /existePerfil [ajax]',
 	function($f3) use ($db) {
-		$busqueda = $f3->get("REQUEST");
-		echo 'entro';
+	/*Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!*/
+	new Session();
+	//echo "--".$f3->get('SESSION.user')."--";
+		/*Se verifica si el usuario tiene la sesion iniciada*/
+		if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user'))){
+			$f3->set('usuario',$f3->get('SESSION.user'));
+			
+			/*Se consulta la base de datos para ver si existe un perfil propio para este usuario*/
+		$usuario = $db->exec('SELECT * FROM Perfil WHERE usuario_id = "'.$f3->get('SESSION.user').'" AND owner = "1"');
+		
+		echo 'SELECT * FROM Perfil WHERE usuario_id = "'.$f3->get('SESSION.id').'" AND owner = "1"';
+		echo "<pre>";
+		print_r($usuario);
+		echo "</pre>";
+		echo count($usuario);
+		die();
+		
+		}
 	}
 
 );
