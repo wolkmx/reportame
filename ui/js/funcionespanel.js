@@ -83,12 +83,46 @@ $(document).ready(function(){
 			data: data,
 			url: '/existePerfil', 
 			}).done(function(respuesta){
-				//alert(respuesta);
+				var x = JSON.parse(respuesta);
+				//alert(x['objeto'][0]['idPerfil']+"--"+x['existe']);
+				//Si el perfil existe recuperara los valores y los llenara en los campos correspondientes
+				if(x['existe']){
+				$("#owner").val(1);
+					//Se actualizan los datos del sexo de la persona
+					if(x['objeto'][0]['sex']){
+						$("#opcion_mujer").prop("checked", false);
+						$("#opcion_hombre").prop("checked", true);
+					}else{
+						$("#opcion_mujer").prop("checked", true);
+						$("#opcion_hombre").prop("checked", false);
+					}
+					//Se recuperan los datos de fecha de nacimiento, etc.
+					$("#cumple_reporte").val(x['objeto'][0]['birthday']);
+					$("#cumple_reporte").val(x['objeto'][0]['birthday']);
+					$("#pais_reporte").val(x['objeto'][0]['country']);
+					$("#ciudad_reporte").val(x['objeto'][0]['city']);
+					$("#municipio_reporte").val(x['objeto'][0]['municipio']);
+					$("#nombre_reporte").val(x['objeto'][0]['firtsName']);
+					$("#apellido_reporte").val(x['objeto'][0]['lastName']);
+					$("#telefono_reporte").val(x['objeto'][0]['phone']);
+					$("#celular_reporte").val(x['objeto'][0]['cellphone']);
+					$("#profesion_reporte").val(x['objeto'][0]['profesion']);
+					$("#documentType_reporte").val(x['objeto'][0]['documentType']);
+					$("#estadoCivil_reporte").val(x['objeto'][0]['estadoCivil']);
+					$("#numeroHijos_reporte").val(x['objeto'][0]['numeroHijos']);
+					$("#peso_reporte").val(x['objeto'][0]['peso']);
+					$("#tipoSangre_reporte").val(x['objeto'][0]['tipoSangre']);
+					
+				}else{
+					//alert("No existe");
+				}
+				
 			});
 
 		
 	}else{
-		alert("es de otra persona");
+		//Si es de otra persona se debe buscar si existen perfiles existentes
+		
 	}
  }
  

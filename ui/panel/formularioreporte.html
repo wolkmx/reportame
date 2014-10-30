@@ -4,6 +4,7 @@
 
 <input type="hidden" id="usuario_id_reporte"/>
 <input type="hidden" id="latitud_logintud_reporte"/>
+<input type="hidden" id="owner"/>
 		<div class="titulo_pasos" style='display:block;' >
 			<span>Paso 1</span>
 			<div id='datos_reporte_1' style='display:block;'>
@@ -39,8 +40,8 @@
 			<div id='datos_reporte_4' style='display:none;' >
 				<span class="preguntas">Esta informacion se utilizara para generar estadisticas para brindar soluciones para todos</span>
 				<p><strong>Datos obligatorios:</strong><p>
-				<p><input type="radio" name="sexo" value="0"> Mujer<br>
-				<input type="radio" name="sexo" value="1" checked>Hombre</p>
+				<p><input id="opcion_mujer" type="radio" name="sexo" value="0"> Mujer<br>
+				<input id="opcion_hombre" type="radio" name="sexo" value="1" checked>Hombre</p>
 				<p>Cumpleaños<input type="text" id="cumple_reporte"></p>
 				<p>Pais<input type="text" id="pais_reporte"></p>
 				<p>Ciudad<input type="text" id="ciudad_reporte"></p>
@@ -59,7 +60,7 @@
 				<p>Profesion<input type="text" id="profesion_reporte"></p>
 				<p>ID Ciudadano<input type="text" id="documentType_reporte"></p>
 				<p>Estado Civil<input type="text" id="estadoCivil_reporte"></p>
-				<p>Numero de Hijos<input type="text" id="estadoCivil_reporte"></p>
+				<p>Numero de Hijos<input type="text" id="numeroHijos_reporte"></p>
 				<p>Peso<input type="text" id="peso_reporte"></p>
 				<p>Tipo de Sangre<input type="text" id="tipoSangre_reporte"></p>
 				<span class="boton_reporte anterior" id="reporte_paso_4">anterior</span>  <span class="boton_reporte" id="reporte_paso_6">Enviar</span>
