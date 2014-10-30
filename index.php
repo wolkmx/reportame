@@ -91,6 +91,42 @@ $f3->route('POST @login: /login [ajax]',
 	}
 );
 
+/*Ruta para cerrar la seccion quienes somos */
+$f3->route('GET  @descarga: /descarga',
+	function($f3) {
+	
+		//Se indica que el contenido del template lo tomara de home.html
+		$f3->set('content','descargar.html');
+		
+		/*Se obtiene el arreglo de la sesion para saber si existe el key user*/
+	$sesion = $f3->get('SESSION');
+	/*Si no existe se declara nula*/
+	if(!array_key_exists("user",$sesion)){
+		$f3->set('usuario','');
+	}
+		
+		echo Template::instance()->render('layout.html');
+	}
+);
+
+/*Ruta para cerrar la seccion quienes somos */
+$f3->route('GET  @email: /email',
+	function($f3) {
+	
+		//Se indica que el contenido del template lo tomara de home.html
+		$f3->set('content','email.html');
+		
+		/*Se obtiene el arreglo de la sesion para saber si existe el key user*/
+	$sesion = $f3->get('SESSION');
+	/*Si no existe se declara nula*/
+	if(!array_key_exists("user",$sesion)){
+		$f3->set('usuario','');
+	}
+		
+		echo Template::instance()->render('layout.html');
+	}
+);
+
 /*Ruta para recibir la peticion ajax para iniciar sesion*/
 /*el valor extra [ajax] se utiliza para indicar que es una peticion ajax, si no es una peticion ajax no entrara a esta url, es decir si se coloca iniciarsesion en el navegador no entrara*/
 /*Se utiliza use ($db) para que la funcion pueda acceder a la conexion de base de datos definida previamente*/
@@ -270,6 +306,24 @@ $f3->route('GET  @logout: /logout',
 		//session_destroy();
 		$f3->reroute('@home'); 
 		//echo Template::instance()->render('layout.html');
+	}
+);
+
+/*Ruta para cerrar la seccion quienes somos */
+$f3->route('GET  @quienessomos: /quienessomos',
+	function($f3) {
+	
+		//Se indica que el contenido del template lo tomara de home.html
+		$f3->set('content','quienessomos.html');
+		
+		/*Se obtiene el arreglo de la sesion para saber si existe el key user*/
+	$sesion = $f3->get('SESSION');
+	/*Si no existe se declara nula*/
+	if(!array_key_exists("user",$sesion)){
+		$f3->set('usuario','');
+	}
+		
+		echo Template::instance()->render('layout.html');
 	}
 );
 
