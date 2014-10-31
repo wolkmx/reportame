@@ -307,6 +307,80 @@ $f3->route('POST @existenPerfiles: /existenPerfiles [ajax]',
 
 );
 
+/*Ruta para recibir la peticion ajax para buscar un perfil especifico del usuario*/
+$f3->route('POST @getPerfil: /getPerfil [ajax]',
+	function($f3) use ($db) {
+	/*Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!*/
+	new Session();
+	//echo "--".$f3->get('SESSION.user')."--";
+		/*Se verifica si el usuario tiene la sesion iniciada*/
+		if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user'))){
+			$f3->set('usuario',$f3->get('SESSION.user'));
+			$formulario = $f3->get("REQUEST");
+			/*Se consulta la base de datos para ver si existe un perfil propio para este usuario*/
+			$perfil = $db->exec('SELECT * FROM Perfil WHERE usuario_id = "'.$f3->get('SESSION.id').'" AND idPerfil = "'.$formulario['perfilId'].'"');
+			//Si trae un registro debe regresar el valor de este perfil
+			if(count($perfil)){
+			//if(false){
+			//echo 'SELECT * FROM Perfil WHERE usuario_id = "'.$f3->get('SESSION.id').'" AND owner = "0"';
+			/*echo "<pre>";
+			print_r($perfil);
+			echo "</pre>";
+			die();*/
+				//Se inicia la cadena con el formato de json
+				$objetojson = '{"objeto": [{';
+				$lastKey = count($perfil[0])-1;
+				$aux = 0;
+				foreach($perfil[0] as $k => $value):
+					$objetojson.= '"'.$k.'":"'.$value.'"';
+					if($aux != $lastKey){
+								$objetojson.= ',';
+							}
+					$aux++;
+				endforeach;
+				$objetojson .= '}],"existe":"1", "length": "'.count($perfil[0]).'"}';
+				
+				echo $objetojson;
+				
+			}else{
+				$objetojson = '{"existe": "0", "lenght" : "0"}';
+				echo $objetojson;
+			}
+		
+		}
+	}
+
+);
+
+/*Ruta para recibir la peticion ajax para guardar el evento*/
+$f3->route('POST @guardarEvento: /guardarEvento [ajax]',
+	function($f3) use ($db) {
+	/*Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!*/
+	new Session();
+	//echo "--".$f3->get('SESSION.user')."--";
+		/*Se verifica si el usuario tiene la sesion iniciada*/
+		if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user'))){
+			$f3->set('usuario',$f3->get('SESSION.user'));
+			$formulario = $f3->get("REQUEST");
+			//Se revisa si el perfil esta definido como propio o no
+			if($formulario['owner']){
+				
+			}else{
+				//Si no es propio se revisa si existe o no un perfil previamente
+				if($formulario['perfil'] != "" ){
+				
+				}else{
+					
+				}
+			}
+			echo "<pre>";
+			print_r($formulario);
+			echo "</pre>";
+		
+		}
+	}
+
+);
 
 /*Ruta para recibir la peticion ajax para buscar una enfermedad en especifico y refrescar el mapa*/
 $f3->route('POST @busquedaHome: /busquedaHome [ajax]',
@@ -388,6 +462,7 @@ $f3->route('GET  @miPanel: /mipanel',
 			$f3->set('formularioreporte','panel/formularioreporte.html');
 			$f3->set('menu','menu.html');
 			$f3->set('usuario',$f3->get('SESSION.user'));
+			$f3->set('usuarioId',$f3->get('SESSION.id'));
 			
 			//Consulta a la base de datos para obtener una lista con los eventos
 			$fechainicial = date ("Y-m-d H:i:s",time());

@@ -5,6 +5,8 @@ $(document).ready(function(){
 	
 	map.on('click', onMapClick);
 	
+	$("#reporte_paso_6").click(function(){ pasoSeis(); });
+	
 	//Funcion para capturar el avance del formulario de reporte de incidencia
 	$(".siguiente").click(function(event){
 		//Se obtiene el paso en al que se desea acceder del formulario
@@ -23,10 +25,7 @@ $(document).ready(function(){
 				pasoCuatro();
 				break;
 			case 5:
-				day = "Thursday";
-				break;
-			case 6:
-				day = "Friday";
+				pasoCinco();
 				break;
 			default:
 				alert("Opción no valida");
@@ -88,32 +87,11 @@ $(document).ready(function(){
 				var x = JSON.parse(respuesta);
 				//alert(x['objeto'][0]['idPerfil']+"--"+x['existe']);
 				//Si el perfil existe recuperara los valores y los llenara en los campos correspondientes
-				if(x['existe']){
+				if(x['existe']){				
 				$("#owner").val(1);
-					//Se actualizan los datos del sexo de la persona
-					if(x['objeto'][0]['sex']){
-						$("#opcion_mujer").prop("checked", false);
-						$("#opcion_hombre").prop("checked", true);
-					}else{
-						$("#opcion_mujer").prop("checked", true);
-						$("#opcion_hombre").prop("checked", false);
-					}
+					
 					//Se recuperan los datos de fecha de nacimiento, etc.
-					$("#cumple_reporte").val(x['objeto'][0]['birthday']);
-					$("#cumple_reporte").val(x['objeto'][0]['birthday']);
-					$("#pais_reporte").val(x['objeto'][0]['country']);
-					$("#ciudad_reporte").val(x['objeto'][0]['city']);
-					$("#municipio_reporte").val(x['objeto'][0]['municipio']);
-					$("#nombre_reporte").val(x['objeto'][0]['firtsName']);
-					$("#apellido_reporte").val(x['objeto'][0]['lastName']);
-					$("#telefono_reporte").val(x['objeto'][0]['phone']);
-					$("#celular_reporte").val(x['objeto'][0]['cellphone']);
-					$("#profesion_reporte").val(x['objeto'][0]['profesion']);
-					$("#documentType_reporte").val(x['objeto'][0]['documentType']);
-					$("#estadoCivil_reporte").val(x['objeto'][0]['estadoCivil']);
-					$("#numeroHijos_reporte").val(x['objeto'][0]['numeroHijos']);
-					$("#peso_reporte").val(x['objeto'][0]['peso']);
-					$("#tipoSangre_reporte").val(x['objeto'][0]['tipoSangre']);
+					cargarDatos(x);
 					
 				}else{
 					
@@ -153,6 +131,64 @@ $(document).ready(function(){
 	}
  }
  
+//Funcion para verificar el paso 5
+ function pasoCinco(event){
+	if($("#perfil").val() == "" || $("#perfil").val() == null ){
+		if( ($("#cumple_reporte").val() == "") || ($("#pais_reporte").val() == "") || ($("#ciudad_reporte").val() == "") || ($("#municipio_reporte").val() == "")){
+			alert("Por favor rellena todos los campos obligatorios antes de continuar.");
+			event.stopPropagation();
+		}	
+	}else{
+		if( ($("#cumple_reporte").val() == "") || ($("#pais_reporte").val() == "") || ($("#ciudad_reporte").val() == "") || ($("#municipio_reporte").val() == "")){
+			alert("Por favor rellena todos los campos obligatorios antes de continuar.");
+			event.stopPropagation();
+		}	
+	}
+ }
+ 
+//Funcion para hacer el registro del nuevo evento
+ function pasoSeis(event){
+	//Se construye el objeto a enviar
+	var data = { usuarioId : $('#usuario_id_reporte').val(), 
+				latlon: $('#usuario_id_reporte').val(),
+				owner: $('#owner').val(),
+				perfil: $('#perfil').val(),
+				enfermedad_reporte: $('#enfermedad_reporte').val(),
+				descripcion_reporte: $('#descripcion_reporte').val(),
+				tipoPerfil: $('input[name=group1]:checked', '#reporte_formulario').val(),
+				perfil_reporte: $('#perfil_reporte').val(),
+				sexo: $('input[name=sexo]:checked', '#reporte_formulario').val(),
+				cumple_reporte: $('#cumple_reporte').val(),
+				pais_reporte: $('#pais_reporte').val(),
+				ciudad_reporte: $('#ciudad_reporte').val(),
+				municipio_reporte: $('#municipio_reporte').val(),
+				nombre_reporte: $('#nombre_reporte').val(),
+				apellido_reporte: $('#apellido_reporte').val(),
+				telefono_reporte: $('#telefono_reporte').val(),
+				celular_reporte: $('#celular_reporte').val(),
+				profesion_reporte: $('#profesion_reporte').val(),
+				documentType_reporte: $('#documentType_reporte').val(),
+				estadoCivil_reporte: $('#estadoCivil_reporte').val(),
+				numeroHijos_reporte: $('#numeroHijos_reporte').val(),
+				peso_reporte: $('#peso_reporte').val(),
+				tipoSangre_reporte: $('#tipoSangre_reporte').val(),
+				
+				};
+	
+	$.ajax({
+			type: 'POST',
+			url: '/guardarEvento', 
+			data: data,
+			}).done(function(respuesta){
+				var x = JSON.parse(respuesta);
+				//alert(x['objeto'][0]['idPerfil']+"--"+x['existe']);
+				//Se cargan los valores del formulario con los que se estan recibiendo
+				cargarDatos(x);
+				
+			});
+	
+ }
+ 
  //Funcion para refrescar el punto en el mapa con la posicion
  function onMapClick(e) {
  
@@ -183,27 +219,23 @@ function cambio(select){
 
 //Funcion para cargar el perfil seleccionado
 function cargarPerfil(perfil){
-	//buscar el perfil en ajax
+	//funcion de ajax para recuperar los datos del perfil especifico
 	
+	var data = { perfilId : perfil };
+	
+	$.ajax({
+			type: 'POST',
+			url: '/getPerfil', 
+			data: data,
+			}).done(function(respuesta){
+				var x = JSON.parse(respuesta);
+				//alert(x['objeto'][0]['idPerfil']+"--"+x['existe']);
+				//Se cargan los valores del formulario con los que se estan recibiendo
+				cargarDatos(x);
+				
+			});
 
-	//Se recuperan los datos de fecha de nacimiento, etc.
-	$("#cumple_reporte").val("");
-	$("#cumple_reporte").val("");
-	$("#pais_reporte").val("");
-	$("#ciudad_reporte").val("");
-	$("#municipio_reporte").val("");
-	$("#nombre_reporte").val("");
-	$("#apellido_reporte").val("");
-	$("#telefono_reporte").val("");
-	$("#celular_reporte").val("");
-	$("#profesion_reporte").val("");
-	$("#documentType_reporte").val("");
-	$("#estadoCivil_reporte").val("");
-	$("#numeroHijos_reporte").val("");
-	$("#peso_reporte").val("");
-	$("#tipoSangre_reporte").val("");
-
-
+}
 
 //Funcion para limpiar el perfil
 function limpiarPerfil(){
@@ -223,5 +255,37 @@ function limpiarPerfil(){
 	$("#numeroHijos_reporte").val("");
 	$("#peso_reporte").val("");
 	$("#tipoSangre_reporte").val("");
+	$("#perfil").val("");
+
+}
+
+function cargarDatos(x){
+	
+	$("#perfil").val(x['objeto'][0]['idPerfil'] );
+	
+	//Se actualizan los datos del sexo de la persona
+	if(parseInt(x['objeto'][0]['sex'])){
+		$("#opcion_mujer").prop("checked", false);
+		$("#opcion_hombre").prop("checked", true);
+	}else{
+		$("#opcion_mujer").prop("checked", true);
+		$("#opcion_hombre").prop("checked", false);
+	}
+	
+	$("#cumple_reporte").val(x['objeto'][0]['birthday']);
+	$("#cumple_reporte").val(x['objeto'][0]['birthday']);
+	$("#pais_reporte").val(x['objeto'][0]['country']);
+	$("#ciudad_reporte").val(x['objeto'][0]['city']);
+	$("#municipio_reporte").val(x['objeto'][0]['municipio']);
+	$("#nombre_reporte").val(x['objeto'][0]['firtsName']);
+	$("#apellido_reporte").val(x['objeto'][0]['lastName']);
+	$("#telefono_reporte").val(x['objeto'][0]['phone']);
+	$("#celular_reporte").val(x['objeto'][0]['cellphone']);
+	$("#profesion_reporte").val(x['objeto'][0]['profesion']);
+	$("#documentType_reporte").val(x['objeto'][0]['documentType']);
+	$("#estadoCivil_reporte").val(x['objeto'][0]['estadoCivil']);
+	$("#numeroHijos_reporte").val(x['objeto'][0]['numeroHijos']);
+	$("#peso_reporte").val(x['objeto'][0]['peso']);
+	$("#tipoSangre_reporte").val(x['objeto'][0]['tipoSangre']);
 
 }
