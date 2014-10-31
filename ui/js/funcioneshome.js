@@ -93,6 +93,7 @@ $(document).ready(function(){
 		pinUbicacion();
 		
 		//alert('dio clic');
+		$('#reporte_panel').css('display','block');
 		$('#info_evento_home').css('height','0px');
 		$('#reporte_panel').css('height',"");
 		$('#datos_reporte_1').show();

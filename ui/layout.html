@@ -44,10 +44,10 @@
 				</div>
 			</div>
 	</header>
+		<include href="{{ @content }}" />
 		<check if="{{ @usuario !== '' }}">
 			<true><include href="{{ @menu }}" /></true>
 		</check>
-		<include href="{{ @content }}" />
 		
 	</body>
 	<footer>
