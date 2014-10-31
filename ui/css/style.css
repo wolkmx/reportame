@@ -12,6 +12,9 @@ body{
 	background-position: center;
 
 }
+.bck-parallax h2{
+	padding-top: 300px;
+}
 .alto{
 	min-height: 700px;
 	background-image: url(../images/fondo.jpg);
@@ -22,9 +25,12 @@ background-color: #108dd1;
 min-height: 500px;
 }
 h1{
+	color: whitesmoke !important;
+}
+h2{
 	font-weight: 500;
 	color: whitesmoke;
-	font-size: 40px;
+	font-size: 30px;
 	text-align: center;
 }
 
@@ -273,7 +279,7 @@ margin:auto;
 /* DESCARGAR */
 
 .imagen-descargar{
-	    background-image: url("../images/quienessomos.jpg");
+	    background-image: url("../images/descarga2.jpg");
     background-size: cover;
     background-attachment: fixed;
     min-height: 500px;
@@ -286,4 +292,14 @@ margin:auto;
 	padding: 20px 40px;
 }
 
+.verde {
+	background-color:#108dd1;
+	min-height: 300px;
+}
+
+.verde h3{
+	font-weight: 300;
+	color: whitesmoke;
+	font-size: 
+}
 
