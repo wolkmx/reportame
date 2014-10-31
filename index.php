@@ -1374,7 +1374,7 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
                         $tipo_archivo = $_FILES['imagePing']['type'];
                         $tamano_archivo = $_FILES['imagePing']['size'];
                         //compruebo si las características del archivo son las que deseo
-                        if (!((strpos($tipo_archivo, "gif") || strpos($tipo_archivo, "jpeg")) && ($tamano_archivo < 2000000))) {
+                        if (!((strpos($tipo_archivo, "gif") || strpos($tipo_archivo, "jpeg") || strpos($tipo_archivo, "png"))  && ($tamano_archivo < 2000000))) {
                             $mensaje = "La extensión o el tamaño de los archivos no es correcta. <br><br><table><tr><td><li>Se permiten archivos .gif o .jpg<br><li>se permiten archivos de 100 Kb máximo.</td></tr></table>";
                         }else{
                             if (move_uploaded_file($_FILES['imagePing']['tmp_name'], $uploadFile)){
@@ -1391,7 +1391,7 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
                         $tipo_archivoShadow = $_FILES['imagePingShadow']['type'];
                         $tamano_archivoShadow = $_FILES['imagePingShadow']['size'];
                         //compruebo si las características del archivo son las que deseo
-                        if (!((strpos($tipo_archivoShadow, "gif") || strpos($tipo_archivoShadow, "jpeg")) && ($tamano_archivoShadow < 2000000))) {
+                        if (!((strpos($tipo_archivoShadow, "gif") || strpos($tipo_archivoShadow, "jpeg") || strpos($tipo_archivoShadow, "png")) && ($tamano_archivoShadow < 2000000))) {
                             $mensaje = "La extensión o el tamaño de los archivos no es correcta. Se permiten archivos .gif o .jpg se permiten archivos de 100 Kb máximo.";
                         }else{
                             if (move_uploaded_file($_FILES['imagePingShadow']['tmp_name'], $uploadFileShadow)){
@@ -1520,7 +1520,7 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
                         $tamano_archivo = $_FILES['imagePing']['size'];
                         
                         //compruebo si las características del archivo son las que deseo
-                        if (!((strpos($tipo_archivo, "gif") || strpos($tipo_archivo, "jpeg")) && ($tamano_archivo < 2000000))) {
+                        if (!((strpos($tipo_archivo, "gif") || strpos($tipo_archivo, "jpeg") || strpos($tipo_archivo, "png")) && ($tamano_archivo < 2000000))) {
                             $mensaje = "La extensión o el tamaño de los archivos no es correcta. Se permiten archivos .gif o .jpg se permiten archivos de 100 Kb máximo.";
                         }else{
                             if (move_uploaded_file($_FILES['imagePing']['tmp_name'], $uploadFile)){
@@ -1537,7 +1537,7 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
                         $tipo_archivoShadow = $_FILES['imagePingShadow']['type'];
                         $tamano_archivoShadow = $_FILES['imagePingShadow']['size'];
                         //compruebo si las características del archivo son las que deseo
-                        if (!((strpos($tipo_archivoShadow, "gif") || strpos($tipo_archivoShadow, "jpeg")) && ($tamano_archivoShadow < 2000000))) {
+                        if (!((strpos($tipo_archivoShadow, "gif") || strpos($tipo_archivoShadow, "jpeg") || strpos($tipo_archivoShadow, "png")) && ($tamano_archivoShadow < 2000000))) {
                             $mensaje = "La extensión o el tamaño de los archivos no es correcta. <br><br><table><tr><td><li>Se permiten archivos .gif o .jpg<br><li>se permiten archivos de 100 Kb máximo.</td></tr></table>";
                         }else{
                             if (move_uploaded_file($_FILES['imagePingShadow']['tmp_name'], $uploadFileShadow)){
