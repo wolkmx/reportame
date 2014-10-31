@@ -1,9 +1,10 @@
+<span style="border-radius: 7px; box-shadow: none;font: bold 131% sans-serif; padding: 0 6px 2px; position: absolute;right: -7px; top: -7px;background-color: #2b91af;" class='b-close'>X</span>
 <ul class="nav nav-tabs" role="tablist" id="tabs_registr_sesion">
 
-	<li><a href="#" role="tab" data-toggle="tab">Login</a></li>
-	<li><a href="#" role="tab" data-toggle="tab">Registrarse</a></li>
+	<li><a href="#" role="tab" data-toggle="tab" onClick="$('#seccion_login').show('slow');$('#seccion_registrarte').hide();">Login</a></li>
+	<li><a href="#" role="tab" data-toggle="tab" onClick="$('#seccion_registrarte').show('slow');$('#seccion_login').hide();">Registrarse</a></li>
 </ul>
-<div class="container">
+<div id='seccion_login' class="container">
 	<div class="row encerrado">
 		<div class="col-md-12 form-group">
 			<div id="iniciar" >
@@ -25,7 +26,7 @@
 	</div>
 </div>
 
-<div class="container">
+<div id='seccion_registrarte' class="container" style='display:none;'>
 	<div class="row">
 		<div class="col-md-12 form-group">
 			<div id="registrarse">

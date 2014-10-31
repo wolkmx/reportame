@@ -13,7 +13,8 @@
 		<script src="ui/js/jquery-2.1.1.min.js"></script>
 		<script type="text/javascript" src='/ui/js/funcioneshome.js' ></script>
 		<script src="ui/leaflet/leaflet.js"></script>
-
+		<script src="ui/js/jquery.bpopup.min.js"></script>
+		
 	<script src="ui/js/bootstrap.min.js"></script>
 	</head>
 	
@@ -44,8 +45,8 @@
 			</div>
 	</header>
 		<check if="{{ @usuario !== '' }}">
-		<true><include href="{{ @menu }}" /></true>
-	</check>
+			<true><include href="{{ @menu }}" /></true>
+		</check>
 		<include href="{{ @content }}" />
 		
 	</body>

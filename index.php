@@ -397,7 +397,13 @@ $f3->route('GET  @miPanel: /mipanel',
 			
 			//Se buscan los perfiles asociados al usuario
 			$perfiles = $db->exec('SELECT * FROM Perfil WHERE usuario_id = "'.$f3->get('SESSION.id').'" AND owner = "0"');
-			$f3->set('perfiles',$perfiles);
+			
+			foreach($perfiles as $key => $perfil):
+				$per[$perfil['idPerfil']] = $perfil['firtsName'].' '.$perfil['lastName'];
+			endforeach;
+	
+
+$f3->set('perfiles',$per);
 			
 			/*Se cargan enfermedades*/
 			$en = $db->exec('SELECT en.idEnfermedad, en.name FROM Enfermedad AS en ORDER BY en.name ASC');
