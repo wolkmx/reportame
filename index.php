@@ -216,14 +216,33 @@ $f3->route('POST @existePerfil: /existePerfil [ajax]',
 			$f3->set('usuario',$f3->get('SESSION.user'));
 			
 			/*Se consulta la base de datos para ver si existe un perfil propio para este usuario*/
-		$usuario = $db->exec('SELECT * FROM Perfil WHERE usuario_id = "'.$f3->get('SESSION.user').'" AND owner = "1"');
+		$usuario = $db->exec('SELECT * FROM Perfil WHERE usuario_id = "'.$f3->get('SESSION.id').'" AND owner = "1"');
+		//Si trae un registro debe regresar el valor de este perfil
+		if(count($usuario)){
+		//if(false){
 		
-		echo 'SELECT * FROM Perfil WHERE usuario_id = "'.$f3->get('SESSION.id').'" AND owner = "1"';
-		echo "<pre>";
-		print_r($usuario);
-		echo "</pre>";
-		echo count($usuario);
-		die();
+		/*echo "<pre>";
+		print_r($usuario[0]);
+		echo "</pre>";*/
+			//Se inicia la cadena con el formato de json
+			$objetojson = '{"objeto": [{';
+			$lastKey = count($usuario[0])-1;
+			$aux = 0;
+			foreach($usuario[0] as $key => $value):
+					//Se inicializa
+					$objetojson.='"'.$key.'":"'.$value.'"';
+					if($lastKey != $aux){
+						$objetojson.= ',';
+					}
+					$aux++;
+			endforeach;
+			$objetojson .= '}],"existe":"1"}';
+			
+			echo $objetojson;
+			
+		}else{
+			$objetojson = '{"existe": "0"}';
+		}
 		
 		}
 	}

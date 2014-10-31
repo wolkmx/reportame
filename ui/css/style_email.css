@@ -4,13 +4,28 @@ body{
 }
 .container{
 	width: 600px;
-	background-color: #ccc;
+text-align: center;
+
 }
 
 .logo{
-
+background-color: #595a5b;
+width: 100%;
+padding: 5px ;
 }
 h3{
-	
+	font-family: arial;
+	font-weight: bold;
+	color: black;
+	font-size: 30px;
+
+}
+
+.texto{
+	padding: 30px 20px;
+}
+.borde{
+	border-bottom: 3px solid #595a5b;
+	padding-bottom: 10px;
 }
 
