@@ -1,6 +1,7 @@
-﻿<span>Hola de Nuevo {{ @usuario }}</span>
-<ul>
-    <li>
+﻿<div id="popup_menu" style="left: 432px; position: absolute; top: 304.5px; z-index: 9999; opacity: 0; display: none;background-color: #fff; border-radius: 10px; box-shadow: 0 0 25px 5px #999;">	
+<span style="border-radius: 7px; box-shadow: none;font: bold 131% sans-serif; padding: 0 6px 2px; position: absolute;right: -7px; top: -7px;background-color: #2b91af;" class='b-close'>X</span>
+	<span>Hola de Nuevo {{ @usuario }}</span>
+<li>
         <a href="/perfil?menuOpc=1">Perfiles</a>
     </li>
     <li>
@@ -8,13 +9,9 @@
     </li>
     <li>
         <a href="/enfermedad?menuOpc=1">Enfermedades</a>
-    </li>
-    <li>Item3</li>
-    <li>Item4</li>
-</ul>
-
-<span id="reportar_evento">¿Que esta ocurriendo?</span>
-
-<span id="cerrar_sesion">
-	<a href="/logout">Cerrar Sesion</a>
+    </li></ul>
 </span>
+<span id="reportar_evento">¿Que esta ocurriendo?</span>	<span id="cerrar_sesion">
+		<a href="/logout">Cerrar Sesion</a>
+	</span>
+</div>

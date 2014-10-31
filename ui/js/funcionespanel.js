@@ -1,5 +1,8 @@
 $(document).ready(function(){
 
+	//Funcion para cerrrar el formulario
+	$("#cerrar_formulario").click(function(){ $("#reporte_panel").hide(); });
+	
 	map.on('click', onMapClick);
 	
 	//Funcion para capturar el avance del formulario de reporte de incidencia
@@ -76,12 +79,11 @@ $(document).ready(function(){
 	//@todo falta agregar la opcion de cargar los perfiles existentes
 	//Si es propio
 	if($('input[name=group1]:checked', '#reporte_formulario').val() == "propio"){
+		$("#perfiles").hide();
 		//Se hace la consulta via ajax para saber si ya tiene su perfil creado
-		var data = 'asdasd';
 		$.ajax({
 			type: 'POST',
-			data: data,
-			url: '/existePerfil', 
+			url: '/existeMiPerfil', 
 			}).done(function(respuesta){
 				var x = JSON.parse(respuesta);
 				//alert(x['objeto'][0]['idPerfil']+"--"+x['existe']);
@@ -114,6 +116,7 @@ $(document).ready(function(){
 					$("#tipoSangre_reporte").val(x['objeto'][0]['tipoSangre']);
 					
 				}else{
+					
 					//alert("No existe");
 				}
 				
@@ -122,7 +125,31 @@ $(document).ready(function(){
 		
 	}else{
 		//Si es de otra persona se debe buscar si existen perfiles existentes
-		
+		$("#owner").val(0);
+		//Funcion ajax que revisa si existen perfiles asociados a este usuario y que no sea el propio
+		$.ajax({
+			type: 'POST',
+			url: '/existenPerfiles', 
+			}).done(function(respuesta){
+				var x = JSON.parse(respuesta);
+				//alert(x['objeto'][0]['idPerfil']+"--"+x['existe']);
+				//Si existen perfiles se debe mostrar un selec con los perfiles que existen
+				if(x['existe']){
+				//alert("entro");
+					//Si existen mas perfiles se debe mostrar un select con los perfiles existentes
+					$("#perfiles").show();
+					//Se construyen la lista desplegable correspondiente
+					var lista = "<option value='volvo'>Volvo</option>";
+					$("#opciones_reporte").html(lista);
+					//Se vacian los datos del formulario
+					limpiarPerfil();
+					
+					
+				}else{
+					//Si no existe ningun perfil se debera mostrar un mensaje que informe al usuario de que debe crear nuevos perfiles
+				}
+				
+			});
 	}
  }
  
@@ -133,6 +160,7 @@ $(document).ready(function(){
 	evento[0] = L.marker(e.latlng,{animate: true}).addTo(map);
 	evento[0].bindPopup("<b>&iquestEsta no es tu ubicaci\u00f3n?</b><br> Prueba dando clic en <br/>otra parte del mapa ;) <br/>").openPopup()
 	cuestionario(e.latlng);
+	$("#reporte_panel").show();
 }
 
 function cuestionario(latlon){
@@ -141,5 +169,59 @@ function cuestionario(latlon){
 	$('#datos_reporte_1').show();
 	
 	//Se crea el formulario que aparecera en el div
+}
+
+//Funcion para obtener el Id del perfil seleccionado
+function cambio(select){
+	var idPerfil = select.value;
+	if(idPerfil == ""){
+		limpiarPerfil();
+	}else{
+		cargarPerfil(idPerfil);
+	}
+}
+
+//Funcion para cargar el perfil seleccionado
+function cargarPerfil(perfil){
+	//buscar el perfil en ajax
+	
+
+	//Se recuperan los datos de fecha de nacimiento, etc.
+	$("#cumple_reporte").val("");
+	$("#cumple_reporte").val("");
+	$("#pais_reporte").val("");
+	$("#ciudad_reporte").val("");
+	$("#municipio_reporte").val("");
+	$("#nombre_reporte").val("");
+	$("#apellido_reporte").val("");
+	$("#telefono_reporte").val("");
+	$("#celular_reporte").val("");
+	$("#profesion_reporte").val("");
+	$("#documentType_reporte").val("");
+	$("#estadoCivil_reporte").val("");
+	$("#numeroHijos_reporte").val("");
+	$("#peso_reporte").val("");
+	$("#tipoSangre_reporte").val("");
+
+
+
+//Funcion para limpiar el perfil
+function limpiarPerfil(){
+	//Se recuperan los datos de fecha de nacimiento, etc.
+	$("#cumple_reporte").val("");
+	$("#cumple_reporte").val("");
+	$("#pais_reporte").val("");
+	$("#ciudad_reporte").val("");
+	$("#municipio_reporte").val("");
+	$("#nombre_reporte").val("");
+	$("#apellido_reporte").val("");
+	$("#telefono_reporte").val("");
+	$("#celular_reporte").val("");
+	$("#profesion_reporte").val("");
+	$("#documentType_reporte").val("");
+	$("#estadoCivil_reporte").val("");
+	$("#numeroHijos_reporte").val("");
+	$("#peso_reporte").val("");
+	$("#tipoSangre_reporte").val("");
 
 }

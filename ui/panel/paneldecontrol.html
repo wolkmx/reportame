@@ -1,10 +1,10 @@
-﻿<div id='info_evento_home' style='transition: 2s;height:0px;'>
+﻿<div id='info_evento_home' style='transition: 2s;height:0px;margin-top: 75px;'>
 	<div id='datos_reporte_home' style='display:none;' ></div>
 	<img src='/ui/images/loading.GIF' style='display:none;' />
 	<span id='cerrar_datos_reporte_home' style='display:none;'>Cerrar</span>
 </div>
 
-<div id='reporte_panel' style='transition: 2s;height:0px;'>
+<div id='reporte_panel' style='transition: 2s;height:0px; display:none;'>
 	<include href="{{ @formularioreporte }}" />
 </div>
 
@@ -25,8 +25,8 @@
 
 <div id="content">
 
-Panel de control
-
+<span id="activar_panel">Panel de control</span>
+<span id="reportar_evento">¿Que esta ocurriendo?</span>
 </div>
 
 <script type="text/javascript">
@@ -35,6 +35,11 @@ var evento = [];
 var map = null;
 $(document).ready(function(){
 
+/*Mostrar el panel de control*/
+$("#activar_panel").click(function(){
+	$('#popup_menu').bPopup();
+
+});
 
  /*Codigo javascript para refrescar la seccion principal "content" para mostrar el formulario de registro/inicio de sesion */
 	$(".form_inicio_registro").click(function(){

@@ -1,4 +1,6 @@
-﻿<form id="reporte_formulario" action="#"  method="post" >
+﻿<span id="cerrar_formulario" style="border-radius: 7px; box-shadow: none;font: bold 131% sans-serif; padding: 0 6px 2px; position: relative;margin-top:9px;background-color: #2b91af; z-index: 100;float:right;" class='b-close'>X</span>
+
+<form id="reporte_formulario" action="#"  method="post" >
 
 
 
@@ -48,6 +50,14 @@
 			<a href="" class="list-group-item list-group-item-info">Paso 4</a>
 			<div id='datos_reporte_4' style='display:none;' class="centrado">
 				<span class="preguntas">Esta informacion se utilizara para generar estadisticas para brindar soluciones para todos</span>
+				<div id="perfiles" style="display:none;">
+					<select id="enfermedad_reporte" onChange="cambio(this);">
+							<option value=""></option>
+						<repeat group="{{ @perfiles }}" key="{{@key}}" value="{{ @nombre }}">
+							 <option value="{{ @key }}">{{@nombre}}</option>
+						</repeat>
+					</select>
+				</div>
 				<p><strong>Datos obligatorios:</strong><p>
 				<p><input id="opcion_mujer" type="radio" name="sexo" value="0"> Mujer<br>
 				<input id="opcion_hombre" type="radio" name="sexo" value="1" checked>Hombre</p>
@@ -59,6 +69,7 @@
 				 <button type="button" class="boton_reporte siguiente btn btn-default" id="reporte_paso_5">Siguiente</button>
 			</div>
 		</div>
+
 		<div class="titulo_pasos" style='display:block;' >
 			<a href="" class="list-group-item list-group-item-info">Paso 5</a>
 			<div id='datos_reporte_5' style='display:none;'class="centrado" >
