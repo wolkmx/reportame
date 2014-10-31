@@ -303,3 +303,62 @@ margin:auto;
 	font-size: 
 }
 
+/* LIGHT BOX */
+
+/* #popup_menu{
+left: 432px;
+ position: absolute;
+ top: 304.5px;
+ z-index: 9999;
+ opacity: 0;
+ display: none;
+ background-color: #fff;
+ border-radius: 10px; 
+
+}
+ */
+
+ .popup{
+ 	padding: 10px 40px;
+    left: 76px !important;
+    margin: auto;
+    top: 158px !important;
+    width: 90%;
+ }
+ .icono2 span{
+    font-size: 25px;
+    height: 38px;
+    left: 27px;
+    position: absolute;
+    top: 9px;
+    transition: all 300ms linear 0s;
+    width: 40px;
+}
+.icono2{
+color:black;
+position: relative;
+}
+
+h5{
+
+}
+.icon-user2{
+	background-image: url("../images/iconos-menu.png");
+	background-position: 1px 0px;
+	height: 39px;
+	width: 39px;
+}
+.icon-user3{
+	background-image: url("../images/iconos-menu.png");
+	background-position:  0 76px;;
+	height: 39px;
+	width: 39px;
+}
+.icon-user4{
+	background-image: url("../images/iconos-menu.png");
+	background-position:  0 155px;
+	height: 39px;
+	width: 39px;
+}
+
+ 
