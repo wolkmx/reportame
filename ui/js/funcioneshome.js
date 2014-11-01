@@ -116,10 +116,9 @@ recognition.start();*/
 //Funcion para colocar un marker con la posicion actual del usuario
 function pinUbicacion(){
 	evento[0] = L.marker(map.getCenter(),{animate: true}).addTo(map);
-	evento[0].bindPopup("<b>&iquestEsta no es tu ubicaci\u00f3n?</b><br> Prueba dando clic en <br/>otra parte del mapa ;) <br/>").openPopup()
+	evento[0].bindPopup("<b>&iquestEsta no es tu ubicaci\u00f3n?</b><br> Prueba dando clic en <br/>otra parte del mapa ;) <br/>").openPopup();
 	
-	
-	$('#latitud_logintud_reporte').val(map.getCenter());
+	$('#latitud_logintud_reporte').val(evento[0].getLatLng().lng+','+evento[0].getLatLng().lat);
 	
 }
 	

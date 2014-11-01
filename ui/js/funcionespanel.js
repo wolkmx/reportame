@@ -16,16 +16,25 @@ $(document).ready(function(){
 		//Switch para verificar que haya llenado los campos obligatorios
 		switch (parseInt(numero)) {
 			case 2:
-				pasoDos();
+				var result = pasoDos(event);
+				if(result == '0'){
+					return false;
+				}
 				break;
 			case 3:
-				pasoTres();
+				var result = pasoTres(event);
+				if(result == '0'){
+					return false;
+				}
 				break;
 			case 4:
 				pasoCuatro();
 				break;
 			case 5:
-				pasoCinco();
+				var result = pasoCinco(event);
+				if(result == '0'){
+					return false;
+				}
 				break;
 			default:
 				alert("Opción no valida");
@@ -57,18 +66,28 @@ $(document).ready(function(){
  
  //Funcion para verificar el paso 2
  function pasoDos(event){
-	if($("#enfermedad_reporte").val() == "" || $("#enfermedad_reporte").val() == null ){
-		alert("Debes escoger una enfermedad primero");
-		event.stopPropagation();
+	//Se verifica si ya esta seleccionado al menos un tipo de reporte, si no esta seleccionado no se le deja avanzar
+	if($("#categoria_reporte").val() == "" || $("#categoria_reporte").val() == null ){
+		alert("Debes decidir que estas reportando");
+		return '0';
 		
+	}else{
+		//Si ya esta seleccionado un tipo de reporte, se verifica si es de tipo enfermedad para que sea obligatorio seleccionarlo
+		//El valor por defecto de enfermedad es 1
+		if($("#categoria_reporte").val() == 1){
+			if($("#enfermedad_reporte").val() == "" || $("#enfermedad_reporte").val() == null ){
+				alert("Debes escoger una enfermedad primero");
+				return '0';
+			}
+		}		
 	}
  }
  
   //Funcion para verificar el paso 3
  function pasoTres(event){
 	if($("#descripcion_reporte").val() == "" || $("#descripcion_reporte").val() == null ){
-		/*alert("Comparte un poco de informacion sobre este evento, hace cuanto lo detectaron, es recurrente, etc.");
-		event.stopPropagation();*/
+		alert("Comparte un poco de informacion sobre este evento, hace cuanto lo detectaron, es recurrente, etc.");
+		return '0';
 	}
  }
  
@@ -87,15 +106,20 @@ $(document).ready(function(){
 				var x = JSON.parse(respuesta);
 				//alert(x['objeto'][0]['idPerfil']+"--"+x['existe']);
 				//Si el perfil existe recuperara los valores y los llenara en los campos correspondientes
-				if(x['existe']){				
+				
+				if(parseInt(x['existe'])){
+				$('#m_perfil').hide();				
 				$("#owner").val(1);
+				$("#owner_exist").val(1);
 					
 					//Se recuperan los datos de fecha de nacimiento, etc.
 					cargarDatos(x);
 					
 				}else{
-					
-					//alert("No existe");
+					//El usuario no ha creado su perfil todabia
+					$('#m_perfil').show();
+					$("#owner").val(1);
+					$("#owner_exist").val(0);
 				}
 				
 			});
@@ -104,6 +128,7 @@ $(document).ready(function(){
 	}else{
 		//Si es de otra persona se debe buscar si existen perfiles existentes
 		$("#owner").val(0);
+		$('#m_perfil').hide();
 		//Funcion ajax que revisa si existen perfiles asociados a este usuario y que no sea el propio
 		$.ajax({
 			type: 'POST',
@@ -116,9 +141,6 @@ $(document).ready(function(){
 				//alert("entro");
 					//Si existen mas perfiles se debe mostrar un select con los perfiles existentes
 					$("#perfiles").show();
-					//Se construyen la lista desplegable correspondiente
-					var lista = "<option value='volvo'>Volvo</option>";
-					$("#opciones_reporte").html(lista);
 					//Se vacian los datos del formulario
 					limpiarPerfil();
 					
@@ -136,12 +158,12 @@ $(document).ready(function(){
 	if($("#perfil").val() == "" || $("#perfil").val() == null ){
 		if( ($("#cumple_reporte").val() == "") || ($("#pais_reporte").val() == "") || ($("#ciudad_reporte").val() == "") || ($("#municipio_reporte").val() == "")){
 			alert("Por favor rellena todos los campos obligatorios antes de continuar.");
-			event.stopPropagation();
+			return '0';
 		}	
 	}else{
 		if( ($("#cumple_reporte").val() == "") || ($("#pais_reporte").val() == "") || ($("#ciudad_reporte").val() == "") || ($("#municipio_reporte").val() == "")){
 			alert("Por favor rellena todos los campos obligatorios antes de continuar.");
-			event.stopPropagation();
+			return '0';
 		}	
 	}
  }
@@ -150,14 +172,15 @@ $(document).ready(function(){
  function pasoSeis(event){
 	//Se construye el objeto a enviar
 	var data = { usuarioId : $('#usuario_id_reporte').val(), 
-				latlon: $('#usuario_id_reporte').val(),
+				latlon: $('#latitud_logintud_reporte').val(),
 				owner: $('#owner').val(),
+				owner_exist: $('#owner_exist').val(),
 				perfil: $('#perfil').val(),
 				enfermedad_reporte: $('#enfermedad_reporte').val(),
 				descripcion_reporte: $('#descripcion_reporte').val(),
 				tipoPerfil: $('input[name=group1]:checked', '#reporte_formulario').val(),
 				perfil_reporte: $('#perfil_reporte').val(),
-				sexo: $('input[name=sexo]:checked', '#reporte_formulario').val(),
+				sexo_reporte: $('input[name=sexo]:checked', '#reporte_formulario').val(),
 				cumple_reporte: $('#cumple_reporte').val(),
 				pais_reporte: $('#pais_reporte').val(),
 				ciudad_reporte: $('#ciudad_reporte').val(),
@@ -172,6 +195,7 @@ $(document).ready(function(){
 				numeroHijos_reporte: $('#numeroHijos_reporte').val(),
 				peso_reporte: $('#peso_reporte').val(),
 				tipoSangre_reporte: $('#tipoSangre_reporte').val(),
+				categoria_reporte: $('#categoria_reporte').val(),
 				
 				};
 	
@@ -180,10 +204,24 @@ $(document).ready(function(){
 			url: '/guardarEvento', 
 			data: data,
 			}).done(function(respuesta){
-				var x = JSON.parse(respuesta);
-				//alert(x['objeto'][0]['idPerfil']+"--"+x['existe']);
-				//Se cargan los valores del formulario con los que se estan recibiendo
-				cargarDatos(x);
+				//var x = JSON.parse(respuesta);
+				//Si existe quiere decir que se guardo correctamente y se refresca el mapa con la informacion del evento correspondiente
+				if(x['objeto'][0]['resultado'] == 1){
+					//x['objeto'][0]['eventoId']
+					limpiarPerfil();
+					$("#perfiles").hide();
+					$("#owner").val('');
+					$("#owner_exist").val('');
+					$('#datos_reporte_5').hide();
+					$('#datos_reporte_1').show();
+					$('#reporte_panel').hide();
+					//Se limpian los eventos
+					eliminareventos();
+					//Se crea un nuevo marcador con los datos del ultimo guardado y muestra la informacion del mismo
+					evento[0] = L.marker(map.getCenter(),{animate: true}).addTo(map);
+
+				}
+				
 				
 			});
 	
@@ -205,6 +243,16 @@ function cuestionario(latlon){
 	$('#datos_reporte_1').show();
 	
 	//Se crea el formulario que aparecera en el div
+}
+
+//Funcion para obtener el Id de la categoria seleccionada y mostrar o no la seccion de enfermedad
+function tipoReporte(select){
+	var tipo = select.value;
+	if(tipo == 1){
+		$('#tipo_enfermedad').show();
+	}else{
+		$('#tipo_enfermedad').hide();
+	}
 }
 
 //Funcion para obtener el Id del perfil seleccionado

@@ -360,22 +360,101 @@ $f3->route('POST @guardarEvento: /guardarEvento [ajax]',
 	//echo "--".$f3->get('SESSION.user')."--";
 		/*Se verifica si el usuario tiene la sesion iniciada*/
 		if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user'))){
-			$f3->set('usuario',$f3->get('SESSION.user'));
+			//Se define vacia la variable
+			$perfil = null;			
+
 			$formulario = $f3->get("REQUEST");
 			//Se revisa si el perfil esta definido como propio o no
 			if($formulario['owner']){
+				//Se revisa si el perfil no existia previamente.
+				if(!$formulario['owner_exist']){
+					//Si no existia previamente se crea en la base de datos
+					$perfil=new DB\SQL\Mapper($db,'Perfil');
+					$perfil->firtsName=$formulario['nombre_reporte'];
+					$perfil->lastName=$formulario['apellido_reporte'];
+					$perfil->phone=$formulario['telefono_reporte'];
+					$perfil->cellphone=$formulario['celular_reporte'];
+					$perfil->birthday=$formulario['cumple_reporte'];
+					$perfil->country=$formulario['pais_reporte'];
+					$perfil->city=$formulario['ciudad_reporte'];
+					$perfil->municipio=$formulario['municipio_reporte'];
+					$perfil->sex=$formulario['sexo_reporte'];
+					$perfil->profesion=$formulario['profesion_reporte'];
+					$perfil->usuario_id=$f3->get('SESSION.id');
+					$perfil->documentType=$formulario['documentType_reporte'];
+					$perfil->estadoCivil=$formulario['estadoCivil_reporte'];
+					$perfil->numeroHijos=$formulario['numeroHijos_reporte'];
+					$perfil->peso=$formulario['peso_reporte'];
+					$perfil->tipoSangre=$formulario['tipoSangre_reporte'];
+					$perfil->owner=1;
+					$perfil->created_at=date('Y-m-d H:i:s');
+					$perfil->updated_at=date('Y-m-d H:i:s');
+					$perfil->save();
+					
+				}else{
+					//Si existe se busca en la base de datos y se relaciona con el evento
+					$perfil=new DB\SQL\Mapper($db,'Perfil');
+					$perfil->load(array('usuario_id=? AND owner=?',$f3->get('SESSION.id'), 1));
+					
+				}
 				
 			}else{
 				//Si no es propio se revisa si existe o no un perfil previamente
 				if($formulario['perfil'] != "" ){
-				
+					//Si es diferente de '' se busca el perfil seleccionado
+					$perfil=new DB\SQL\Mapper($db,'Perfil');
+					$perfil->load(array('usuario_id=? AND idPerfil=? ',$f3->get('SESSION.id'), $formulario['perfil']));
 				}else{
+					//Si no existia el perfil debe crearse uno nuevo con los datos que se ingresaron
+					//@todo falta optimizar esta seccion de codigo para que sea reutilizable con la seccion superior
+					$perfil=new DB\SQL\Mapper($db,'Perfil');
+					$perfil->firtsName=$formulario['nombre_reporte'];
+					$perfil->lastName=$formulario['apellido_reporte'];
+					$perfil->phone=$formulario['telefono_reporte'];
+					$perfil->cellphone=$formulario['celular_reporte'];
+					$perfil->birthday=$formulario['cumple_reporte'];
+					$perfil->country=$formulario['pais_reporte'];
+					$perfil->city=$formulario['ciudad_reporte'];
+					$perfil->municipio=$formulario['municipio_reporte'];
+					$perfil->sex=$formulario['sexo_reporte'];
+					$perfil->profesion=$formulario['profesion_reporte'];
+					$perfil->usuario_id=$f3->get('SESSION.id');
+					$perfil->documentType=$formulario['documentType_reporte'];
+					$perfil->estadoCivil=$formulario['estadoCivil_reporte'];
+					$perfil->numeroHijos=$formulario['numeroHijos_reporte'];
+					$perfil->peso=$formulario['peso_reporte'];
+					$perfil->tipoSangre=$formulario['tipoSangre_reporte'];
+					$perfil->owner=0;
+					$perfil->created_at=date('Y-m-d H:i:s');
+					$perfil->updated_at=date('Y-m-d H:i:s');
+					$perfil->save();
 					
 				}
 			}
-			echo "<pre>";
+			//Se obtiene la latitud y la longitud			
+			$latlon = explode(',',$formulario['latlon']);
+			//Se crea el nuevo evento
+			$evento=new DB\SQL\Mapper($db,'Evento');
+			$evento->lat=$latlon[1];
+			$evento->lon=$latlon[0];
+			$evento->usuario_id=$f3->get('SESSION.id');
+			$evento->categoria_id=$formulario['categoria_reporte'];
+			if($formulario['categoria_reporte']== 1){
+				$evento->enfermedad_id=$formulario['enfermedad_reporte'];			
+			}
+			$evento->descripcion=$formulario['descripcion_reporte'];
+			$evento->perfil_id=$perfil->get('_id');
+			$evento->created_at=date('Y-m-d H:i:s');
+			$evento->updated_at=date('Y-m-d H:i:s');
+
+			//Se guarda el evento
+			$evento->save();
+
+			/*echo "<pre>";
 			print_r($formulario);
-			echo "</pre>";
+			echo "</pre>";*/
+
+			echo "{'objeto': [{'resultado': 1, 'eventoId': '".$evento->get('_id')."'}]}";
 		
 		}
 	}
@@ -493,6 +572,14 @@ $f3->set('perfiles',$per);
 				$enfermedades[$e["idEnfermedad"]] = $e["name"];
 			endforeach;
 			$f3->set('enfermedades',$enfermedades);
+
+			/*Se cargan las categorias*/
+			$ca = $db->exec('SELECT c.idCategoria, c.name FROM Categoria AS c ORDER BY c.name ASC');
+			
+			foreach($ca as $c):
+				$categorias[$c["idCategoria"]] = $c["name"];
+			endforeach;
+			$f3->set('categorias',$categorias);
 			
 			echo Template::instance()->render('layout.html');
 		}else{
@@ -1433,7 +1520,7 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //-- Se arma la consulta
-                        $consulta = 'SELECT * FROM enfermedad;';
+                        $consulta = 'SELECT * FROM Enfermedad;';
                         
                         //-- Se hace la consulta
                         $todosLosRegistros = $db->exec( $consulta );
@@ -1617,7 +1704,7 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //-- Llama al modelo
-                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'enfermedad'));
+                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'Enfermedad'));
 
                         //-- Carga al objeto
                         $f3->get('enfermedad')->load(array('idEnfermedad=?',$request['id']));
@@ -1663,7 +1750,7 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //--    Llama al modelo
-                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'enfermedad'));
+                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'Enfermedad'));
                         
                         //-- Carga al objeto
                         $f3->get('enfermedad')->load(array('idEnfermedad=?',$request['id']));
@@ -1763,7 +1850,7 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //--    Llama al modelo
-                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'enfermedad'));
+                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'Enfermedad'));
                         
                         //-- Carga al objeto
                         $f3->get('enfermedad')->load(array('idEnfermedad=?',$request['id']));
@@ -1806,10 +1893,10 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //--    Llama al modelo
-                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'enfermedad'));
+                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'Enfermedad'));
                         
                         //-- Arma la consulta
-                        $consulta = 'DELETE FROM enfermedad WHERE idEnfermedad='.$request['id'].';';
+                        $consulta = 'DELETE FROM Enfermedad WHERE idEnfermedad='.$request['id'].';';
                         
                         //-- Eliminar el registro
                         $db->exec($consulta);
@@ -1824,7 +1911,7 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
                         $f3->set('menu','menu.html');
                         
                         //-- Se arma la consulta
-                        $consulta = 'SELECT * FROM enfermedad;';
+                        $consulta = 'SELECT * FROM Enfermedad;';
                         
                         //-- Se hace la consulta
                         $todosLosRegistros = $db->exec( $consulta );
