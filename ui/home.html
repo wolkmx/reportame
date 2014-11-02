@@ -225,8 +225,12 @@ evento[index].indice = index;
 			$('#info_evento_home').css('height','0px');
 			$('#info_evento_home').css('height','135px');
 			$('#cerrar_datos_reporte_home').fadeIn('slow');
-			$('#datos_reporte_home').html(contenido);
+			
 			$('#datos_reporte_home').fadeIn('slow');
+
+			contenido = contenido + etiquetasConsejo(eventosrecientes[this.indice]["idEvento"]);
+			$('#datos_reporte_home').html(contenido);
+
 		 } );
 
 	}
