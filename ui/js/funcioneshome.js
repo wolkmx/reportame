@@ -115,50 +115,21 @@ recognition.start();*/
 
 //Funcion para recuperar las etiquetas y 10 consejos mas votados para cada evento
 function etiquetasConsejo(idEvento){
-
+	
+	var data = { 'idEvento' : idEvento };
 	$.ajax({
 	type: 'POST',
 	data: data,
-	url: '/busquedaHome', 
-	}).done(function(eventos){
+	url: '/etiquetasConsejo', 
+	}).done(function(objeto){
 		/*@todo se convierte el resultado que se imprime con echo desde php en un objeto json se debe revisar si es necesario hacerlo*/
-		var x = JSON.parse(eventos);
+		var x = JSON.parse(objeto);
 		//la manera de accederlos es la siguiente x['objeto'][0][0][0]['descripcion']
 		//alert('termino la busqueda'+x['objeto'][0][0][0]['descripcion']);
 		//alert(evento.length);
 
-		//Funcion para eliminar los eventos
-		eliminareventos();
-
-		//alert(x.length);
-		//Se crean los nuevos markers
-		/*@todo se debe dejar una sola funcion que realice este trabajo*/
-		for(i=0;i < x.length ; i++){
-	
-			evento[i] = L.marker([x['objeto'][0][i][0]["lat"], x['objeto'][0][i][0]["lon"]],{ title: x['objeto'][0][i][0]["categoriaName"]+': '+x['objeto'][0][i][0]["name"] }).addTo(map);
-	
-			evento[i].indice = i;
-
-		}
-
-		/*Se agregan los eventos @todo se debe crear una sola funcion que se encarge de esto*/
-		for(var j = 0; j < x.length; j++){
-
-			evento[j].on('click', function(){ 
-
-				var contenido =  "<ul><li><span class='titulo_dato_home'>Tipo de reporte:</span><span> "+x['objeto'][0][this.indice][0]['categoriaName']+"</span></li><li><span class='titulo_dato_home'>Enfermedad:</span><span> "+x['objeto'][0][this.indice][0]['name']+"</span></li><li><span class='titulo_dato_home'>Usuario que Reporta:</span><span> "+x['objeto'][0][this.indice][0]['alias']+"</span></li><li><span class='titulo_dato_home'>Reportado el:</span><span> "+x['objeto'][0][this.indice][0]['created_at']+"</span></li></ul>";
-					/*$('#info_evento_home img').fadeIn();*/
-					$('#info_evento_home').css('height','0px');
-					$('#info_evento_home').css('height','135px');
-					$('#cerrar_datos_reporte_home').fadeIn('slow');
-					$('#datos_reporte_home').html(contenido);
-					$('#datos_reporte_home').fadeIn('slow');
-				 } );
-
-			}
-
-		//$( "#map" ).html( html );
 	});
+	return '';
 	
 }
 

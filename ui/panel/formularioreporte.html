@@ -65,9 +65,14 @@
 				<div id="perfiles" style="display:none;">
 					<select id="perfil_reporte" onChange="cambio(this);">
 							<option value=""></option>
-						<repeat group="{{ @perfiles }}" key="{{@key}}" value="{{ @nombre }}">
-							 <option value="{{ @key }}">{{@nombre}}</option>
-						</repeat>
+							<check if="{{ @perfiles!=NULL }}">
+								<true>
+									<repeat group="{{ @perfiles }}" key="{{@key}}" value="{{ @nombre }}">
+										 <option value="{{ @key }}">{{@nombre}}</option>
+									</repeat>
+								</true>
+							</check>
+						
 					</select>
 				</div>
 				<span id="m_perfil" style="display:none;">

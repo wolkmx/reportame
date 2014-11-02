@@ -539,6 +539,51 @@ $f3->route('POST @busquedaHome: /busquedaHome [ajax]',
 	}
 );
 
+
+/*Ruta para recibir la peticion ajax para buscar todas las etiquetas y consejos del evento*/
+$f3->route('POST @etiquetasConsejo: /etiquetasConsejo [ajax]',
+	function($f3) use ($db) {
+		$idEvento = $f3->get("REQUEST");
+		$eventoLabels = $db->exec('SELECT el.label_id, l.name FROM EventoLabel AS el LEFT JOIN Label l ON el.label_id = l.idLabel WHERE el.evento_id = '.$idEvento['idEvento']);
+
+	//Se inicia la cadena con el formato de json
+	$objetojson = '{"labels": [{';
+	//Se obtiene la longitud de la columna
+	$lastKey = count($eventoLabels)-1;
+
+	foreach($eventoLabels as $k => $eventoLabel):
+		$objetojson.= '"'.$k.'":[{';
+		//Se obtiene el total de keys
+		$lastKeyinner = count($eventoLabel)-1;
+		$aux = 0;
+		foreach($eventoLabel as $key => $event ):
+			//Se inicializa
+			$objetojson.='"'.$key.'":"'.$event.'"';
+			if($lastKeyinner != $aux){
+				$objetojson.= ',';
+			}
+			$aux++;
+		endforeach;
+		$objetojson.= '}]';
+		if($k != $lastKey){
+			$objetojson.= ',';
+		}
+	endforeach;
+
+	//$objetojson .= '}],"consejos": [{';
+
+	
+
+	$objetojson .= '}],"length":"'.count($eventoLabels).'"}';
+echo $objetojson;
+/*
+echo '<pre>';
+print_r($eventoLabels);
+echo '</pre>';*/
+
+	}
+);
+
 /*Ruta para recibir la peticion ajax para buscar todos los eventos y refrescar el mapa*/
 $f3->route('POST @todosLosEventos: /todosLosEventos [ajax]',
 	function($f3) use ($db) {
@@ -612,7 +657,8 @@ $f3->route('GET  @miPanel: /mipanel',
 			
 			//Se buscan los perfiles asociados al usuario
 			$perfiles = $db->exec('SELECT * FROM Perfil WHERE usuario_id = "'.$f3->get('SESSION.id').'" AND owner = "0"');
-			
+			$per = null;			
+
 			foreach($perfiles as $key => $perfil):
 				$per[$perfil['idPerfil']] = $perfil['firtsName'].' '.$perfil['lastName'];
 			endforeach;
