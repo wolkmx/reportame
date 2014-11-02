@@ -3,6 +3,13 @@ $(document).ready(function(){
 	//Funcion para cerrrar el formulario
 	$("#cerrar_formulario").click(function(){ $("#reporte_panel").hide(); });
 	
+	//Funcion para actualizar el mapa
+	$("#actualizar_mapa").click(function(){ 
+		$("#info_evento_home").css('height','0px'); 
+		eliminareventos();
+		cargarEventos();
+	});
+	
 	map.on('click', onMapClick);
 	
 	$("#reporte_paso_6").click(function(){ pasoSeis(); });
@@ -230,7 +237,7 @@ $(document).ready(function(){
 					evento[0] = L.marker([x['objeto'][0]["lat"], x['objeto'][0]["lon"]],{animate: true, icon: icono}).addTo(map);
 
 					//Se abre la informacion del evento
-					var contenido =  "<ul><li><span class='titulo_dato_home'>Tipo de reporte:<span> "+x['objeto'][0]["tipo_reporte"]+"</li><li><span class='titulo_dato_home'>Enfermedad:<span> "+x['objeto'][0]["enfermedad"]+"</li><li><span class='titulo_dato_home'>Usuario que Reporta:<span> "+x['objeto'][0]["usuario"]+"</li><li><span class='titulo_dato_home'>Reportado el:<span> "+x['objeto'][0]['created']+"</li></ul>";
+					var contenido =  "<ul><li><span class='titulo_dato_home'>Tipo de reporte:<span> "+x['objeto'][0]["tipo_reporte"]+"</span></span></li><li><span class='titulo_dato_home'>Enfermedad:<span>"+x['objeto'][0]["enfermedad"]+"</span></span></li><li><span class='titulo_dato_home'>Usuario que Reporta:<span> "+x['objeto'][0]["usuario"]+"</span></span></li><li><span class='titulo_dato_home'>Reportado el:<span> "+x['objeto'][0]['created']+"</span></span></li></ul>";
 					/*$('#info_evento_home img').fadeIn();*/
 					$('#info_evento_home').css('height','0px');
 					$('#info_evento_home').css('height','135px');
@@ -251,16 +258,15 @@ $(document).ready(function(){
 	eliminareventos();
 	evento[0] = L.marker(e.latlng,{animate: true}).addTo(map);
 	evento[0].bindPopup("<b>&iquestEsta no es tu ubicaci\u00f3n?</b><br> Prueba dando clic en <br/>otra parte del mapa ;) <br/>").openPopup()
-	cuestionario(e.latlng);
+	cuestionario(evento[0].getLatLng().lng+','+evento[0].getLatLng().lat);
 	$("#reporte_panel").show();
 }
 
 function cuestionario(latlon){
 	$('#reporte_panel').css('height','0px');
 	$('#reporte_panel').css('height',"");
-	$('#datos_reporte_1').show();
-	
-	//Se crea el formulario que aparecera en el div
+	//Se actualiza la latitud y longitud
+	$('#latitud_logintud_reporte').val(latlon);	
 }
 
 //Funcion para obtener el Id de la categoria seleccionada y mostrar o no la seccion de enfermedad
