@@ -454,7 +454,20 @@ $f3->route('POST @guardarEvento: /guardarEvento [ajax]',
 			print_r($formulario);
 			echo "</pre>";*/
 
-			echo "{'objeto': [{'resultado': 1, 'eventoId': '".$evento->get('_id')."'}]}";
+			//Se obtiene el tipo de reporte y el nombre de la enfermedad
+			$categoria=new DB\SQL\Mapper($db,'Categoria');
+			$categoria->load(array('idCategoria=?',$evento->get('categoria_id')));
+			//Se obtiene el tipo de enfermedad
+			if($formulario['categoria_reporte']== 1){
+				$enf=new DB\SQL\Mapper($db,'Enfermedad');
+				$enf->load(array('idEnfermedad=?',$evento->get('enfermedad_id')));
+				$enfermedad['name'] = $enf->get('name');
+				$enfermedad['image'] = $enf->get('imagePing');
+			}else{
+				$enfermedad = null;
+			}
+
+			echo '{"objeto": [{"lat":"'.$evento->get('lat').'", "lon":"'.$evento->get('lon').'", "usuario":"'.$f3->get('SESSION.user').'", "tipo_reporte":"'.$categoria->get('name').'", "enfermedad":"'.$enfermedad['name'].'", "image":"'.$enfermedad['image'].'", "created":"'.$evento->get('created_at').'" }],"resultado": "1"}';
 		
 		}
 	}
@@ -551,7 +564,7 @@ $f3->route('GET  @miPanel: /mipanel',
 			//Esta consulta se debe simplificar solo obtener la informacion del evento y luego con ajax hacer una consulta especifica cuando se de clic en el evento.
 			/*$eventos = $db->exec('SELECT e.*, p.*, en.name, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario WHERE (e.created_at BETWEEN "'.$fechaanterior.'" AND "'.$fechainicial*/
 			
-			$eventos = $db->exec('SELECT e.*, p.*, en.name, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario');
+			$eventos = $db->exec('SELECT e.*, p.*, en.name, en.imagePing, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario');
 			
 			$f3->set('eventosrecientes',$eventos);
 			

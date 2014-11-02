@@ -204,9 +204,10 @@ $(document).ready(function(){
 			url: '/guardarEvento', 
 			data: data,
 			}).done(function(respuesta){
-				//var x = JSON.parse(respuesta);
+				var x = JSON.parse(respuesta);
 				//Si existe quiere decir que se guardo correctamente y se refresca el mapa con la informacion del evento correspondiente
-				if(x['objeto'][0]['resultado'] == 1){
+				if(x['resultado'] == 1){
+					//alert('entro al if de resultado');
 					//x['objeto'][0]['eventoId']
 					limpiarPerfil();
 					$("#perfiles").hide();
@@ -215,10 +216,27 @@ $(document).ready(function(){
 					$('#datos_reporte_5').hide();
 					$('#datos_reporte_1').show();
 					$('#reporte_panel').hide();
+					$('#tipo_enfermedad').hide();
 					//Se limpian los eventos
 					eliminareventos();
+					//Icono
+					var icono = L.icon({
+						iconUrl: '/uploads/'+x['objeto'][0]["image"],
+						iconSize:     [68, 61], // size of the icon
+						iconAnchor:   [65, 58], // point of the icon which will correspond to marker's location
+						popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+					});
 					//Se crea un nuevo marcador con los datos del ultimo guardado y muestra la informacion del mismo
-					evento[0] = L.marker(map.getCenter(),{animate: true}).addTo(map);
+					evento[0] = L.marker([x['objeto'][0]["lat"], x['objeto'][0]["lon"]],{animate: true, icon: icono}).addTo(map);
+
+					//Se abre la informacion del evento
+					var contenido =  "<ul><li><span class='titulo_dato_home'>Tipo de reporte:<span> "+x['objeto'][0]["tipo_reporte"]+"</li><li><span class='titulo_dato_home'>Enfermedad:<span> "+x['objeto'][0]["enfermedad"]+"</li><li><span class='titulo_dato_home'>Usuario que Reporta:<span> "+x['objeto'][0]["usuario"]+"</li><li><span class='titulo_dato_home'>Reportado el:<span> "+x['objeto'][0]['created']+"</li></ul>";
+					/*$('#info_evento_home img').fadeIn();*/
+					$('#info_evento_home').css('height','0px');
+					$('#info_evento_home').css('height','135px');
+					$('#cerrar_datos_reporte_home').fadeIn('slow');
+					$('#datos_reporte_home').html(contenido);
+					$('#datos_reporte_home').fadeIn('slow');
 
 				}
 				
