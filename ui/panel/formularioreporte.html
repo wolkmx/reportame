@@ -4,24 +4,36 @@
 
 
 
-<input type="hidden" id="usuario_id_reporte"/>
-<input type="hidden" id="latitud_logintud_reporte"/>
-<input type="hidden" id="owner"/>
+<input type="hidden" id="usuario_id_reporte" name="usuario_id_reporte" value="{{ @usuarioId }}"/>
+<input type="hidden" id="latitud_logintud_reporte" name="latitud_logintud_reporte"/>
+<input type="hidden" id="owner" name="owner"/>
+<input type="hidden" id="owner_exist" name="owner_exist"/>
+<input type="hidden" id="perfil" name="perfil" />
 
 	<div class="titulo_pasos " style='display:block;' >
 		
 		<a href="" class="list-group-item list-group-item-info">Paso 1</a>
 		<div id='datos_reporte_1' style='display:block;' class="centrado">
-			<span class="preguntas ">Que enfermedad estas reportando</span>
-			<p>Enfermo de: ... <select id="enfermedad_reporte">
-								<repeat group="{{ @enfermedades }}" key="{{@key}}" value="{{ @enfermedad }}">
-									 <option value="{{ @key }}">{{@enfermedad}}</option>
-								</repeat>
-								</select>
-			</p>
-		
-	
-				<button type="button" class="boton_reporte siguiente btn btn-default"  id="reporte_paso_2">Siguiente</button>
+			<div id='tipo_categoria'>
+				<span class="preguntas ">Estoy reportando...</span>
+				<select id="categoria_reporte" onChange="tipoReporte(this);">
+					<option value=""></option>
+					<repeat group="{{ @categorias }}" key="{{@k}}" value="{{ @categoria }}">
+						 <option value="{{ @k }}">{{ @categoria }}</option>
+					</repeat>
+				</select>
+			</div>
+			<div id='tipo_enfermedad' style='display:none;'>
+				<span class="preguntas ">Que enfermedad estas reportando</span>
+				<p>Enfermo de: ... <select id="enfermedad_reporte">
+									 <option value=""></option>
+									<repeat group="{{ @enfermedades }}" key="{{@key}}" value="{{ @enfermedad }}">
+										 <option value="{{ @key }}">{{@enfermedad}}</option>
+									</repeat>
+									</select>
+				</p>
+			</div>
+			<button type="button" class="boton_reporte siguiente btn btn-default"  id="reporte_paso_2">Siguiente</button>
 		</div>
 	</div>
 
@@ -51,13 +63,16 @@
 			<div id='datos_reporte_4' style='display:none;' class="centrado">
 				<span class="preguntas">Esta informacion se utilizara para generar estadisticas para brindar soluciones para todos</span>
 				<div id="perfiles" style="display:none;">
-					<select id="enfermedad_reporte" onChange="cambio(this);">
+					<select id="perfil_reporte" onChange="cambio(this);">
 							<option value=""></option>
 						<repeat group="{{ @perfiles }}" key="{{@key}}" value="{{ @nombre }}">
 							 <option value="{{ @key }}">{{@nombre}}</option>
 						</repeat>
 					</select>
 				</div>
+				<span id="m_perfil" style="display:none;">
+					Actualmente no cuentas con un perfil propio, con estos datos se creara el mismo
+				</span>
 				<p><strong>Datos obligatorios:</strong><p>
 				<p><input id="opcion_mujer" type="radio" name="sexo" value="0"> Mujer<br>
 				<input id="opcion_hombre" type="radio" name="sexo" value="1" checked>Hombre</p>

@@ -62,7 +62,7 @@ $f3->route('GET @home: /',
 	//Esta consulta se debe simplificar solo obtener la informacion del evento y luego con ajax hacer una consulta especifica cuando se de clic en el evento.
 	/*$eventos = $db->exec('SELECT e.*, p.*, en.name, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario WHERE (e.created_at BETWEEN "'.$fechaanterior.'" AND "'.$fechainicial.'")');*/
 	
-	$eventos = $db->exec('SELECT e.*, p.*, en.name, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario');
+	$eventos = $db->exec('SELECT e.*, p.*, en.name, en.imagePing, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario');
 	
 	$f3->set('eventosrecientes',$eventos);
 	
@@ -307,6 +307,172 @@ $f3->route('POST @existenPerfiles: /existenPerfiles [ajax]',
 
 );
 
+/*Ruta para recibir la peticion ajax para buscar un perfil especifico del usuario*/
+$f3->route('POST @getPerfil: /getPerfil [ajax]',
+	function($f3) use ($db) {
+	/*Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!*/
+	new Session();
+	//echo "--".$f3->get('SESSION.user')."--";
+		/*Se verifica si el usuario tiene la sesion iniciada*/
+		if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user'))){
+			$f3->set('usuario',$f3->get('SESSION.user'));
+			$formulario = $f3->get("REQUEST");
+			/*Se consulta la base de datos para ver si existe un perfil propio para este usuario*/
+			$perfil = $db->exec('SELECT * FROM Perfil WHERE usuario_id = "'.$f3->get('SESSION.id').'" AND idPerfil = "'.$formulario['perfilId'].'"');
+			//Si trae un registro debe regresar el valor de este perfil
+			if(count($perfil)){
+			//if(false){
+			//echo 'SELECT * FROM Perfil WHERE usuario_id = "'.$f3->get('SESSION.id').'" AND owner = "0"';
+			/*echo "<pre>";
+			print_r($perfil);
+			echo "</pre>";
+			die();*/
+				//Se inicia la cadena con el formato de json
+				$objetojson = '{"objeto": [{';
+				$lastKey = count($perfil[0])-1;
+				$aux = 0;
+				foreach($perfil[0] as $k => $value):
+					$objetojson.= '"'.$k.'":"'.$value.'"';
+					if($aux != $lastKey){
+								$objetojson.= ',';
+							}
+					$aux++;
+				endforeach;
+				$objetojson .= '}],"existe":"1", "length": "'.count($perfil[0]).'"}';
+				
+				echo $objetojson;
+				
+			}else{
+				$objetojson = '{"existe": "0", "lenght" : "0"}';
+				echo $objetojson;
+			}
+		
+		}
+	}
+
+);
+
+/*Ruta para recibir la peticion ajax para guardar el evento*/
+$f3->route('POST @guardarEvento: /guardarEvento [ajax]',
+	function($f3) use ($db) {
+	/*Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!*/
+	new Session();
+	//echo "--".$f3->get('SESSION.user')."--";
+		/*Se verifica si el usuario tiene la sesion iniciada*/
+		if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user'))){
+			//Se define vacia la variable
+			$perfil = null;			
+
+			$formulario = $f3->get("REQUEST");
+			//Se revisa si el perfil esta definido como propio o no
+			if($formulario['owner']){
+				//Se revisa si el perfil no existia previamente.
+				if(!$formulario['owner_exist']){
+					//Si no existia previamente se crea en la base de datos
+					$perfil=new DB\SQL\Mapper($db,'Perfil');
+					$perfil->firtsName=$formulario['nombre_reporte'];
+					$perfil->lastName=$formulario['apellido_reporte'];
+					$perfil->phone=$formulario['telefono_reporte'];
+					$perfil->cellphone=$formulario['celular_reporte'];
+					$perfil->birthday=$formulario['cumple_reporte'];
+					$perfil->country=$formulario['pais_reporte'];
+					$perfil->city=$formulario['ciudad_reporte'];
+					$perfil->municipio=$formulario['municipio_reporte'];
+					$perfil->sex=$formulario['sexo_reporte'];
+					$perfil->profesion=$formulario['profesion_reporte'];
+					$perfil->usuario_id=$f3->get('SESSION.id');
+					$perfil->documentType=$formulario['documentType_reporte'];
+					$perfil->estadoCivil=$formulario['estadoCivil_reporte'];
+					$perfil->numeroHijos=$formulario['numeroHijos_reporte'];
+					$perfil->peso=$formulario['peso_reporte'];
+					$perfil->tipoSangre=$formulario['tipoSangre_reporte'];
+					$perfil->owner=1;
+					$perfil->created_at=date('Y-m-d H:i:s');
+					$perfil->updated_at=date('Y-m-d H:i:s');
+					$perfil->save();
+					
+				}else{
+					//Si existe se busca en la base de datos y se relaciona con el evento
+					$perfil=new DB\SQL\Mapper($db,'Perfil');
+					$perfil->load(array('usuario_id=? AND owner=?',$f3->get('SESSION.id'), 1));
+					
+				}
+				
+			}else{
+				//Si no es propio se revisa si existe o no un perfil previamente
+				if($formulario['perfil'] != "" ){
+					//Si es diferente de '' se busca el perfil seleccionado
+					$perfil=new DB\SQL\Mapper($db,'Perfil');
+					$perfil->load(array('usuario_id=? AND idPerfil=? ',$f3->get('SESSION.id'), $formulario['perfil']));
+				}else{
+					//Si no existia el perfil debe crearse uno nuevo con los datos que se ingresaron
+					//@todo falta optimizar esta seccion de codigo para que sea reutilizable con la seccion superior
+					$perfil=new DB\SQL\Mapper($db,'Perfil');
+					$perfil->firtsName=$formulario['nombre_reporte'];
+					$perfil->lastName=$formulario['apellido_reporte'];
+					$perfil->phone=$formulario['telefono_reporte'];
+					$perfil->cellphone=$formulario['celular_reporte'];
+					$perfil->birthday=$formulario['cumple_reporte'];
+					$perfil->country=$formulario['pais_reporte'];
+					$perfil->city=$formulario['ciudad_reporte'];
+					$perfil->municipio=$formulario['municipio_reporte'];
+					$perfil->sex=$formulario['sexo_reporte'];
+					$perfil->profesion=$formulario['profesion_reporte'];
+					$perfil->usuario_id=$f3->get('SESSION.id');
+					$perfil->documentType=$formulario['documentType_reporte'];
+					$perfil->estadoCivil=$formulario['estadoCivil_reporte'];
+					$perfil->numeroHijos=$formulario['numeroHijos_reporte'];
+					$perfil->peso=$formulario['peso_reporte'];
+					$perfil->tipoSangre=$formulario['tipoSangre_reporte'];
+					$perfil->owner=0;
+					$perfil->created_at=date('Y-m-d H:i:s');
+					$perfil->updated_at=date('Y-m-d H:i:s');
+					$perfil->save();
+					
+				}
+			}
+			//Se obtiene la latitud y la longitud			
+			$latlon = explode(',',$formulario['latlon']);
+			//Se crea el nuevo evento
+			$evento=new DB\SQL\Mapper($db,'Evento');
+			$evento->lat=$latlon[1];
+			$evento->lon=$latlon[0];
+			$evento->usuario_id=$f3->get('SESSION.id');
+			$evento->categoria_id=$formulario['categoria_reporte'];
+			if($formulario['categoria_reporte']== 1){
+				$evento->enfermedad_id=$formulario['enfermedad_reporte'];			
+			}
+			$evento->descripcion=$formulario['descripcion_reporte'];
+			$evento->perfil_id=$perfil->get('_id');
+			$evento->created_at=date('Y-m-d H:i:s');
+			$evento->updated_at=date('Y-m-d H:i:s');
+
+			//Se guarda el evento
+			$evento->save();
+
+			/*echo "<pre>";
+			print_r($formulario);
+			echo "</pre>";*/
+
+			//Se obtiene el tipo de reporte y el nombre de la enfermedad
+			$categoria=new DB\SQL\Mapper($db,'Categoria');
+			$categoria->load(array('idCategoria=?',$evento->get('categoria_id')));
+			//Se obtiene el tipo de enfermedad
+			if($formulario['categoria_reporte']== 1){
+				$enf=new DB\SQL\Mapper($db,'Enfermedad');
+				$enf->load(array('idEnfermedad=?',$evento->get('enfermedad_id')));
+				$enfermedad['name'] = $enf->get('name');
+				$enfermedad['image'] = $enf->get('imagePing');
+			}else{
+				$enfermedad = null;
+			}
+
+			echo '{"objeto": [{"lat":"'.$evento->get('lat').'", "lon":"'.$evento->get('lon').'", "usuario":"'.$f3->get('SESSION.user').'", "tipo_reporte":"'.$categoria->get('name').'", "enfermedad":"'.$enfermedad['name'].'", "image":"'.$enfermedad['image'].'", "created":"'.$evento->get('created_at').'" }],"resultado": "1"}';
+		
+		}
+	}
+
+);
 
 /*Ruta para recibir la peticion ajax para buscar una enfermedad en especifico y refrescar el mapa*/
 $f3->route('POST @busquedaHome: /busquedaHome [ajax]',
@@ -373,6 +539,48 @@ $f3->route('POST @busquedaHome: /busquedaHome [ajax]',
 	}
 );
 
+/*Ruta para recibir la peticion ajax para buscar todos los eventos y refrescar el mapa*/
+$f3->route('POST @todosLosEventos: /todosLosEventos [ajax]',
+	function($f3) use ($db) {
+
+		//Consulta a la base de datos para obtener una lista con los eventos
+	
+		$fechainicial = date ("Y-m-d H:i:s",time());
+		$fechaanterior = date('Y-m-d H:i:s', strtotime('-1 day', strtotime( date("Y-m-d H:i:s",time()) )));
+		
+		/*$eventos = $db->exec('SELECT e.*, p.*, en.name, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario WHERE (e.created_at BETWEEN "'.$fechaanterior.'" AND "'.$fechainicial.'") AND UPPER(en.name) LIKE "'.$busqueda['busquedaajax'].'" '.$tipousuario);*/
+		
+		$eventos = $db->exec('SELECT e.*, p.*, en.name, en.imagePing, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario');
+	
+	//Se inicia la cadena con el formato de json
+	$objetojson = '{"objeto": [{';
+	//Se obitnene la longitud de la columna
+	$lastKey = count($eventos)-1;
+
+	foreach($eventos as $k => $evento):
+		$objetojson.= '"'.$k.'":[{';
+		//Se obtiene el total de keys
+		$lastKeyinner = count($evento)-1;
+		$aux = 0;
+		foreach($evento as $key => $event ):
+			//Se inicializa
+			$objetojson.='"'.$key.'":"'.$event.'"';
+			if($lastKeyinner != $aux){
+				$objetojson.= ',';
+			}
+			$aux++;
+		endforeach;
+		$objetojson.= '}]';
+		if($k != $lastKey){
+			$objetojson.= ',';
+		}
+	endforeach;
+	$objetojson .= '}],"length":"'.count($eventos).'"}';
+	echo $objetojson;
+
+	}
+);
+
 /*----*/
 
 
@@ -388,6 +596,7 @@ $f3->route('GET  @miPanel: /mipanel',
 			$f3->set('formularioreporte','panel/formularioreporte.html');
 			$f3->set('menu','menu.html');
 			$f3->set('usuario',$f3->get('SESSION.user'));
+			$f3->set('usuarioId',$f3->get('SESSION.id'));
 			
 			//Consulta a la base de datos para obtener una lista con los eventos
 			$fechainicial = date ("Y-m-d H:i:s",time());
@@ -397,7 +606,7 @@ $f3->route('GET  @miPanel: /mipanel',
 			//Esta consulta se debe simplificar solo obtener la informacion del evento y luego con ajax hacer una consulta especifica cuando se de clic en el evento.
 			/*$eventos = $db->exec('SELECT e.*, p.*, en.name, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario WHERE (e.created_at BETWEEN "'.$fechaanterior.'" AND "'.$fechainicial*/
 			
-			$eventos = $db->exec('SELECT e.*, p.*, en.name, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario');
+			$eventos = $db->exec('SELECT e.*, p.*, en.name, en.imagePing, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario');
 			
 			$f3->set('eventosrecientes',$eventos);
 			
@@ -418,6 +627,14 @@ $f3->set('perfiles',$per);
 				$enfermedades[$e["idEnfermedad"]] = $e["name"];
 			endforeach;
 			$f3->set('enfermedades',$enfermedades);
+
+			/*Se cargan las categorias*/
+			$ca = $db->exec('SELECT c.idCategoria, c.name FROM Categoria AS c ORDER BY c.name ASC');
+			
+			foreach($ca as $c):
+				$categorias[$c["idCategoria"]] = $c["name"];
+			endforeach;
+			$f3->set('categorias',$categorias);
 			
 			echo Template::instance()->render('layout.html');
 		}else{
@@ -1358,7 +1575,7 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //-- Se arma la consulta
-                        $consulta = 'SELECT * FROM enfermedad;';
+                        $consulta = 'SELECT * FROM Enfermedad;';
                         
                         //-- Se hace la consulta
                         $todosLosRegistros = $db->exec( $consulta );
@@ -1542,7 +1759,7 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //-- Llama al modelo
-                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'enfermedad'));
+                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'Enfermedad'));
 
                         //-- Carga al objeto
                         $f3->get('enfermedad')->load(array('idEnfermedad=?',$request['id']));
@@ -1588,7 +1805,7 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //--    Llama al modelo
-                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'enfermedad'));
+                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'Enfermedad'));
                         
                         //-- Carga al objeto
                         $f3->get('enfermedad')->load(array('idEnfermedad=?',$request['id']));
@@ -1688,7 +1905,7 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //--    Llama al modelo
-                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'enfermedad'));
+                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'Enfermedad'));
                         
                         //-- Carga al objeto
                         $f3->get('enfermedad')->load(array('idEnfermedad=?',$request['id']));
@@ -1731,10 +1948,10 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //--    Llama al modelo
-                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'enfermedad'));
+                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'Enfermedad'));
                         
                         //-- Arma la consulta
-                        $consulta = 'DELETE FROM enfermedad WHERE idEnfermedad='.$request['id'].';';
+                        $consulta = 'DELETE FROM Enfermedad WHERE idEnfermedad='.$request['id'].';';
                         
                         //-- Eliminar el registro
                         $db->exec($consulta);
@@ -1749,7 +1966,7 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
                         $f3->set('menu','menu.html');
                         
                         //-- Se arma la consulta
-                        $consulta = 'SELECT * FROM enfermedad;';
+                        $consulta = 'SELECT * FROM Enfermedad;';
                         
                         //-- Se hace la consulta
                         $todosLosRegistros = $db->exec( $consulta );

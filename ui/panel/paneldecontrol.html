@@ -23,14 +23,15 @@
 </div>
 
 
-<div id="content">
+<div id="content" style="position: absolute; margin-top: -276px;">
 
-<div class="row">
-	<div class="col-md-12">
-		<button type="button" id="activar_panel" class="btn btn-primary btn-lg btn-block">Panel de control</button>
-		<button type="button" id="reportar_evento" class="btn btn-primary btn-lg btn-block">¿Que esta ocurriendo?</button>
+	<div class="row">
+		<div class="col-md-12">
+			<button type="button" id="activar_panel" class="btn btn-primary btn-lg btn-block">Panel de control</button>
+			<button type="button" id="reportar_evento" class="btn btn-primary btn-lg btn-block">¿Que esta ocurriendo?</button>
+			<button type="button" id="actualizar_mapa" class="btn btn-primary btn-lg btn-block">¿Actualizar Mapa?</button>
+		</div>
 	</div>
-</div>
 </div>
 
 <script type="text/javascript">
@@ -99,7 +100,7 @@ var eventosrecientes = [];
 	for (index = 0; index < eventosrecientes.length; ++index) {
 		//Icono
 		var icono = L.icon({
-			iconUrl: '/ui/images/pin1.png',
+			iconUrl: '/uploads/'+eventosrecientes[index]["imagePing"],
 
 			iconSize:     [68, 61], // size of the icon
 			iconAnchor:   [65, 58], // point of the icon which will correspond to marker's location
