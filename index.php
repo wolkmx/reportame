@@ -2060,4 +2060,103 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
 	}
 );
 
+/**
+ * @author Oscar Galindez <oscarabreu19@gmail.com>
+ * @todo Controlador para el manejo de la descarga de los datos
+ */
+$f3->route('POST @descargar: /descargar',
+    function($f3) use ($db) 
+    {
+
+        //-- Obtiene la peticion
+        $request = $f3->get("REQUEST");
+        
+        //-- Base de la consulta
+        $consulta = "
+                    SELECT
+                        e.lat, 
+                        e.lon, 
+                        e.created_at, 
+                        en.name, 
+                        p.sex, 
+                        p.country, 
+                        p.city, 
+                        p.municipio
+                    FROM 
+                            Evento e
+                    INNER JOIN Perfil p
+                        ON e.perfil_id = p.idPerfil
+                    INNER JOIN Enfermedad en
+                        ON e.enfermedad_id = en.idEnfermedad";
+        
+        //-- Armado de la fecha
+        $fecha = '';
+        
+        if( $request['anio'] != '' ):
+            $fecha .= $request['anio'];
+        endif;
+        
+        if( $request['mes'] != '' ):
+            $fecha .= "-".$request['mes']."-00";
+        endif;
+        
+        //-- Armado del where segun los traido del formulario
+        $where = "
+                WHERE
+                e.created_at >= '".$fecha."'";
+        
+        if( $request['enfermedad'] != '' ):
+            $consulta .= " AND en.name = '".$request['enfermedad']."'";
+        endif;
+        
+        if( $request['pais'] != '' ):
+            $consulta .= " AND p.country = '".$request['pais']."'";
+        endif;
+        
+        if( $request['municipio'] != '' ):
+            $consulta .= " AND p.municipio = '".$request['municipio']."'";
+        endif;
+        
+        if( $request['ciudad'] != '' ):
+            $consulta .= " AND p.ciudad = '".$request['ciudad']."'";
+        endif;
+        
+        //-- Se hace la consulta
+        $todosLosRegistros = $db->exec( $consulta );
+
+        //-- Si tiene registros
+        if(count($todosLosRegistros)!=0 ):
+            
+            header('Content-Type: text/csv; charset=utf-8');
+            header('Content-Disposition: attachment; filename=reporta-m-'.date("Y-m-d").'-data.csv');
+        
+            $fp = fopen('php://output', 'w');
+            
+            //-- Monta el encabezado 'latitud,longitud,fecha,enfermedad,sexo,pais,ciudad,numicipio'
+            $encabezado = 
+                    array('latitud',
+                        'longitud',
+                        'fecha',
+                        'enfermedad',
+                        'sexo',
+                        'pais',
+                        'ciudad',
+                        'numicipio');
+            
+            fputcsv($fp, $encabezado);
+            
+            foreach ($todosLosRegistros as $campos) {
+                fputcsv($fp, $campos);
+            }
+
+            fclose($fp);
+            
+        else:
+            //-- Carga el arreglo de respuesta en 'SESSION'
+            //$f3->set( 'todosLosRegistros', 0 );
+        endif;
+        
+    }
+);
+
 $f3->run();
