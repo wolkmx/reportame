@@ -1233,7 +1233,7 @@ $f3->route('GET|POST @categoria: /categoria',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //-- Se arma la consulta
-                        $consulta = 'SELECT * FROM categoria;';
+                        $consulta = 'SELECT * FROM Categoria;';
                         
                         //-- Se hace la consulta
                         $todosLosRegistros = $db->exec( $consulta );
@@ -1512,7 +1512,7 @@ $f3->route('GET|POST @categoria: /categoria',
                         $f3->set('categoria',new DB\SQL\Mapper($db,'categoria'));
                         
                         //-- Arma la consulta
-                        $consulta = 'DELETE FROM categoria WHERE idCategoria='.$request['id'].';';
+                        $consulta = 'DELETE FROM Categoria WHERE idCategoria='.$request['id'].';';
                         
                         //-- Eliminar el registro
                         $db->exec($consulta);
@@ -1527,7 +1527,7 @@ $f3->route('GET|POST @categoria: /categoria',
                         $f3->set('menu','menu.html');
                         
                         //-- Se arma la consulta
-                        $consulta = 'SELECT * FROM categoria;';
+                        $consulta = 'SELECT * FROM Categoria;';
                         
                         //-- Se hace la consulta
                         $todosLosRegistros = $db->exec( $consulta );
