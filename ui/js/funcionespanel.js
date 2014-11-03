@@ -244,7 +244,21 @@ $(document).ready(function(){
 					$('#cerrar_datos_reporte_home').fadeIn('slow');
 					$('#datos_reporte_home').html(contenido);
 					$('#datos_reporte_home').fadeIn('slow');
-
+					
+					//Se debe mostrar un formulario para agregar etiquetas y consejos
+					/*$.get( "formularioEtiquetas", function( data ) {
+						$( "#datos_reporte_home" ).append( data);
+					});*/
+					var id = {"evento": x["evento"]};
+					$.ajax({
+							type: 'POST',
+							url: '/formularioEtiquetas', 
+							data: id,
+							}).done(function(formulario){
+								$( "#datos_reporte_home" ).append( formulario);
+								
+							});
+					
 				}
 				
 				

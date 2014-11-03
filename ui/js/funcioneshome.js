@@ -116,6 +116,7 @@ recognition.start();*/
 //Funcion para recuperar las etiquetas y 10 consejos mas votados para cada evento
 function etiquetasConsejo(idEvento){
 	
+	var contenido = "";
 	var data = { 'idEvento' : idEvento };
 	$.ajax({
 	type: 'POST',
@@ -124,12 +125,36 @@ function etiquetasConsejo(idEvento){
 	}).done(function(objeto){
 		/*@todo se convierte el resultado que se imprime con echo desde php en un objeto json se debe revisar si es necesario hacerlo*/
 		var x = JSON.parse(objeto);
-		//la manera de accederlos es la siguiente x['objeto'][0][0][0]['descripcion']
-		//alert('termino la busqueda'+x['objeto'][0][0][0]['descripcion']);
-		//alert(evento.length);
+		contenido = contenido + "<span id='etiquetas_evento'>";
+		//Si existen etiquetas
+		if(parseInt(x['lengthetiquetas']) > 0){
+			contenido = contenido + "<p>Las etiquetas para este evento son:</p><p>";
+			$.each(x['labels'][0], function(idx, obj) {
+				contenido = contenido + "#"+obj[0]['name']+" ";
+				//alert(obj[0]['name']);
+			});
+		}else{
+			contenido = contenido + "<p>No existen etiquetas para este evento";
+		}
+		contenido = contenido + "</p></span>";
+		
+		//Se agregan los consejo
+		contenido = contenido + "<span id='consejos_evento'>";
+		if(parseInt(x['lengtconsejos']) > 0){
+			contenido = contenido + "<p>Estos consejos podrian servirte:</p><p>";
+			$.each(x['consejos'][0], function(idx, obj) {
+				contenido = contenido + "<div class='consejo_info'><span>"+obj[0]['consejo']+"</span><span> por: "+obj[0]['alias']+"</span></div>";
+				//alert(obj[0]['name']);
+			});
+		}else{
+			contenido = contenido + "<p>No existen consejos";
+		}
+		contenido = contenido + "</p></span>";
+		$( "#datos_reporte_home" ).append( contenido);
+
 
 	});
-	return '';
+	
 	
 }
 

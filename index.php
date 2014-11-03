@@ -467,7 +467,7 @@ $f3->route('POST @guardarEvento: /guardarEvento [ajax]',
 				$enfermedad = null;
 			}
 
-			echo '{"objeto": [{"lat":"'.$evento->get('lat').'", "lon":"'.$evento->get('lon').'", "usuario":"'.$f3->get('SESSION.user').'", "tipo_reporte":"'.$categoria->get('name').'", "enfermedad":"'.$enfermedad['name'].'", "image":"'.$enfermedad['image'].'", "created":"'.$evento->get('created_at').'" }],"resultado": "1"}';
+			echo '{"objeto": [{"lat":"'.$evento->get('lat').'", "lon":"'.$evento->get('lon').'", "usuario":"'.$f3->get('SESSION.user').'", "tipo_reporte":"'.$categoria->get('name').'", "enfermedad":"'.$enfermedad['name'].'", "image":"'.$enfermedad['image'].'", "created":"'.$evento->get('created_at').'" }],"resultado": "1","evento": "'.$evento->get('_id').'"}';
 		
 		}
 	}
@@ -546,6 +546,8 @@ $f3->route('POST @etiquetasConsejo: /etiquetasConsejo [ajax]',
 		$idEvento = $f3->get("REQUEST");
 		$eventoLabels = $db->exec('SELECT el.label_id, l.name FROM EventoLabel AS el LEFT JOIN Label l ON el.label_id = l.idLabel WHERE el.evento_id = '.$idEvento['idEvento']);
 
+		//echo 'SELECT el.label_id, l.name FROM EventoLabel AS el LEFT JOIN Label l ON el.label_id = l.idLabel WHERE el.evento_id = '.$idEvento['idEvento'];
+		
 	//Se inicia la cadena con el formato de json
 	$objetojson = '{"labels": [{';
 	//Se obtiene la longitud de la columna
@@ -569,13 +571,47 @@ $f3->route('POST @etiquetasConsejo: /etiquetasConsejo [ajax]',
 			$objetojson.= ',';
 		}
 	endforeach;
+	
+	$objetojson .= '}],"consejos": [{';
+	
+	$cadena = "";
+	
+	//Se construye una cadena con los id de las etiquetas del evento
+	foreach($eventoLabels as $ev):
+		$cadena .= $ev["label_id"].',';
+	endforeach;
+	
+	//se buscan los consejos relacionados con las etiquetas de eventoLabels
+	$consejos = $db->exec('SELECT c.*, u.alias FROM Consejo AS c LEFT JOIN ConsejoLabel cl ON c.idConsejo = cl.consejo_id LEFT JOIN Usuario u ON u.idUsuario = c.usuario_id WHERE cl.label_id IN ('.substr($cadena, 0, -1).')');
+	
+	//Se itera entre las etiquetas para construir el objeto json
+	$lastKey = count($consejos)-1;
 
-	//$objetojson .= '}],"consejos": [{';
+	foreach($consejos as $k => $consejo):
+		$objetojson.= '"'.$k.'":[{';
+		//Se obtiene el total de keys
+		$lastKeyinner = count($consejo)-1;
+		$aux = 0;
+		foreach($consejo as $key => $c ):
+			//Se inicializa
+			$objetojson.='"'.$key.'":"'.$c.'"';
+			if($lastKeyinner != $aux){
+				$objetojson.= ',';
+			}
+			$aux++;
+		endforeach;
+		$objetojson.= '}]';
+		if($k != $lastKey){
+			$objetojson.= ',';
+		}
+	endforeach;
 
 	
-
-	$objetojson .= '}],"length":"'.count($eventoLabels).'"}';
-echo $objetojson;
+	//$objetojson .= '}]}';
+	
+	//$objetojson .= '}]';
+	$objetojson .= '}],"lengthetiquetas":"'.count($eventoLabels).'", "lengtconsejos":"'.count($consejos).'"}';
+	echo $objetojson;
 /*
 echo '<pre>';
 print_r($eventoLabels);
@@ -583,6 +619,32 @@ echo '</pre>';*/
 
 	}
 );
+
+
+/*Ruta dummy para aceptar las peticiones get desde jquery para mostrar el formulario de etiquetas*/
+$f3->route('POST @formularioEtiquetas: /formularioEtiquetas [ajax]',
+	function($f3) use ($db) {
+		$formulario = $f3->get("REQUEST");		
+		$f3->set('id_evento',$formulario['evento']);
+		echo Template::instance()->render('panel/formularioetiquetas.html');
+	}
+
+);
+
+/*Ruta guardar las etiquetas del evento*/
+$f3->route('POST @guardarEtiquetasEvento: /guardarEtiquetasEvento [ajax]',
+	function($f3) use ($db) {
+		
+		$formulario = $f3->get("REQUEST");
+		$eventolabel=new DB\SQL\Mapper($db,'Eventolabel');
+		//$eventolabel->
+		//@todo continuar aqui
+		
+	}
+
+);
+
+
 
 /*Ruta para recibir la peticion ajax para buscar todos los eventos y refrescar el mapa*/
 $f3->route('POST @todosLosEventos: /todosLosEventos [ajax]',

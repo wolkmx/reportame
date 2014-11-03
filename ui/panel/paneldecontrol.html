@@ -146,6 +146,9 @@ evento[index].indice = index;
 			$('#cerrar_datos_reporte_home').fadeIn('slow');
 			$('#datos_reporte_home').html(contenido);
 			$('#datos_reporte_home').fadeIn('slow');
+			
+			etiquetasConsejo(eventosrecientes[this.indice]["idEvento"]);
+			
 		 } );
 
 	}
