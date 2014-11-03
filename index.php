@@ -181,12 +181,9 @@ $f3->route('POST @iniciarsesion: /iniciarsesion [ajax]',
 /*Ruta para recibir la peticion ajax para registrar el usuario*/
 $f3->route('POST @registrousuario: /registrousuario [ajax]',
 	function($f3) use ($db) {
+    
 		$formulario = $f3->get("REQUEST");
 		
-		/*echo "<pre>";
-		print_r($formulario);
-		echo "</pre>";
-		die();*/
 		$user=new DB\SQL\Mapper($db,'Usuario');
 		$user->set('alias',$formulario['user']);
 		$user->set('email',$formulario['email']);
@@ -194,13 +191,45 @@ $f3->route('POST @registrousuario: /registrousuario [ajax]',
 		//Se guarda el usuario creado
 		$user->save();
 		
+        //-- Envio del email
+    
+                $smtp = new SMTP ( 'smtp.gmail.com', 465, 'SSL', 'usuario@dominio.com', 'clave' );
+
+                $smtp->set('From', '"Reporta-m" <reportame@info.com>');
+                $smtp->set('To', '<'.$user->get('email').'>');
+                $smtp->set('Subject', 'Confirmacion de Activacion');  
+                $smtp->set('Errors-to', '<usuario@dominio.com>');  
+
+                $message = 'Usuario: '. $user->get('alias'); 
+                $message .= '<br>Clave: '. $user->get('password'); 
+
+                $sent = $smtp->send($message, TRUE);
+
+                $mylog = $smtp->log();
+
+                $sentText = 'not sent';
+
+                $headerText = 'does not exist';
+
+                if ($sent)
+                {
+                    $sentText = 'was sent';
+                }
+
+                if ($smtp->exists('Date'))
+                {
+                    $headerText = 'exists';
+                }
+
+        //-- Envio del email
+       
 		/*@todo falta agregar la logica para verificar si ya existe le usuario o si se pudo guardar correctamente por ejemplo que no exista el usuario y el email antes*/
 		
 		//Si encuentra el usuario se inicia la sesion con los datos del usuario.
-			new Session();
-			
-			$f3->set('SESSION.user',$user->get('alias'));
-			$f3->set('SESSION.id',$user->get('idUsuario'));
+                new Session();
+
+                $f3->set('SESSION.user',$user->get('alias'));
+                $f3->set('SESSION.id',$user->get('idUsuario'));
 
 		//Se redirecciona al panel de control
 		echo '<script language="javascript" type="text/javascript">window.location.href="mipanel/";</script>'; 
