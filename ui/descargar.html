@@ -1,82 +1,96 @@
 <section class="imagen-descargar">
-	<div class="container">
-		<div class="row contenedor-quienes">
-			<div class="col12">
-				<h2>DESCARGAR DATOS</h2>
-			</div>
-		</div>
-	</div>
+    <div class="container">
+        <div class="row contenedor-quienes">
+            <div class="col12">
+                <h2>DESCARGAR DATOS</h2>
+            </div>
+        </div>
+    </div>
 </section>
+
 <section class="verde">
-	<div class="container">
-		<div class="row espacio">
-			<div class="col-md-12"><h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi qui, ea, sed exercitationem unde molestiae. Ullam cumque odit magnam dolores non fugit animi amet deleniti nulla dignissimos, temporibus aut fuga.</h2></div>
-			
-		</div>
-<div class="row">
-	<div class="col-md-6">
-		<select class="form-control">
-		  <option>Enero</option>
-		  <option>Febrero</option>
-		  <option>Marzo</option>
-		  <option>Abril</option>
-		  <option>Mayo</option>
-		  <option>Junio</option>
-		  <option>Julio</option>
-		  <option>Agosto</option>
-		  <option>Septiembre</option>
-		  <option>Octubre</option>
-		   <option>Noviembre</option>
-		</select>
-		
-	</div>
-	<div class="col-md-6">
-					<select class="form-control">
-		  <option>2014</option>
-		  <option>2015</option>
-		</select>
-	</div>
-</div>
+    
+    <div class="container">
+        
+        <div class="row espacio">
+                <div class="col-md-12">
+                    <h2>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing 
+                        elit. Eligendi qui, ea, sed exercitationem unde molestiae. Ullam cumque 
+                        odit magnam dolores non fugit animi amet deleniti nulla dignissimos, 
+                        temporibus aut fuga.
+                    </h2>
+                </div>
+        </div>
 
+        <form action="descargar" method="post" class="form-inline" role="form">
+        
+            <div class="row">
 
+                <div class="col-md-6">
+                        <select class="form-control" name="anio">
+                          <option value="2014">2014</option>
+                          <option value="2015">2015</option>
+                        </select>
+                </div>
+                
+                <div class="col-md-6">
+                    <select class="form-control" name="mes">
+                        <option value="01">Enero</option>
+                        <option value="02">Febrero</option>
+                        <option value="03">Marzo</option>
+                        <option value="04">Abril</option>
+                        <option value="05">Mayo</option>
+                        <option value="06">Junio</option>
+                        <option value="07">Julio</option>
+                        <option value="08">Agosto</option>
+                        <option value="09">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
+                </div>
 
-		<div class="row espacio">
-			<form class="form-inline" role="form">
-			
-				<div class="col-md-3">
-				  <div class="form-group">
-			  <label class="sr-only" for="exampleInputEmail2">Cuidad</label>
-			  <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Cuidad">
-			</div>
-				</div>
-			
-			  <div class="col-md-3">
-			  	<div class="form-group">
-			  	  <div class="input-group">
-			  	  	<label class="sr-only" for="exampleInputEmail2">Pais</label>
-			  	    <input class="form-control" type="text" placeholder="Pais">
-			  	  </div>
-			  	</div>
-			  </div>
-			
-			  <div class="col-md-3">
-			  	<div class="form-group">
-			  	  <label class="sr-only" >Enfermedad</label>
-			  	  <input type="text" class="form-control" id="exampleInputPassword2" placeholder="Enfermedad"> 
-			  	</div>
-			  </div>
-			
-			 <div class="col-md-3">
-			 	<label class="sr-only" >Municipio</label>
-			  	  <input type="text" class="form-control" id="exampleInputPassword2" placeholder="Municipio"> 
-			 </div>
-			 <div class="col-md-12 espacio" >
-			 	 <button type="submit" class="btn btn-default">Descargar Datos</button>
-			 </div>
-			</form>
-		</div>
+            </div>
 
+            <div class="row espacio">
 
-	</div>
+                <div class="col-md-3">
+                      <div class="form-group">
+                        <label class="sr-only" >Enfermedad</label>
+                        <input name="enfermedad" type="text" class="form-control" id="exampleInputPassword2" placeholder="Enfermedad"> 
+                      </div>
+                </div>
+                
+                <div class="col-md-3">
+                      <div class="form-group">
+                        <div class="input-group">
+                              <label class="sr-only" for="exampleInputEmail2">Pais</label>
+                          <input name="pais" class="form-control" type="text" placeholder="Pais">
+                        </div>
+                      </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="sr-only" for="exampleInputEmail2">Cuidad</label>
+                        <input name="ciudad" type="text" class="form-control" id="exampleInputEmail2" placeholder="Cuidad">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                       <label class="sr-only" >Municipio</label>
+                         <input name="municipio" type="text" class="form-control" id="exampleInputPassword2" placeholder="Municipio"> 
+                </div>
+
+                <div class="col-md-12 espacio" >
+                        <button type="submit" class="btn btn-default">Descargar Datos</button>
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
 	
 </section>
