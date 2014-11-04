@@ -581,6 +581,10 @@ $f3->route('POST @etiquetasConsejo: /etiquetasConsejo [ajax]',
 		$cadena .= $ev["label_id"].',';
 	endforeach;
 	
+	if(count($eventoLabels) < 1){
+		$cadena = "0,";
+	}
+	
 	//se buscan los consejos relacionados con las etiquetas de eventoLabels
 	$consejos = $db->exec('SELECT c.*, u.alias FROM Consejo AS c LEFT JOIN ConsejoLabel cl ON c.idConsejo = cl.consejo_id LEFT JOIN Usuario u ON u.idUsuario = c.usuario_id WHERE cl.label_id IN ('.substr($cadena, 0, -1).')');
 	

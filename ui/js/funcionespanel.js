@@ -237,10 +237,10 @@ $(document).ready(function(){
 					evento[0] = L.marker([x['objeto'][0]["lat"], x['objeto'][0]["lon"]],{animate: true, icon: icono}).addTo(map);
 
 					//Se abre la informacion del evento
-					var contenido =  "<ul><li><span class='titulo_dato_home'>Tipo de reporte:<span> "+x['objeto'][0]["tipo_reporte"]+"</span></span></li><li><span class='titulo_dato_home'>Enfermedad:<span>"+x['objeto'][0]["enfermedad"]+"</span></span></li><li><span class='titulo_dato_home'>Usuario que Reporta:<span> "+x['objeto'][0]["usuario"]+"</span></span></li><li><span class='titulo_dato_home'>Reportado el:<span> "+x['objeto'][0]['created']+"</span></span></li></ul>";
+					var contenido =  "<ul class='list-group'><li class='list-group-item'><span class='titulo_dato_home'>Tipo de reporte:<span> "+x['objeto'][0]["tipo_reporte"]+"</span></span></li><li class='list-group-item'><span class='titulo_dato_home'>Enfermedad:<span>"+x['objeto'][0]["enfermedad"]+"</span></span></li><li class='list-group-item'><span class='titulo_dato_home'>Usuario que Reporta:<span> "+x['objeto'][0]["usuario"]+"</span></span></li><li class='list-group-item'><span class='titulo_dato_home'>Reportado el:<span> "+x['objeto'][0]['created']+"</span></span></li></ul>";
 					/*$('#info_evento_home img').fadeIn();*/
 					$('#info_evento_home').css('height','0px');
-					$('#info_evento_home').css('height','200px');
+					$('#info_evento_home').css('height','470px');
 					$('#cerrar_datos_reporte_home').fadeIn('slow');
 					$('#datos_reporte_home').html(contenido);
 					$('#datos_reporte_home').fadeIn('slow');
