@@ -86,9 +86,10 @@ $f3->route('GET @home: /',
 /*Ruta para recibir la peticion ajax para mostrar el formulario de registro*/
 $f3->route('POST @login: /login [ajax]',
 	function($f3) {
-	
+		$formulario = $f3->get("REQUEST");
 		//Se declara la variable flash como nula para que no aparesca la primera vez que se muestra el formulario pero si la segunda vez si es que hay un error.
 		$f3->set('flash',null);
+		$f3->set("tipo", $formulario["tipo"]);
 		echo Template::instance()->render('loginform.html');
 	}
 );
@@ -162,6 +163,7 @@ $f3->route('POST @iniciarsesion: /iniciarsesion [ajax]',
 		}else{
 		//Si no encuentra el usuario volvera a mostrar el formulario con un mensaje de advertencia llamado flash
 			$f3->set('flash','Usuario o clave incorrecta por favor ingrese los datos nuevamente');
+			$f3->set("tipo", "is");
 			echo Template::instance()->render('loginform.html');
 
 		}
