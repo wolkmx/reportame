@@ -181,19 +181,20 @@ $f3->route('POST @iniciarsesion: /iniciarsesion [ajax]',
 /*Ruta para recibir la peticion ajax para registrar el usuario*/
 $f3->route('POST @registrousuario: /registrousuario [ajax]',
 	function($f3) use ($db) {
-    
+                
 		$formulario = $f3->get("REQUEST");
 		
 		$user=new DB\SQL\Mapper($db,'Usuario');
 		$user->set('alias',$formulario['user']);
 		$user->set('email',$formulario['email']);
 		$user->set('password',$formulario['clave']);
+                
 		//Se guarda el usuario creado
 		$user->save();
 		
         //-- Envio del email
     
-                $smtp = new SMTP ( 'smtp.gmail.com', 465, 'SSL', 'usuario@dominio.com', 'clave' );
+                $smtp = new SMTP ( 'smtp.gmail.com', 465, 'SSL', 'reportame.vzla@gmail.com', 'gpuOyuN8Ma92la0TsMrj' );
 
                 $smtp->set('From', '"Reporta-m" <reportame@info.com>');
                 $smtp->set('To', '<'.$user->get('email').'>');
