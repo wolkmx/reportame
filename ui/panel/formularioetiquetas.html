@@ -1,0 +1,46 @@
+﻿<input type="hidden" class="form-control" id="id_evento_etiquetas" value="{{ @id_evento }}"/>
+<div id="agregar_etiquetas">
+	<p>Este evento no tiene etiquetas agregadas ¿Por que no agregas algunas? por ejemplo #gripe #mosquito, etc.:</p>
+	<input class="form-control" placeholder="#gripe #mosquito" type="text" id="etiquetas_nuevo_evento">
+	<button type="button" class="boton_reporte btn btn-default" id="enviar_etiquetas">guardar</button> 
+</div>
+<div id="agregar_consejo">
+	<p>¿Tienes algun consejo para estas etiquetas, por que no lo compartes con la comunidad?:</p>
+	<input class="form-control" placeholder="Para alejar a los mosquitos puedes hervir hojas de eucalipto" type="text" id="consejo_nuevo_evento">
+	<button type="button" class="boton_reporte btn btn-default" id="enviar_consejo">guardar</button> 
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){ 
+		$("#enviar_etiquetas").click(function(){
+			
+			var data = {"id_evento" : $("#id_evento_etiquetas").val(), "etiquetas" : $("#etiquetas_nuevo_evento").val() }
+			
+			$.ajax({
+			type: 'POST',
+			url: '/guardarEtiquetasEvento', 
+			data: data,
+			}).done(function(respuesta){
+				var x = JSON.parse(respuesta);
+				var resultado = '';
+				for(var z = 0; z < x['length']; z++){
+					alert(x['objeto'][0][z]);
+					resultado = resultado +x['objeto'][0][z]+" ";
+				}
+
+				//Se elimina el formulario y se colocan las nuevas etiquetas
+				$('#agregar_etiquetas').html(resultado);
+
+
+				
+			});
+			
+			
+		});
+		
+		$("#enviar_consejo").click(function(){
+			alert("dio clic consejos");
+		});
+
+	});
+</script>

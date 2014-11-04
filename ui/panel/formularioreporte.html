@@ -1,0 +1,111 @@
+﻿<span id="cerrar_formulario" style="border-radius: 7px; box-shadow: none;font: bold 131% sans-serif; padding: 0 6px 2px; position: relative;margin-top:9px;background-color: #2b91af; z-index: 100;float:right;" class='b-close'>X</span>
+
+<form id="reporte_formulario" action="#"  method="post" >
+
+
+
+<input type="hidden" id="usuario_id_reporte" name="usuario_id_reporte" value="{{ @usuarioId }}"/>
+<input type="hidden" id="latitud_logintud_reporte" name="latitud_logintud_reporte"/>
+<input type="hidden" id="owner" name="owner"/>
+<input type="hidden" id="owner_exist" name="owner_exist"/>
+<input type="hidden" id="perfil" name="perfil" />
+
+	<div class="titulo_pasos " style='display:block;' >
+		
+		<a href="" class="list-group-item list-group-item-info">Paso 1</a>
+		<div id='datos_reporte_1' style='display:block;' class="centrado">
+			<div id='tipo_categoria'>
+				<span class="preguntas ">Estoy reportando...</span>
+				<select id="categoria_reporte" onChange="tipoReporte(this);">
+					<option value=""></option>
+					<repeat group="{{ @categorias }}" key="{{@k}}" value="{{ @categoria }}">
+						 <option value="{{ @k }}">{{ @categoria }}</option>
+					</repeat>
+				</select>
+			</div>
+			<div id='tipo_enfermedad' style='display:none;'>
+				<span class="preguntas ">Que enfermedad estas reportando</span>
+				<p>Enfermo de: ... <select id="enfermedad_reporte">
+									 <option value=""></option>
+									<repeat group="{{ @enfermedades }}" key="{{@key}}" value="{{ @enfermedad }}">
+										 <option value="{{ @key }}">{{@enfermedad}}</option>
+									</repeat>
+									</select>
+				</p>
+			</div>
+			<button type="button" class="boton_reporte siguiente btn btn-default"  id="reporte_paso_2">Siguiente</button>
+		</div>
+	</div>
+
+		<div class="titulo_pasos" style='display:block;' >
+			<a href="" class="list-group-item list-group-item-info">Paso 2</a>
+			<div id='datos_reporte_2' style='display:none;'class="centrado" >
+				<span class="preguntas">Describe brevemente el evento: </span>
+				<p>Es un evento anterior, ya se esta atendiendo, no lo ha hecho aun ...<input type="text" id="descripcion_reporte"></p>
+				<button type="button" class="boton_reporte anterior btn btn-default" id="reporte_paso_1">Anterior</button> 
+
+				 <button type="button" class="boton_reporte siguiente btn btn-default" id="reporte_paso_3">Siguiente</button>
+			</div>
+		</div>
+		<div class="titulo_pasos" style='display:block;' >
+			<a href="" class="list-group-item list-group-item-info">Paso 3</a>
+			<div id='datos_reporte_3' style='display:none;' class="centrado">
+				<span class="preguntas">¿A quien estas reportando?</span>
+				<p><input type="radio" name="group1" value="propio"> Yo<br>
+				<input type="radio" name="group1" value="otro" checked>Otra persona</p>
+
+				<button  type="button" class="btn btn-default boton_reporte anterior" id="reporte_paso_2">Anterior</button>  
+				<button type="button" class="btn btn-default boton_reporte siguiente" id="reporte_paso_4">Siguiente</button>
+			</div>
+		</div>	
+		<div class="titulo_pasos" style='display:block;' >
+			<a href="" class="list-group-item list-group-item-info">Paso 4</a>
+			<div id='datos_reporte_4' style='display:none;' class="centrado">
+				<span class="preguntas">Esta informacion se utilizara para generar estadisticas para brindar soluciones para todos</span>
+				<div id="perfiles" style="display:none;">
+					<select id="perfil_reporte" onChange="cambio(this);">
+							<option value=""></option>
+							<check if="{{ @perfiles!=NULL }}">
+								<true>
+									<repeat group="{{ @perfiles }}" key="{{@key}}" value="{{ @nombre }}">
+										 <option value="{{ @key }}">{{@nombre}}</option>
+									</repeat>
+								</true>
+							</check>
+						
+					</select>
+				</div>
+				<span id="m_perfil" style="display:none;">
+					Actualmente no cuentas con un perfil propio, con estos datos se creara el mismo
+				</span>
+				<p><strong>Datos obligatorios:</strong><p>
+				<p><input id="opcion_mujer" type="radio" name="sexo" value="0"> Mujer<br>
+				<input id="opcion_hombre" type="radio" name="sexo" value="1" checked>Hombre</p>
+				<p>Cumpleaños:<input placeholder="Cumpleaños" type="text" id="cumple_reporte"></p>
+				<p>Pais:<input placeholder="Pais" type="text" id="pais_reporte"></p>
+				<p>Ciudad:<input placeholder="Cuidad" type="text" id="ciudad_reporte"></p>
+				<p>Municipio:<input placeholder="Municipio" type="text" id="municipio_reporte"></p>
+				<button type="button" class="boton_reporte anterior btn btn-default" id="reporte_paso_3">Anterior</button> 
+				 <button type="button" class="boton_reporte siguiente btn btn-default" id="reporte_paso_5">Siguiente</button>
+			</div>
+		</div>
+
+		<div class="titulo_pasos" style='display:block;' >
+			<a href="" class="list-group-item list-group-item-info">Paso 5</a>
+			<div id='datos_reporte_5' style='display:none;'class="centrado" >
+				<span class="preguntas">Hemos terminado!</span>
+				<p>Estos datos no son obligatorios, sin embargo si los ingresas, un ente gubernamental, privado u ONG, podria ponerse en contacto contigo para brindarte asistencia, puedes revisar nuestra politica de privacidad <a href="#">Aqui</a><p>
+				<p>Me llamo<input placeholder="nombre" type="text"  id="nombre_reporte"> <input type="text" id="apellido_reporte"></p>
+				<p>Teléfono<input placeholder="Teléfono" type="text" id="telefono_reporte"></p>
+				<p>Celular<input placeholder="Celular" type="text" id="celular_reporte"></p>
+				<p>Profesion<input placeholder="Profesion" type="text" id="profesion_reporte"></p>
+				<p>ID Ciudadano<input placeholder="ID Ciudadano" type="text" id="documentType_reporte"></p>
+				<p>Estado Civil<input  placeholder="Estado Civil" type="text" id="estadoCivil_reporte"></p>
+				<p>Numero de Hijos<input  placeholder="Numero de Hijos" type="text" id="numeroHijos_reporte"></p>
+				<p>Peso<input type="text" placeholder="Peso" id="peso_reporte"></p>
+				<p>Tipo de Sangre<input placeholder="Tipo de Sangre" type="text" id="tipoSangre_reporte"></p>
+				<button type="button" class="btn btn-default boton_reporte anterior" id="reporte_paso_4">Anterior</button>  <button type="button" class="btn btn-default boton_reporte" id="reporte_paso_6">Enviar</button>
+			</div>
+		</div>
+</form>
+	<button type="button" id='cerrar_datos_reporte_home' class="btn btn-default" style='display:none;'>Cerrar</button>

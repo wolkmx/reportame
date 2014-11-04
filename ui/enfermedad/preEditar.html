@@ -1,0 +1,41 @@
+<div class="container " style="  margin-top: 100px;">
+    
+    <h3>
+        Editar
+    </h3>
+    
+    <br>
+    
+    <span class="error">{{ @flash }}</span>
+    
+    <form action="enfermedad" method="post" enctype="multipart/form-data" class="form-group">
+        
+        <span>Nombre: </span><input id="nombre" class="form-control" type="text" name="name" value="{{ @POST.name }}"><br>
+        
+        <span>Color: </span><input class="form-control" type="text" name="color" value="{{ @POST.color }}"><br>
+        
+        <span>Imagen Ping: </span><input class="form-control" type="file" name="imagePing" value="{{ @POST.imagePing }}"><br>
+        <div>
+            <img src="/uploads/{{ @POST.imagePing }}" alt="{{ @POST.imagePing }}" height="100" width="100"> 
+            <br>{{ @POST.imagePing }}
+        </div>
+        
+        <span>Imagen Ping Shadow: </span><input class="form-control" type="file" name="imagePingShadow" value="{{ @POST.imagePingShadow }}"><br>
+        <div>
+             <img src="/uploads/{{ @POST.imagePingShadow }}" alt="{{ @POST.imagePingShadow }}" height="100" width="100">
+             <br>{{ @POST.imagePingShadow }}
+        </div>
+        
+        <input type="hidden" value="5" name="menuOpc" >
+        
+        <input type="hidden" value="{{ @POST.idEnfermedad }}" name="id" >
+        
+        <input type="hidden" name="MAX_FILE_SIZE" value="2000000"> 
+        
+        <input class="send validarEnfermedad" type="submit" value="Modificar">
+        
+    </form> 
+    
+</div>
+
+<script src="ui/js/enfermedadValidaciones.js"></script>

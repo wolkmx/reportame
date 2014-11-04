@@ -1,0 +1,27 @@
+<div class="container " style="  margin-top: 100px;">
+    
+    <h3>
+        Editar
+    </h3>
+    
+    <br>
+    
+    <span class="error">{{ @flash }}</span>
+    
+    <form action="categoria" method="post" class="form-group">
+        
+        <span>Nombre: </span><input id="nombre" class="form-control" type="text" name="name" value="{{ @POST.name }}"><br>
+        
+        <span>Color: </span><input class="form-control" type="text" name="color" value="{{ @POST.color }}"><br>
+        
+        <input type="hidden" value="5" name="menuOpc" >
+        
+        <input type="hidden" value="{{ @POST.idCategoria }}" name="id" >
+        
+        <input class="send validarCategoria" type="submit" value="Modificar">
+        
+    </form> 
+    
+</div>
+
+<script src="ui/js/categoriaValidaciones.js"></script>

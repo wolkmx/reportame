@@ -1,0 +1,26 @@
+<div class="container " style="  margin-top: 100px;">
+
+    
+    <h3>
+        Eliminar
+    </h3>
+    
+    <br>
+    
+    <span class="error">{{ @flash }}</span>
+    
+    <form action="categoria" method="post" class="form-group">
+        
+        <span>Nombre: </span><input class="form-control" type="text" name="name" value="{{ @POST.name }}" disabled><br>
+        
+        <span>Color: </span><input class="form-control" type="text" name="color" value="{{ @POST.color }}" disabled><br>
+        
+        <input type="hidden" value="7" name="menuOpc">
+        
+        <input type="hidden" value="{{ @POST.idCategoria }}" name="id">
+        
+        <input class="send" type="submit" value="Eliminar">
+        
+    </form> 
+    
+</div>

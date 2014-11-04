@@ -1,0 +1,17 @@
+.icon {
+	display: inline-block;
+	color: #000000;
+	fill: currentColor;
+}
+.icon-user {
+	width: 24px;
+	height: 24px;
+}
+.icon-pin {
+	width: 24px;
+	height: 24px;
+}
+.icon-categoria {
+	width: 24px;
+	height: 24px;
+}

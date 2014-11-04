@@ -1,0 +1,89 @@
+<div class="container " style="  margin-top: 100px;">
+  <div class="container">  
+         <div class="row">
+               <h3>
+                  Editar
+              </h3>
+              
+              <br>
+              
+              <span class="error">{{ @flash }}</span>
+              
+              <form action="perfil" method="post" class="form-group">
+                  
+                  <span>¿Se reporta a usted mismo? </span>
+                  
+                      <check if="{{ @POST.owner == '1' }}">
+                          <true>
+                              <input type="radio" name="owner" value="1" checked>Si
+                              <input type="radio" name="owner" value="0">No
+                          </true>
+                      </check>
+                      <check if="{{ @POST.owner == '0' }}">
+                          <true>
+                              <input type="radio" name="owner" value="1">Si
+                              <input type="radio" name="owner" value="0" checked>No
+                          </true>
+                      </check>
+                  
+                  <br>
+                  
+                 <div class="col-md-6">
+                      <span>Nombre: </span><input class="form-control" type="text" name="firtsName" value="{{ @POST.firtsName }}"><br>
+                     
+                     <span>Apellido: </span><input  class="form-control" type="text" name="lastName" value="{{ @POST.lastName }}"><br>
+                     
+                     <span>Teléfono: </span><input class="form-control" type="text" name="phone" value="{{ @POST.phone }}"><br>
+                     
+                     <span>Teléfono Movil: </span><input class="form-control" type="text" name="cellphone" value="{{ @POST.cellphone }}"><br>
+                     
+                     <span>Fecha de Nacimiento: </span><input id="fechaNacimiento" class="form-control" type="text" name="birthday" value="{{ @POST.birthday }}"><br>
+                     
+                     <span>Pais: </span><input id="pais" class="form-control" type="text" name="country" value="{{ @POST.country }}"><br>
+                     
+                     <span>Ciudad: </span><input id="ciudad" class="form-control" type="text" name="city" value="{{ @POST.city }}"><br>
+                 </div>
+                  
+                  <div class="col-md-6"><span>Municipio: </span><input id="municipio" class="form-control" type="text" name="municipio" value="{{ @POST.municipio }}"><br>
+                      
+                      <span>Sexo: </span>
+                      
+                          <check if="{{ @POST.sex == '1' }}">
+                              <true>
+                                  <input type="radio" name="sex" value="1" checked>Masculino
+                                  <input type="radio" name="sex" value="0">Femenino
+                              </true>
+                          </check>
+                          <check if="{{ @POST.sex == '0' }}">
+                              <true>
+                                  <input type="radio" name="sex" value="1">Masculino
+                                  <input type="radio" name="sex" value="0" checked>Femenino
+                              </true>
+                          </check>
+                      
+                      <br>
+                      
+                      <span>Profesión: </span><input class="form-control" type="text" name="profesion" value="{{ @POST.profesion }}"><br>
+                      
+                      <span>Numero de Identificación: </span><input class="form-control" type="text" name="documentType" value="{{ @POST.documentType }}"><br>
+                      
+                      <span>Estado Civil: </span><input class="form-control" type="text" name="estadoCivil" value="{{ @POST.estadoCivil }}"><br>
+                      
+                      <span>Numero dei Hijos: </span><input class="form-control" type="text" name="numeroHijos" value="{{ @POST.numeroHijos }}"><br>
+                      
+                      <span>Peso: </span><input class="form-control" type="text" name="peso" value="{{ @POST.peso }}"><br>
+                      
+                      <span>Tipo de Sangre: </span><input class="form-control" type="text" name="tipoSangre" value="{{ @POST.tipoSangre }}"><br>
+                      
+                      <input type="hidden" value="5" name="menuOpc" >
+                      
+                      <input type="hidden" value="{{ @POST.idPerfil }}" name="id" >
+                      
+                      <input class="send validarPerfil" type="submit" value="Modificar">
+                      </div>
+              </form>
+          </div> </div>
+    
+</div>
+
+<script src="ui/js/perfilValidaciones.js"></script>

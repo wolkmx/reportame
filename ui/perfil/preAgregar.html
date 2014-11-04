@@ -1,0 +1,60 @@
+<div class="container " style="  margin-top: 100px;">
+  <div class="container">  
+         <div class="row">
+          <h3>
+                 Agregar
+             </h3>
+             
+             <br>
+             
+             <span class="error">{{ @flash }}</span>
+             
+             <form id="nuevoPerfilForm" name="nuevoPerfilForm" action="perfil" method="post" class="form-group">
+                   
+                 <div class="col-md-6"><span>¿Se reporta a usted mismo? </span>
+                     
+                         <input type="radio" name="owner" value="1">Si <input type="radio" name="owner" value="0">No
+                         
+                     <br>
+                     
+                     <span>Nombre: </span><input class="form-control" type="text" name="firtsName"><br>
+                     
+                     <span>Apellido: </span><input class="form-control" type="text" name="lastName"><br>
+                     
+                     <span>Teléfono: </span><input class="form-control" type="text" name="phone"><br>
+                     
+                     <span>Teléfono Movil: </span><input class="form-control" type="text" name="cellphone"><br>
+                     
+                     <span>Fecha de Nacimiento: </span><input id="fechaNacimiento" class="form-control" type="text" name="birthday"><br>
+                     
+                     <span>Pais: </span><input id="pais" class="form-control" type="text" name="country"><br>
+                     <span>Municipio: </span><input id="municipio" class="form-control" type="text" name="municipio"><br>
+                     </div>
+                 <div class="col-md-6"><span>Ciudad: </span><input id="ciudad" class="form-control" type="text" name="city"><br>
+                     
+                     
+                     
+                     <span>Sexo: </span>
+                         <input type="radio" name="sex" value="1">Masculino <input type="radio" name="sex" value="0">Femenino
+                     <br>
+                     
+                     <span>Profesión: </span><input class="form-control" type="text" name="profesion"><br>
+                     
+                     <span>Numero de Identificación: </span><input class="form-control" type="text" name="documentType"><br>
+                     
+                     <span>Estado Civil: </span><input class="form-control" type="text" name="estadoCivil"><br>
+                     
+                     <span>Numero dei Hijos: </span><input class="form-control" type="text" name="numeroHijos"><br>
+                     
+                     <span>Peso: </span><input class="form-control" type="text" name="peso"><br>
+                     
+                     <span>Tipo de Sangre: </span><input class="form-control" type="text" name="tipoSangre"><br>
+                     
+                     <input type="hidden" value="3" name="menuOpc" >
+                       
+                     <input class="send validarPerfil" type="submit" value="Crear">
+                     </div>
+             </form> </div></div>
+</div>
+
+<script src="ui/js/perfilValidaciones.js"></script>

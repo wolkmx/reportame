@@ -1,34 +1,74 @@
-<span id="tabs_registr_sesion">
-	<span>Login</span>
-	<span>Registrarse</span>
-</span>
-<div id="iniciar">
-<span class="error">{{ @flash }}</span>
-	<form id="registro_form" name="inicio_sesion" action="iniciarsesion" method="post">
-		<span>Usuario/email: </span><input id="user_i" type="text" name="userEmail">
-		<span>Clave: </span><input id="clave_i" type="password" name="clave">
-		<input class="send" type="button" value="Enviar">
-	</form> 
+<span style="border-radius: 7px; box-shadow: none;font: bold 131% sans-serif; padding: 0 6px 2px; position: absolute;right: -7px; top: -7px;background-color: #2b91af;" class='b-close'>X</span>
+<ul class="nav nav-tabs" role="tablist" id="tabs_registr_sesion">
+
+	<li><a href="#" role="tab" data-toggle="tab" onClick="$('#seccion_login').show('slow');$('#seccion_registrarte').hide();">Login</a></li>
+	<li><a href="#" role="tab" data-toggle="tab" onClick="$('#seccion_registrarte').show('slow');$('#seccion_login').hide();">Registrarse</a></li>
+</ul>
+<div id='seccion_login' class="container" <check if="{{ @tipo !== 'is' }}" ><true>style='display:none;'</true></check> >
+	<div class="row encerrado">
+		<div class="col-md-12 form-group">
+			<div id="iniciar" >
+					<span class="error">{{ @flash }}</span>
+					<form id="registro_form" name="inicio_sesion" action="iniciarsesion" method="post" class="form-vertical" role="form">
+			
+						<span>Usuario/email: </span><br>
+						<input id="user_i" type="text" name="userEmail" placeholder="Usuario/email" class="form-control" /><br>
+						<span>Clave: </span><br>
+						<input id="clave_i" type="password" name="clave" placeholder="Clave" class="form-control" /><br>
+						<buttom id="boton_enviari" class="btn btn-primary send" type="buttom" value="Enviar" > Enviar </buttom>
+					</form> 
+			</div>
+		</div>
+	</div>
 </div>
-<div id="registrarse">
-	<form name="registro_sesion" action="registrousuario" method="post">
-		<span>Usuario: </span><input id="user_r" type="text" name="user">
-		<span>Email: </span><input id="email_r" type="text" name="email">
-		<span>Clave: </span><input id="clave_r" type="password" name="clave">
-		<input class="send" type="button" value="Enviar">
-	</form> 
-</div>	
+
+<div id='seccion_registrarte' class="container" <check if="{{ @tipo !== 're' }}" ><true>style='display:none;'</true></check> >
+	<div class="row">
+		<div class="col-md-12 form-group">
+			<div id="registrarse">
+				<form name="registro_sesion" action="registrousuario" method="post">
+					<span>Usuario: </span><br>
+					<input id="user_r" type="text" name="user" placeholder="Usuario" class="form-control"><br>
+					<span>Email: </span><br>
+					<input id="email_r" type="text" name="email" placeholder="Email" class="form-control"><br>
+					<span>Clave: </span><br>
+					<input id="clave_r" type="password" name="clave" placeholder="Clave" class="form-control"><br>
+					<span>Repita su clave: </span><br>
+					<input id="rclave_r" type="password" name="rclave" placeholder="Repita su clave" class="form-control"><br>
+					<buttom id="boton_enviarr" class="btn btn-primary send" type="submit" value="Enviar"> Enviar </buttom>
+				</form> 
+			</div>	
+		</div>
+	</div>
+</div>
 
 <script type="text/javascript">
 $(document).ready(function(){
 
+	$("#clave_i").keypress(function(e) {
+		if(e.which == 13) {
+			$("#boton_enviari").click();
+		}
+	});
+	
+	$("#rclave_r").keypress(function(e) {
+		if(e.which == 13) {
+			$("#boton_enviarr").click();
+		}
+	});
+
+	/*CODIGO PARA LOS TABS*/
+
+
+
  /*Codigo javascript para enviar los datos a la funcion correspondiente */
-	$(".send").click(function(){
+	$(".send").click(function(event){
 	//Se obtiene el formulario padre del boton
+
 	var form = $(this).closest("form");
 	//Se obtienen los datos del formulario seleccionado
 	if(form.attr('action') == "registrousuario"){
-		var data = { type:form.attr('action'), user : $('#user_r').val(), clave :  $('#clave_r').val(), email: $('#email_').val() };	
+		var data = { type:form.attr('action'), user : $('#user_r').val(), clave :  $('#clave_r').val(), email: $('#email_r').val() };
 	}else{
 		var data = { type:form.attr('action'), user : $('#user_i').val(), clave :  $('#clave_i').val() };	
 	}
@@ -40,7 +80,5 @@ $(document).ready(function(){
 				$( "#content" ).html( html );
 			});
 	});
-	
 });
- 
 </script>	
