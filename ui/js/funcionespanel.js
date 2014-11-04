@@ -240,11 +240,25 @@ $(document).ready(function(){
 					var contenido =  "<ul><li><span class='titulo_dato_home'>Tipo de reporte:<span> "+x['objeto'][0]["tipo_reporte"]+"</span></span></li><li><span class='titulo_dato_home'>Enfermedad:<span>"+x['objeto'][0]["enfermedad"]+"</span></span></li><li><span class='titulo_dato_home'>Usuario que Reporta:<span> "+x['objeto'][0]["usuario"]+"</span></span></li><li><span class='titulo_dato_home'>Reportado el:<span> "+x['objeto'][0]['created']+"</span></span></li></ul>";
 					/*$('#info_evento_home img').fadeIn();*/
 					$('#info_evento_home').css('height','0px');
-					$('#info_evento_home').css('height','135px');
+					$('#info_evento_home').css('height','200px');
 					$('#cerrar_datos_reporte_home').fadeIn('slow');
 					$('#datos_reporte_home').html(contenido);
 					$('#datos_reporte_home').fadeIn('slow');
-
+					
+					//Se debe mostrar un formulario para agregar etiquetas y consejos
+					/*$.get( "formularioEtiquetas", function( data ) {
+						$( "#datos_reporte_home" ).append( data);
+					});*/
+					var id = {"evento": x["evento"]};
+					$.ajax({
+							type: 'POST',
+							url: '/formularioEtiquetas', 
+							data: id,
+							}).done(function(formulario){
+								$( "#datos_reporte_home" ).append( formulario);
+								
+							});
+					
 				}
 				
 				

@@ -59,7 +59,7 @@ box-sizing:border-box;
 
 .navbar{
 background-color: #353535 !important;
-opacity: 0.8;
+/* opacity: 0.8; */
  min-height: 97px;
 }
 
@@ -73,6 +73,11 @@ margin: 10px auto;
 
 #mapa{
 width:100%;
+min-height: 700px;
+}
+
+.leaflet-container{
+	min-height: 700px !important;
 }
 
 #info_evento_home{
@@ -289,7 +294,7 @@ margin:auto;
 
 .centrado{
 
-	padding: 20px 40px;
+	padding: 20px 40px !important;
 }
 
 .verde {
@@ -359,6 +364,21 @@ h5{
 	background-position:  0 155px;
 	height: 39px;
 	width: 39px;
+}
+
+/* PANEL ICONOS */
+.parabotones{
+    height: 58px;
+    width: 73px;
+	border-radius: 0px important;	
+}
+
+.table{
+	 text-align: center;
+}
+
+@-moz-document url-prefix() {
+  fieldset { display: table-cell; }
 }
 
  
