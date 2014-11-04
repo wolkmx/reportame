@@ -1,79 +1,91 @@
 <div>
-    <span>
+    <button type="button" class=" btn btn-default btn-lg">
         Eliminar
-    </span>
+    </button>
     <br>
     <span class="error">{{ @flash }}</span>
     
-    <form action="perfil" method="post">
-        
-        <span>¿Se reporta a usted mismo? </span>
-        
-            <check if="{{ @POST.owner == '1' }}">
-                <true>
-                    <input type="radio" name="owner" value="1" disabled checked>Si
-                    <input type="radio" name="owner" value="0" disabled >No
-                </true>
-            </check>
-            <check if="{{ @POST.owner == '0' }}">
-                <true>
-                    <input type="radio" name="owner" value="1" disabled>Si
-                    <input type="radio" name="owner" value="0" disabled checked>No
-                </true>
-            </check>
-        
-        <br>
-        <span>Nombre: </span><input type="text" name="firtsName" value="{{ @POST.firtsName }}" disabled><br>
-        
-        <span>Apellido: </span><input type="text" name="lastName" value="{{ @POST.lastName }}" disabled><br>
-        
-        <span>Teléfono: </span><input type="text" name="phone" value="{{ @POST.phone }}" disabled><br>
-        
-        <span>Teléfono Movil: </span><input type="text" name="cellphone" value="{{ @POST.cellphone }}" disabled><br>
-        
-        <span>Fecha de Nacimiento: </span><input type="text" name="birthday" value="{{ @POST.birthday }}" disabled><br>
-        
-        <span>Pais: </span><input type="text" name="country" value="{{ @POST.country }}" disabled><br>
-        
-        <span>Ciudad: </span><input type="text" name="city" value="{{ @POST.city }}" disabled><br>
-        
-        <span>Municipio: </span><input type="text" name="municipio" value="{{ @POST.municipio }}" disabled><br>
-        
-        <span>Sexo: </span>
-        
-            <check if="{{ @POST.sex == '1' }}">
-                <true>
-                    <input type="radio" name="sex" value="1" disabled checked>Masculino
-                    <input type="radio" name="sex" value="0" disabled>Femenino
-                </true>
-            </check>
-            <check if="{{ @POST.sex == '0' }}">
-                <true>
-                    <input type="radio" name="sex" value="1" disabled>Masculino
-                    <input type="radio" name="sex" value="0" disabled checked>Femenino
-                </true>
-            </check>
-        
-        <br>
-        
-        <span>Profesión: </span><input type="text" name="profesion" value="{{ @POST.profesion }}" disabled><br>
-        
-        <span>Numero de Identificación: </span><input type="text" name="documentType" value="{{ @POST.documentType }}" disabled><br>
-        
-        <span>Estado Civil: </span><input type="text" name="estadoCivil" value="{{ @POST.estadoCivil }}" disabled><br>
-        
-        <span>Numero dei Hijos: </span><input type="text" name="numeroHijos" value="{{ @POST.numeroHijos }}" disabled><br>
-        
-        <span>Peso: </span><input type="text" name="peso" value="{{ @POST.peso }}" disabled><br>
-        
-        <span>Tipo de Sangre: </span><input type="text" name="tipoSangre" value="{{ @POST.tipoSangre }}" disabled><br>
-        
-        <input type="hidden" value="7" name="menuOpc">
-        
-        <input type="hidden" value="{{ @POST.idPerfil }}" name="id">
-        
-        <input class="send" type="submit" value="Eliminar">
-        
-    </form> 
+    <div class="container centrado" style="  margin-top: 100px;">
+        <div class="row">
+            <form action="perfil" method="post" role="form" class="form-group">
+                
+                <span>¿Se reporta a usted mismo? </span>
+                
+                    <check if="{{ @POST.owner == '1' }}">
+                        <true>
+                            <input type="radio" name="owner" value="1" disabled checked>Si
+                            <input type="radio" name="owner" value="0" disabled >No
+                        </true>
+                    </check>
+                    <check if="{{ @POST.owner == '0' }}">
+                        <true>
+                            <input type="radio" name="owner" value="1" disabled>Si
+                            <input type="radio" name="owner" value="0" disabled checked>No
+                        </true>
+                    </check>
+                
+                <br>
+              <div class="col-md-6">
+                    <span>Nombre: </span>
+                  <input class="form-control" type="text" name="firtsName" value="{{ @POST.firtsName }}" disabled><br>
+                  
+                  <span>Apellido: </span>
+                  <input class="form-control" type="text" name="lastName" value="{{ @POST.lastName }}" disabled><br>
+                  
+                  <span>Teléfono: </span>
+                  <input class="form-control" type="text" name="phone" value="{{ @POST.phone }}" disabled><br>
+                  
+                  <span>Teléfono Movil: </span>
+                  <input class="form-control" type="text" name="cellphone" value="{{ @POST.cellphone }}" disabled><br>
+                  
+                  <span>Fecha de Nacimiento: </span>
+                  <input class="form-control" type="text" name="birthday" value="{{ @POST.birthday }}" disabled><br>
+                  
+                  <span>Pais: </span>
+                  <input class="form-control" type="text" name="country" value="{{ @POST.country }}" disabled><br>
+                  
+                  <span>Ciudad: </span><input type="text" name="city" value="{{ @POST.city }}" disabled><br>
+                  
+                  <span>Municipio: </span><input class="form-control" type="text" name="municipio" value="{{ @POST.municipio }}" disabled><br>
+              </div>
+                
+                <div class="col-md-6">
+                    <span>Sexo: </span>
+                    
+                        <check if="{{ @POST.sex == '1' }}">
+                            <true>
+                                <input type="radio" name="sex" value="1" disabled checked>Masculino
+                                <input  type="radio" name="sex" value="0" disabled>Femenino
+                            </true>
+                        </check>
+                        <check if="{{ @POST.sex == '0' }}">
+                            <true>
+                                <input type="radio" name="sex" value="1" disabled>Masculino
+                                <input type="radio" name="sex" value="0" disabled checked>Femenino
+                            </true>
+                        </check>
+                    
+                    <br>
+                    
+                    <span>Profesión: </span><input class="form-control" type="text" name="profesion" value="{{ @POST.profesion }}" disabled><br>
+                    
+                    <span>Numero de Identificación: </span><input class="form-control" type="text" name="documentType" value="{{ @POST.documentType }}" disabled><br>
+                    
+                    <span>Estado Civil: </span><input class="form-control" type="text" name="estadoCivil" value="{{ @POST.estadoCivil }}" disabled><br>
+                    
+                    <span>Numero dei Hijos: </span><input class="form-control" type="text" name="numeroHijos" value="{{ @POST.numeroHijos }}" disabled><br>
+                    
+                    <span>Peso: </span><input class="form-control" type="text" name="peso" value="{{ @POST.peso }}" disabled><br>
+                    
+                    <span>Tipo de Sangre: </span><input class="form-control" type="text" name="tipoSangre" value="{{ @POST.tipoSangre }}" disabled><br>
+                    
+                    <input type="hidden" value="7" name="menuOpc">
+                    
+                    <input type="hidden" value="{{ @POST.idPerfil }}" name="id">
+                    
+                    <input class="send" type="submit" value="Eliminar">
+                </div>
+                
+            </form> </div></div>
     
 </div>
