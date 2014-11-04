@@ -1,74 +1,86 @@
-<span class="error">{{ @flash }}</span>
+<div class="container" style="  margin-top: 100px;">
+    <span class="error">{{ @flash }}</span>
+    
+    <check if="{{ @todosLosRegistros!=0 }}">
+    
+        <true>
+        
+            <div class="row">
+                <div class="table-responsive">
+                    <table border="1" class="table .table-hover">
+                        
+                        <tr class="info centrado">
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Telefono</th>
+                            <th>Telefono Movil</th>
+                            <th>Pais</th>
+                            <th>Ciudad</th>
+                            <th>Municipio</th>
+                            <th>Sexo</th>
+                            <th>Editar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                        
+                        <repeat group="{{ @todosLosRegistros }}" value="{{ @cadaRegistro }}">
+                            <tr class="">
+                                <td>
+                                    {{ trim(@cadaRegistro['firtsName']) }}
+                                </td>
+                                <td>
+                                    {{ trim(@cadaRegistro['lastName']) }}
+                                </td>
+                                <td>
+                                    {{ trim(@cadaRegistro['phone']) }}
+                                </td>
+                                <td>
+                                    {{ trim(@cadaRegistro['cellphone']) }}
+                                </td>
+                                <td>
+                                    {{ trim(@cadaRegistro['country']) }}
+                                </td>
+                                <td>
+                                    {{ trim(@cadaRegistro['city']) }}
+                                </td>
+                                <td>
+                                    {{ trim(@cadaRegistro['municipio']) }}
+                                </td>
+                                <td>
+                                    <check if="{{ trim(@cadaRegistro['sex'])== '1' }}">
+                                        <true>
+                                            Masculino
+                                        </true>
+                                        <false>
+                                            Femenino
+                                        </false>
+                                    </check>
+                                </td>
+                                <td>
+                                    
+                                        <a href="/perfil?menuOpc=4&id={{ trim(@cadaRegistro['idPerfil']) }}"><button type="button" class=" btn btn-default btn-lg">Consultar/Editar </button></a>
+                                   
+                                </td>
+                                <td>
+                                    <a href="/perfil?menuOpc=6&id={{ trim(@cadaRegistro['idPerfil']) }}"><button type="button" class=" btn btn-default btn-lg">Eliminar</button></a>
+                                </td>
+                            </tr>
+                        </repeat>
+                        
+                    </table>
+                </div>
+                        
+                        
+                        </true>
+                        
+                        <false>
+                <span>no hay registros</span>
+                        </false>
+                        
+                    </check>
+                    
+                   <dic class="col-md-12">
+                        <a href="/perfil?menuOpc=2"><button type="button" class=" color-grande btn btn-default btn-lg">Agregar Nuevo Perfil</button></a>
+                   </dic>
+            </div>
+</div>
 
-<check if="{{ @todosLosRegistros!=0 }}">
-
-    <true>
-    
-        <table border="1">
-            
-            <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Telefono</th>
-                <th>Telefono Movil</th>
-                <th>Pais</th>
-                <th>Ciudad</th>
-                <th>Municipio</th>
-                <th>Sexo</th>
-                <th>Editar</th>
-                <th>Eliminar</th>
-            </tr>
-            
-            <repeat group="{{ @todosLosRegistros }}" value="{{ @cadaRegistro }}">
-                <tr>
-                    <td>
-                        {{ trim(@cadaRegistro['firtsName']) }}
-                    </td>
-                    <td>
-                        {{ trim(@cadaRegistro['lastName']) }}
-                    </td>
-                    <td>
-                        {{ trim(@cadaRegistro['phone']) }}
-                    </td>
-                    <td>
-                        {{ trim(@cadaRegistro['cellphone']) }}
-                    </td>
-                    <td>
-                        {{ trim(@cadaRegistro['country']) }}
-                    </td>
-                    <td>
-                        {{ trim(@cadaRegistro['city']) }}
-                    </td>
-                    <td>
-                        {{ trim(@cadaRegistro['municipio']) }}
-                    </td>
-                    <td>
-                        <check if="{{ trim(@cadaRegistro['sex'])== '1' }}">
-                            <true>
-                                Masculino
-                            </true>
-                            <false>
-                                Femenino
-                            </false>
-                        </check>
-                    </td>
-                    <td>
-                        <a href="/perfil?menuOpc=4&id={{ trim(@cadaRegistro['idPerfil']) }}">Consultar/Editar</a>
-                    </td>
-                    <td>
-                        <a href="/perfil?menuOpc=6&id={{ trim(@cadaRegistro['idPerfil']) }}">Eliminar</a>
-                    </td>
-                </tr>
-            </repeat>
-            
-        </table>
-    
-    </true>
-    
-    <false>
-        <span>no hay registros</span>
-    </false>
-    
-</check>
-
-<a href="/perfil?menuOpc=2">Agregar Nuevo Perfil</a>
