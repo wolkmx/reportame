@@ -4,7 +4,7 @@
 	<li><a href="#" role="tab" data-toggle="tab" onClick="$('#seccion_login').show('slow');$('#seccion_registrarte').hide();">Login</a></li>
 	<li><a href="#" role="tab" data-toggle="tab" onClick="$('#seccion_registrarte').show('slow');$('#seccion_login').hide();">Registrarse</a></li>
 </ul>
-<div id='seccion_login' class="container">
+<div id='seccion_login' class="container" <check if="{{ @tipo !== 'is' }}" ><true>style='display:none;'</true></check> >
 	<div class="row encerrado">
 		<div class="col-md-12 form-group">
 			<div id="iniciar" >
@@ -15,18 +15,14 @@
 						<input id="user_i" type="text" name="userEmail" placeholder="Usuario/email" class="form-control" /><br>
 						<span>Clave: </span><br>
 						<input id="clave_i" type="password" name="clave" placeholder="Clave" class="form-control" /><br>
-						<buttom class="btn btn-primary send" type="buttom" value="Enviar"> Enviar
-							  
-						</buttom>
-							  
-						
+						<buttom id="boton_enviari" class="btn btn-primary send" type="buttom" value="Enviar" > Enviar </buttom>
 					</form> 
 			</div>
 		</div>
 	</div>
 </div>
 
-<div id='seccion_registrarte' class="container" style='display:none;'>
+<div id='seccion_registrarte' class="container" <check if="{{ @tipo !== 're' }}" ><true>style='display:none;'</true></check> >
 	<div class="row">
 		<div class="col-md-12 form-group">
 			<div id="registrarse">
@@ -39,8 +35,7 @@
 					<input id="clave_r" type="password" name="clave" placeholder="Clave" class="form-control"><br>
 					<span>Repita su clave: </span><br>
 					<input id="rclave_r" type="password" name="rclave" placeholder="Repita su clave" class="form-control"><br>
-					<buttom class="btn btn-primary send" type="submit" value="Enviar"> Enviar
-					</buttom>
+					<buttom id="boton_enviarr" class="btn btn-primary send" type="submit" value="Enviar"> Enviar </buttom>
 				</form> 
 			</div>	
 		</div>
@@ -50,6 +45,17 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
+	$("#clave_i").keypress(function(e) {
+		if(e.which == 13) {
+			$("#boton_enviari").click();
+		}
+	});
+	
+	$("#rclave_r").keypress(function(e) {
+		if(e.which == 13) {
+			$("#boton_enviarr").click();
+		}
+	});
 
 	/*CODIGO PARA LOS TABS*/
 

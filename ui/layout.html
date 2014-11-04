@@ -2,6 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="<?php echo $ENCODING; ?>" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Reportame</title>
 		<base href="<?php echo $SCHEME.'://'.$HOST.':'.$PORT.$BASE.'/'; ?>" />
 		<link rel="stylesheet" href="lib/code.css" type="text/css" />
@@ -38,9 +39,17 @@
 						<ul class="nav navbar-nav pull-right">
 							<li><a href="/quienessomos" id="">¿Quiénes Somos?</a></li>
 							<li><a href="/descarga" id="">Descargar Datos</a></li>
-							<li><a href="#" class="form_inicio_registro" >Mi Cuenta</a></li>
-							<li><a href="#" class="form_inicio_registro" >Iniciar Sesión</a></li>
-							<li><a href="#" class="form_inicio_registro" >Registrarse</a></li>
+							<check if="{{ @usuario !== '' }}">
+								<true>
+									<li><a class="activar_panel" href="#" >Opciones</a></li>
+									<li><a href="#" class="form_inicio_registro" >Mi Cuenta</a></li>
+									<li><a href="/logout">Cerrar Sesion</a></li>
+								</true>
+								<false>
+									<li><a id="is" href="#" class="form_inicio_registro" >Iniciar Sesión</a></li>
+									<li><a id="re" href="#" class="form_inicio_registro" >Registrarse</a></li>
+								</false>
+							</check>
 						</ul>
 				</div>
 			</div>

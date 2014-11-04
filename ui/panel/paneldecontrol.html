@@ -28,7 +28,7 @@
 	<div class="row">
 		<div class="col-md-1">
 
-			<button type="button" alt="Panel de control" id="activar_panel" class="btn btn-primary btn-lg btn-block parabotones"><img src="ui/images/panel.png" alt=""></button>
+			<button type="button" alt="Panel de control" class="btn btn-primary btn-lg btn-block parabotones activar_panel"><img src="ui/images/panel.png" alt=""></button>
 
 			<button type="button" id="reportar_evento" class="parabotones btn btn-primary btn-lg btn-block"  alt="¿Que esta ocurriendo?"><img src="ui/images/questa.png" alt="¿Actualizar Mapa?"></button>
 
@@ -45,7 +45,7 @@ var map = null;
 $(document).ready(function(){
 
 /*Mostrar el panel de control*/
-$("#activar_panel").click(function(){
+$(".activar_panel").click(function(){
 	$('#popup_menu').bPopup();
 
 });
