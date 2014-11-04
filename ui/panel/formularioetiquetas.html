@@ -22,7 +22,16 @@
 			data: data,
 			}).done(function(respuesta){
 				var x = JSON.parse(respuesta);
-				
+				var resultado = '';
+				for(var z = 0; z < x['length']; z++){
+					alert(x['objeto'][0][z]);
+					resultado = resultado +x['objeto'][0][z]+" ";
+				}
+
+				//Se elimina el formulario y se colocan las nuevas etiquetas
+				$('#agregar_etiquetas').html(resultado);
+
+
 				
 			});
 			

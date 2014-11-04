@@ -634,11 +634,58 @@ $f3->route('POST @formularioEtiquetas: /formularioEtiquetas [ajax]',
 /*Ruta guardar las etiquetas del evento*/
 $f3->route('POST @guardarEtiquetasEvento: /guardarEtiquetasEvento [ajax]',
 	function($f3) use ($db) {
-		
+		new Session();
 		$formulario = $f3->get("REQUEST");
-		$eventolabel=new DB\SQL\Mapper($db,'Eventolabel');
-		//$eventolabel->
-		//@todo continuar aqui
+		//Se crea un array con todas las etiquetas que llegan del formulario
+		$etiquetas = explode ( ' ' , $formulario['etiquetas'] );
+		//Por cada etiqueta se busca si existe en la base de datos y si no se crea
+		//$label=new DB\SQL\Mapper($db,'Label');
+		//Etiquetas finales
+		$labelfinal = '';
+		$aux = 0;
+		foreach($etiquetas as $etiqueta):
+			//Se crea un eventolabel para guardarlo por cada etiqueta nueva o existente
+			$eventoLabel=new DB\SQL\Mapper($db,'EventoLabel');
+			$eventoLabel->evento_id = $formulario['id_evento'];
+			$label=new DB\SQL\Mapper($db,'Label');
+			//Si existe se recupera el ID;
+			if($label->load(array('name=?',$etiqueta)) !== FALSE){
+				$eventoLabel->label_id = $label->get('idLabel');
+				//echo 'entro1:/'.$label->get('_id').'/';
+			}else{
+				//Si no existe se crea la etiqueta
+				$label->name = $etiqueta;
+				$label->usuario_id = $f3->get('SESSION.id');
+				$label->save();
+				//Se relaciona la nueva etiqueta con el eventoLabel
+				$eventoLabel->label_id = $label->get('idLabel');
+				
+			}
+			
+			//Se guardan el eventolabel
+			$eventoLabel->save();
+			//$labelfinal[$aux]=$eventoLabel->get('name');
+			$aux++;
+			//Se libera el objeto
+			$eventoLabel->reset();
+			//Se libera el objeto
+			$label->reset();
+		endforeach;
+
+		//Se inicia la cadena con el formato de json
+		$objetojson = '{"objeto": [{';
+		//Se obtiene la longitud de la columna
+		$lastKey = count($etiquetas)-1;
+
+		foreach($etiquetas as $k => $etiqueta):
+			$objetojson.= '"'.$k.'":"'.$etiqueta.'"';
+			
+			if($k != $lastKey){
+				$objetojson.= ',';
+			}
+		endforeach;
+		$objetojson .= '}],"length":"'.count($etiquetas).'"}';
+		echo $objetojson;
 		
 	}
 
@@ -661,7 +708,7 @@ $f3->route('POST @todosLosEventos: /todosLosEventos [ajax]',
 	
 	//Se inicia la cadena con el formato de json
 	$objetojson = '{"objeto": [{';
-	//Se obitnene la longitud de la columna
+	//Se obtiene la longitud de la columna
 	$lastKey = count($eventos)-1;
 
 	foreach($eventos as $k => $evento):
