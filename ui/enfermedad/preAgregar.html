@@ -7,7 +7,7 @@
     
     <form action="enfermedad" method="post" enctype="multipart/form-data" class="form-group">
 
-        <span>Nombre: </span><input class="form-control" type="text" name="name"><br>
+        <span>Nombre: </span><input id="nombre" class="form-control" type="text" name="name"><br>
         
         <span>Color: </span><input class="form-control" type="text" name="color"><br>
         
@@ -19,7 +19,9 @@
         
         <input type="hidden" name="MAX_FILE_SIZE" value="2000000"> 
 
-        <input class="send" type="submit" value="Crear">
+        <input class="send validarEnfermedad" type="submit" value="Crear">
         
     </form> 
 </div>
+
+<script src="ui/js/enfermedadValidaciones.js"></script>

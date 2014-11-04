@@ -8,12 +8,14 @@
        <div class="col-lg-12">  <span class="error">{{ @flash }}</span>
            <form action="categoria" method="post" class="form-group">
            
-               <span>Nombre: </span><input class="form-control" type="text" name="name"><br>
+               <span>Nombre: </span><input id="nombre" class="form-control" type="text" name="name"><br>
                <span>Color: </span><input class="form-control" type="text" name="color"><br>
            
                <input type="hidden" value="3" name="menuOpc" >
            
-               <input class="send" type="submit" value="Crear">
+               <input class="send validarCategoria" type="submit" value="Crear">
                
            </form> </div></div>
 </div>
+
+<script src="ui/js/categoriaValidaciones.js"></script>

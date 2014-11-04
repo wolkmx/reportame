@@ -25,12 +25,12 @@
                      
                      <span>Teléfono Movil: </span><input class="form-control" type="text" name="cellphone"><br>
                      
-                     <span>Fecha de Nacimiento: </span><input class="form-control" type="text" name="birthday"><br>
+                     <span>Fecha de Nacimiento: </span><input id="fechaNacimiento" class="form-control" type="text" name="birthday"><br>
                      
-                     <span>Pais: </span><input class="form-control" type="text" name="country"><br>
-                     <span>Municipio: </span><input class="form-control" type="text" name="municipio"><br>
+                     <span>Pais: </span><input id="pais" class="form-control" type="text" name="country"><br>
+                     <span>Municipio: </span><input id="municipio" class="form-control" type="text" name="municipio"><br>
                      </div>
-                 <div class="col-md-6"><span>Ciudad: </span><input class="form-control" type="text" name="city"><br>
+                 <div class="col-md-6"><span>Ciudad: </span><input id="ciudad" class="form-control" type="text" name="city"><br>
                      
                      
                      
@@ -52,7 +52,9 @@
                      
                      <input type="hidden" value="3" name="menuOpc" >
                        
-                     <input class="send" type="submit" value="Crear">
+                     <input class="send validarPerfil" type="submit" value="Crear">
                      </div>
              </form> </div></div>
 </div>
+
+<script src="ui/js/perfilValidaciones.js"></script>

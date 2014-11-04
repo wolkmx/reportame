@@ -37,14 +37,14 @@
                      
                      <span>Teléfono Movil: </span><input class="form-control" type="text" name="cellphone" value="{{ @POST.cellphone }}"><br>
                      
-                     <span>Fecha de Nacimiento: </span><input class="form-control" type="text" name="birthday" value="{{ @POST.birthday }}"><br>
+                     <span>Fecha de Nacimiento: </span><input id="fechaNacimiento" class="form-control" type="text" name="birthday" value="{{ @POST.birthday }}"><br>
                      
-                     <span>Pais: </span><input class="form-control" type="text" name="country" value="{{ @POST.country }}"><br>
+                     <span>Pais: </span><input id="pais" class="form-control" type="text" name="country" value="{{ @POST.country }}"><br>
                      
-                     <span>Ciudad: </span><input class="form-control" type="text" name="city" value="{{ @POST.city }}"><br>
+                     <span>Ciudad: </span><input id="ciudad" class="form-control" type="text" name="city" value="{{ @POST.city }}"><br>
                  </div>
                   
-                  <div class="col-md-6"><span>Municipio: </span><input class="form-control" type="text" name="municipio" value="{{ @POST.municipio }}"><br>
+                  <div class="col-md-6"><span>Municipio: </span><input id="municipio" class="form-control" type="text" name="municipio" value="{{ @POST.municipio }}"><br>
                       
                       <span>Sexo: </span>
                       
@@ -79,9 +79,11 @@
                       
                       <input type="hidden" value="{{ @POST.idPerfil }}" name="id" >
                       
-                      <input class="send" type="submit" value="Modificar">
+                      <input class="send validarPerfil" type="submit" value="Modificar">
                       </div>
               </form>
           </div> </div>
     
 </div>
+
+<script src="ui/js/perfilValidaciones.js"></script>
