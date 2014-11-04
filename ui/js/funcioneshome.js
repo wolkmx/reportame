@@ -134,7 +134,7 @@ function etiquetasConsejo(idEvento){
 				//alert(obj[0]['name']);
 			});
 		}else{
-			contenido = contenido + "<p>No existen etiquetas para este evento";
+			contenido = contenido + "<p >No existen etiquetas para este evento";
 		}
 		contenido = contenido + "</p></span>";
 		
@@ -216,7 +216,7 @@ function cargarEventos(){
 						var contenido =  "<ul><li><span class='titulo_dato_home'>Tipo de reporte:</span><span> "+x['objeto'][0][this.indice][0]['categoriaName']+"</span></li><li><span class='titulo_dato_home'>Enfermedad:</span><span> "+x['objeto'][0][this.indice][0]['name']+"</span></li><li><span class='titulo_dato_home'>Usuario que Reporta:</span><span> "+x['objeto'][0][this.indice][0]['alias']+"</span></li><li><span class='titulo_dato_home'>Reportado el:</span><span> "+x['objeto'][0][this.indice][0]['created_at']+"</span></li></ul>";
 							/*$('#info_evento_home img').fadeIn();*/
 							$('#info_evento_home').css('height','0px');
-							$('#info_evento_home').css('height','200px');
+							$('#info_evento_home').css('height','327px');
 							$('#cerrar_datos_reporte_home').fadeIn('slow');
 							$('#datos_reporte_home').html(contenido);
 							$('#datos_reporte_home').fadeIn('slow');
