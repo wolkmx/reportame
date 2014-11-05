@@ -994,7 +994,7 @@ $f3->route('GET|POST @perfil: /perfil',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //-- Se arma la consulta
-                        $consulta = 'SELECT * FROM perfil WHERE usuario_id= '. $f3->get('SESSION.id') .';';
+                        $consulta = 'SELECT * FROM Perfil WHERE usuario_id= '. $f3->get('SESSION.id') .';';
                         
                         //-- Se hace la consulta
                         $todosLosRegistros = $db->exec( $consulta );
@@ -1080,7 +1080,7 @@ $f3->route('GET|POST @perfil: /perfil',
                         $fecha = date("Y-m-d H:i:s");
                         
                         //--    Llama al modelo
-                        $f3->set('perfil',new DB\SQL\Mapper($db,'perfil'));
+                        $f3->set('perfil',new DB\SQL\Mapper($db,'Perfil'));
                         
                         //--    Cargamos los valores que tenemos del formulario
                         $f3->get('perfil')->copyFrom('POST');
@@ -1132,7 +1132,7 @@ $f3->route('GET|POST @perfil: /perfil',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //-- Llama al modelo
-                        $f3->set('perfil',new DB\SQL\Mapper($db,'perfil'));
+                        $f3->set('perfil',new DB\SQL\Mapper($db,'Perfil'));
 
                         //-- Carga al objeto
                         $f3->get('perfil')->load(array('idPerfil=?',$request['id']));
@@ -1175,7 +1175,7 @@ $f3->route('GET|POST @perfil: /perfil',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //--    Llama al modelo
-                        $f3->set('perfil',new DB\SQL\Mapper($db,'perfil'));
+                        $f3->set('perfil',new DB\SQL\Mapper($db,'Perfil'));
                         
                         //-- Carga al objeto
                         $f3->get('perfil')->load(array('idPerfil=?',$request['id']));
@@ -1228,7 +1228,7 @@ $f3->route('GET|POST @perfil: /perfil',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //--    Llama al modelo
-                        $f3->set('perfil',new DB\SQL\Mapper($db,'perfil'));
+                        $f3->set('perfil',new DB\SQL\Mapper($db,'Perfil'));
                         
                         //-- Carga al objeto
                         $f3->get('perfil')->load(array('idPerfil=?',$request['id']));
@@ -1271,10 +1271,10 @@ $f3->route('GET|POST @perfil: /perfil',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //--    Llama al modelo
-                        $f3->set('perfil',new DB\SQL\Mapper($db,'perfil'));
+                        $f3->set('perfil',new DB\SQL\Mapper($db,'Perfil'));
                         
                         //-- Arma la consulta
-                        $consulta = 'DELETE FROM perfil WHERE idPerfil='.$request['id'].';';
+                        $consulta = 'DELETE FROM Perfil WHERE idPerfil='.$request['id'].';';
                         
                         //-- Eliminar el registro
                         $db->exec($consulta);
@@ -1289,7 +1289,7 @@ $f3->route('GET|POST @perfil: /perfil',
                         $f3->set('menu','menu.html');
                         
                         //-- Se arma la consulta
-                        $consulta = 'SELECT * FROM perfil WHERE usuario_id= '. $f3->get('SESSION.id') .';';
+                        $consulta = 'SELECT * FROM Perfil WHERE usuario_id= '. $f3->get('SESSION.id') .';';
                         
                         //-- Se hace la consulta
                         $todosLosRegistros = $db->exec( $consulta );
