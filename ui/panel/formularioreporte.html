@@ -1,7 +1,10 @@
-﻿<span id="cerrar_formulario" style="border-radius: 7px; box-shadow: none;font: bold 131% sans-serif; padding: 0 6px 2px; position: relative;margin-top:9px;background-color: #2b91af; z-index: 100;float:right;" class='b-close'>X</span>
+﻿<!-- <span id="cerrar_formulario" style="border-radius: 7px; box-shadow: none;font: bold 131% sans-serif; padding: 0 6px 2px; position: relative;margin-top:9px;background-color: #2b91af; z-index: 100;float:right;" class='b-close'>X</span> -->
+
+<img src="../ui/images/close.png" style="cursor: pointer;
+    float: right;margin: 0 0 1px;padding: 5px 5px 20px;
+    position: absolute;right: 0;z-index:90;" id="cerrar_formulario" class='b-close'>
 
 <form id="reporte_formulario" action="#"  method="post" >
-
 
 
 <input type="hidden" id="usuario_id_reporte" name="usuario_id_reporte" value="{{ @usuarioId }}"/>
@@ -10,7 +13,7 @@
 <input type="hidden" id="owner_exist" name="owner_exist"/>
 <input type="hidden" id="perfil" name="perfil" />
 
-	<div class="titulo_pasos " style='display:block;' >
+	<div class="titulo_pasos " style='display:block;margin-top: 38px;' >
 		
 		<a href="" class="list-group-item list-group-item-info">Paso 1</a>
 		<div id='datos_reporte_1' style='display:block;' class="centrado">
