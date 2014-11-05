@@ -73,11 +73,11 @@ margin: 10px auto;
 
 #mapa{
 width:100%;
-min-height: 700px;
+min-height: 489px;
 }
 
 .leaflet-container{
-	min-height: 700px !important;
+	min-height: 489px !important;
 }
 
 #info_evento_home{
@@ -91,7 +91,7 @@ background-color:#595a5b;
 	color: white;
 }
 .espacio-interno{
- padding: 20px 50px;
+/*  padding: 20px 50px; */
 }
 
 #cerrar_datos_reporte_home{
@@ -210,7 +210,7 @@ text-align: center;
 footer{
 background-color:#999999;
 color:whitesmoke;
-margin:40px 0 0 auto;
+/* margin:40px 0 0 auto; */
 padding: 20px 40px;
   text-align: center;
 }
@@ -228,6 +228,14 @@ footer .container img{
 	.medio {
 	top:0;	
 	font-size: 34px;
+	}
+
+	.navbar-brand img{
+		width: 195px !important;
+	}
+
+	.navbar-toggle {
+		margin-top: 17px !important;
 	}
 }
 
@@ -328,6 +336,10 @@ left: 432px;
 }
  */
 
+ .caras-ocultas{
+ 	padding: 10px;
+ }
+
  .popup{
  	padding: 10px 40px;
     left: 76px !important;
@@ -384,6 +396,11 @@ h5{
 
 @-moz-document url-prefix() {
   fieldset { display: table-cell; }
+}
+
+.panel-body{
+	margin: 0 !important;
+	padding: 0 !important;
 }
 
  
