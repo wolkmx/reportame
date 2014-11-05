@@ -1,5 +1,11 @@
 $(document).ready(function(){
 	
+	/*Mostrar el panel de control*/
+	$(".activar_panel").click(function(){
+		$('#popup_menu').bPopup();
+
+	});
+	
 	//FUncion para cerrar los datos de informacion rapida del home
 	$('#cerrar_datos_reporte_home').click(function(){
 		$('#info_evento_home').css('height','0px');

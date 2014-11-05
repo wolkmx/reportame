@@ -19,9 +19,6 @@
 		
 	<script src="ui/js/bootstrap.min.js"></script>
 	</head>
-	
-
-	
 	<body>
 
 		<header id="moverlo">
@@ -33,7 +30,7 @@
 							<span class="icon-bar"></span>
 							<span class="icon-bar"></span>
 						  </button>
-					<a href="#" class="navbar-brand"><img src="ui/images/logo.png" width="300" alt="" class="img-responsive"></a>
+					<a href="<check if="{{ @usuario !== '' }}"><true>/mipanel</true><false>/</false></check>" class="navbar-brand"><img src="ui/images/logo.png" width="300" alt="" class="img-responsive"></a>
 				</div>
 				<div id="acomodat" class="collapse navbar-collapse">
 						<ul class="nav navbar-nav pull-right">
@@ -41,7 +38,7 @@
 							<li><a href="/descarga" id="">Descargar Datos</a></li>
 							<check if="{{ @usuario !== '' }}">
 								<true>
-									<li><a class="activar_panel" href="#" >Opciones</a></li>
+									<li><span class="activar_panel menu_boton" >Opciones</span></li>
 									<li><a href="#" class="form_inicio_registro" >Mi Cuenta</a></li>
 									<li><a href="/logout">Cerrar Sesion</a></li>
 								</true>
