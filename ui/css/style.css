@@ -12,6 +12,10 @@ body{
     font-size: 17px;
     cursor: pointer;
 }
+#search_home_input{
+	margin-bottom: 5px;
+    margin-right: 46px;
+}
 
 .bck-parallax{
 	
