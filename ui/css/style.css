@@ -30,13 +30,37 @@ body{
 }
 .alto{
 	min-height: 700px;
-	background-image: url(../images/fondo.jpg);
+	background-image: url(../images/fondo.jpg);fondoquienes.png
 }
 
 .azul{
 background-color: #108dd1;
 min-height: 500px;
 }
+
+.blanco p{
+	font-family: 'Arial';
+	 font-size: 17px;
+	 text-align: justify;
+	 font-weight: 300;
+	
+}
+
+.gris{
+	background-image: url(../images/fondoquienes.png);
+	color: whitesmoke;
+	 font-weight:500;
+	   font-size: 20px;
+	   font-family: 'Roboto';
+	   text-align: left;
+	      text-shadow: 4px 3px 3px #000;
+
+}
+
+.gris li{
+	margin-bottom: 10px;
+}
+
 h1{
 	color: whitesmoke !important;
 }
@@ -415,5 +439,16 @@ h5{
 	margin: 0 !important;
 	padding: 0 !important;
 }
+/* texto botones */
 
- 
+#popover,#popover2,#popover3{
+    background-color: #e2e2e2;
+    display: none;
+    height: 241px;
+    position: absolute;
+    top: 60px;
+    width: 360px;
+    opacity: 0.8;
+}
+
+
