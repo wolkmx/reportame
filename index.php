@@ -45,7 +45,11 @@ $f3->route('GET @home: /',
 	/*Si no existe se declara nula*/
 	if(!array_key_exists("user",$sesion)){
 		$f3->set('usuario','');
-	}
+		//echo "entro";
+	}/*else{
+		echo "no entro--";
+		echo $f3->get('SESSION.user');
+	}*/
 	
 	/*echo "---<pre>";
 	print_r($sesion);
@@ -149,10 +153,11 @@ $f3->route('POST @iniciarsesion: /iniciarsesion [ajax]',
 		
 		if(count($usuario)){
 			//Si encuentra el usuario se inicia la sesion con los datos del usuario.
-			new Session();
+			//new Session();
 			
 			$f3->set('SESSION.user',$usuario[0]['alias']);
 			$f3->set('SESSION.id',$usuario[0]['idUsuario']);
+			$f3->set('SESSION.tipo',$usuario[0]['tipoUsuario']);
 			
 			//echo "--".$f3->get('SESSION.user')."--";
 			
@@ -189,6 +194,7 @@ $f3->route('POST @registrousuario: /registrousuario [ajax]',
 		$user=new DB\SQL\Mapper($db,'Usuario');
 		$user->set('alias',$formulario['user']);
 		$user->set('email',$formulario['email']);
+		$user->set('tipoUsuario',2);
 		$user->set('password',$formulario['clave']);
                 
 		//Se guarda el usuario creado
@@ -204,9 +210,38 @@ $f3->route('POST @registrousuario: /registrousuario [ajax]',
                 $smtp->set('Errors-to', '<usuario@dominio.com>');  
 
                 $message = 'Usuario: '. $user->get('alias'); 
-                $message .= '<br>Clave: '. $user->get('password'); 
+                $message .= '<br>Clave: '. $user->get('password');
+				
+				/*$message = "<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<meta charset='UTF-8'>
+	<link rel='stylesheet' href='http://reportame.ohsioh.com/ui/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='http://reportame.ohsioh.com/ui/css/style_email.css'>
+	<script src='http://reportame.ohsioh.com/ui/js/jquery-2.1.1.min.js'></script>
+</head>
+<body>
+	<div class='container borde'>
+		<div class='row'>
+			<div class='col-md-12'>
+				<div class='logo'><img src='http://reportame.ohsioh.com/ui/images/logo.png' width='300' alt='' class='img-responsive'></div>
+				<div class='texto'>
+					<h3>¡Bienvenido a Reportame!</h3>
+					<p>Para comenzar a formar parte de una comunidad transparente e informada debes verificar tu dirección de email. </p>
+				</div>
+				<button class='btn btn-primary send' type='buttom' >Verificar Email</button><br>
+				<p style='margin-top:10px; color:#999;'>También puedes verificarla a través de este enlace:
+					<a href='#'>http://reportame.org/account/email/verify/w2ZPJUpQQmE_LQmCw-Jv</a>
+				</p>
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>";*/
 
                 $sent = $smtp->send($message, TRUE);
+				//$sent = $smtp->send(Template::instance()->render('email.txt','text/html'));
 
                 $mylog = $smtp->log();
 
@@ -229,10 +264,25 @@ $f3->route('POST @registrousuario: /registrousuario [ajax]',
 		/*@todo falta agregar la logica para verificar si ya existe le usuario o si se pudo guardar correctamente por ejemplo que no exista el usuario y el email antes*/
 		
 		//Si encuentra el usuario se inicia la sesion con los datos del usuario.
-                new Session();
+                //new Session();
 
                 $f3->set('SESSION.user',$user->get('alias'));
                 $f3->set('SESSION.id',$user->get('idUsuario'));
+				$f3->set('SESSION.tipo',$user->get('tipoUsuario'));
+				
+				/*echo $f3->get('SESSION.user');
+				echo $f3->get('SESSION.id');
+				echo $f3->get('SESSION.tipo');
+				echo "*****";*/
+			/*$f3->set('SESSION.user',$formulario['user']);
+			$f3->set('SESSION.id',1);
+			$f3->set('SESSION.tipo',2);
+			
+			echo $f3->get('SESSION.user');
+				echo $f3->get('SESSION.id');
+				echo $f3->get('SESSION.tipo');*/
+				
+				
 
 
 		//Se redirecciona al panel de control
@@ -783,8 +833,9 @@ $f3->route('POST @todosLosEventos: /todosLosEventos [ajax]',
 $f3->route('GET  @miPanel: /mipanel',
 	function($f3) use ($db) {
 	/*Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!*/
-	new Session();
-	//echo "--".$f3->get('SESSION.user')."--";
+	//new Session();
+	/*echo "----".$f3->get('SESSION.user')."---";
+	die();*/
 		/*Se verifica si el usuario tiene la sesion iniciada*/
 		if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user'))){
 			$f3->set('content','panel/paneldecontrol.html');
@@ -846,10 +897,11 @@ $f3->route('GET  @logout: /logout',
 	function($f3) {
 	
 		//Se inicializa la sesion para poder acceder a los valores anteriores
-		new Session();
+		//new Session();
 		//Se destruye la sesion del usuario
 		$f3->clear('SESSION.user');
 		$f3->clear('SESSION.id');
+		$f3->clear('SESSION.tipo');
 		$f3->clear('SESSION');
 		//session_destroy();
 		$f3->reroute('@home'); 
