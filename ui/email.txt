@@ -1,7 +1,5 @@
 MIME-Version: 1.0
 Content-type: text/html; charset=UTF8
-<!DOCTYPE html>
-<html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="http://reportame.ohsioh.com/ui/css/bootstrap.min.css">
@@ -26,4 +24,3 @@ Content-type: text/html; charset=UTF8
 	</div>
 	
 </body>
-</html>

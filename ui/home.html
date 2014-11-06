@@ -124,28 +124,12 @@
 
 
 
-<div id="content" style="left: 432px; position: absolute; top: 304.5px; z-index: 9999; opacity: 0; display: none;background-color: #fff; border-radius: 10px; ">
-</div>
+
 <script type="text/javascript">
 //Se declaran globalmente los markers y el mapa para que pueda ser referenciado a lo largo de los scripts
 var evento = [];
 var map = null;
 $(document).ready(function(){
-
-
- /*Codigo javascript para refrescar la seccion principal "content" para mostrar el formulario de registro/inicio de sesion */
-	$(".form_inicio_registro").click(function(){
-		var data = {"tipo": $(this).attr("id")};
-		 $.ajax({
-			type: 'POST',
-			url: '/login',
-			data: data,
-			}).done(function(html){
-				$( "#content" ).html( html );
-				$('#content').bPopup();
-				
-			});
-	});
 
 //Se declara un arreglo vacio de elementos para guardar todos los markers
 var eventosrecientes = [];

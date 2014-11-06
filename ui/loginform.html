@@ -35,7 +35,7 @@
 					<input id="clave_r" type="password" name="clave" placeholder="Clave" class="form-control"><br>
 					<span>Repita su clave: </span><br>
 					<input id="rclave_r" type="password" name="rclave" placeholder="Repita su clave" class="form-control"><br>
-					<buttom id="boton_enviarr" class="btn btn-primary send" type="submit" value="Enviar"> Enviar </buttom>
+					<buttom id="boton_enviarr" class="btn btn-primary send" type="submit" onClick="validarRegistro(this);" value="Enviar"> Enviar </buttom>
 				</form> 
 			</div>	
 		</div>
@@ -53,7 +53,11 @@ $(document).ready(function(){
 	
 	$("#rclave_r").keypress(function(e) {
 		if(e.which == 13) {
-			$("#boton_enviarr").click();
+			
+			if(validarRegistro()){
+				$("#boton_enviarr").click();
+			}
+			
 		}
 	});
 
@@ -81,4 +85,18 @@ $(document).ready(function(){
 			});
 	});
 });
+
+function validarRegistro(event){
+	
+	if($("#user_r").val() != "" && $("#email_r").val() != "" && $("#clave_r").val() != "" && $("#rclave_r").val() != ""){
+		return 1;
+	}else{
+	//alert("asa");
+	return false;
+		event.stopPropagation();
+		return 0;
+	}
+	
+}
+
 </script>	

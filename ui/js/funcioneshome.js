@@ -1,5 +1,22 @@
 $(document).ready(function(){
 	
+	 /*Codigo javascript para refrescar la seccion principal "content" para mostrar el formulario de registro/inicio de sesion */
+	$(".form_inicio_registro").click(function(){
+	
+
+	
+		var data = {"tipo": $(this).attr("id")};
+		 $.ajax({
+			type: 'POST',
+			url: '/login',
+			data: data,
+			}).done(function(html){
+				$( "#content" ).html( html );
+				$('#content').bPopup();
+				
+			});
+	});
+	
 	/*Mostrar el panel de control*/
 	$(".activar_panel").click(function(){
 		$('#popup_menu').bPopup();
