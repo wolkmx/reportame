@@ -26,6 +26,8 @@
 	<div class="row">
 		<div class="col-md-12 form-group">
 			<div id="registrarse">
+				<input type='hidden' id='oculto' value='0' />
+				<span class="error">{{ @flashr }}</span>
 				<form name="registro_sesion" action="registrousuario" method="post">
 					<span>Usuario: </span><br>
 					<input id="user_r" type="text" name="user" placeholder="Usuario" class="form-control"><br>
@@ -68,23 +70,76 @@ $(document).ready(function(){
  /*Codigo javascript para enviar los datos a la funcion correspondiente */
 	$(".send").click(function(event){
 	//Se obtiene el formulario padre del boton
-
 	var form = $(this).closest("form");
 	//Se obtienen los datos del formulario seleccionado
 	if(form.attr('action') == "registrousuario"){
-		var data = { type:form.attr('action'), user : $('#user_r').val(), clave :  $('#clave_r').val(), email: $('#email_r').val() };
+		var data = { type:form.attr('action'), user : $('#user_r').val(), clave :  $('#clave_r').val(), email: $('#email_r').val(), rclave: $('#rclave_r').val() };
+
+		//Verifico si los campos estan vacios
+		if( $('#user_r').val() == '' &&  $('#email_r').val() == '' && $('#rclave_r').val() == '' &&  $('#clave_r').val() == '' ){
+			alert('Todos los campos son obligatorios');
+			return false;
+		}else{
+			if($('#user_r').val() == '' ||  $('#email_r').val() == '' || $('#rclave_r').val() == '' ||  $('#clave_r').val() == ''){
+				alert('Debes llenar todos los campos');
+				return false;
+			}else{
+				if($('#rclave_r').val() != $('#clave_r').val()){
+					alert('Tus claves no coinciden vuelve a ingresarlas');
+					return false;
+				}else{
+					var filter = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+					if(!filter.test( $('#email_r').val())){
+						alert('Ingresa un email valido por favor');
+						return false;					
+					}else{
+						//@todo Falta corregir esta verificacion ya que esta dando errores
+						/*checkUser();
+						if($('#oculto').val() == 1 ){ 
+							alert('Este usuario y/o correo ya estan registrados prueba con otros');
+							return false;			
+						 }*/
+						
+					}
+				}
+			}
+		}
+
 	}else{
 		var data = { type:form.attr('action'), user : $('#user_i').val(), clave :  $('#clave_i').val() };	
 	}
-		 $.ajax({
-			type: 'POST',
-			url: form.attr('action'), 
-			data: data,
-			}).done(function(html){
-				$( "#content" ).html( html );
-			});
+
+	envioformulario(data, form.attr('action'));
+		 
 	});
 });
+
+function checkUser(){
+	var z = 0;
+	//Aqui debe verificarse si ya existe este email y alias registrado
+	$.ajax({
+	type: 'POST',
+	url: '/checkUser', 
+	data: {email : $('#email_r').val(), alias :  $('#user_r').val() },
+	}).done(function(respuesta){
+		var x = JSON.parse(respuesta);
+		$('#oculto').val(x['existe']);
+		
+	});
+
+}
+
+function envioformulario(data, action){
+
+	$.ajax({
+	type: 'POST',
+	url: action, 
+	data: data,
+	}).done(function(html){
+		$( "#content" ).html( html );
+	});
+
+}
 
 function validarRegistro(event){
 	

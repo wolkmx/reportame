@@ -78,8 +78,17 @@ $(document).ready(function(){
 				//Se crean los nuevos markers
 				/*@todo se debe dejar una sola funcion que realice este trabajo*/
 				for(i=0;i < x.length ; i++){
+
+				//Icono
+				var icono = L.icon({
+					iconUrl: '/uploads/'+x['objeto'][0][i][0]["imagePing"],
+
+					iconSize:     [68, 61], // size of the icon
+					iconAnchor:   [65, 58], // point of the icon which will correspond to marker's location
+					popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+				});
 					
-					evento[i] = L.marker([x['objeto'][0][i][0]["lat"], x['objeto'][0][i][0]["lon"]],{ title: x['objeto'][0][i][0]["categoriaName"]+': '+x['objeto'][0][i][0]["name"] }).addTo(map);
+					evento[i] = L.marker([x['objeto'][0][i][0]["lat"], x['objeto'][0][i][0]["lon"]],{ title: x['objeto'][0][i][0]["categoriaName"]+': '+x['objeto'][0][i][0]["name"], icon: icono }).addTo(map);
 					
 					evento[i].indice = i;
 
@@ -90,13 +99,17 @@ $(document).ready(function(){
 	
 					evento[j].on('click', function(){ 
 
-						var contenido =  "<ul><li><span class='titulo_dato_home'>Tipo de reporte:</span><span> "+x['objeto'][0][this.indice][0]['categoriaName']+"</span></li><li><span class='titulo_dato_home'>Enfermedad:</span><span> "+x['objeto'][0][this.indice][0]['name']+"</span></li><li><span class='titulo_dato_home'>Usuario que Reporta:</span><span> "+x['objeto'][0][this.indice][0]['alias']+"</span></li><li><span class='titulo_dato_home'>Reportado el:</span><span> "+x['objeto'][0][this.indice][0]['created_at']+"</span></li></ul>";
+						/*var contenido =  "<ul><li><span class='titulo_dato_home'>Tipo de reporte:</span><span> "+x['objeto'][0][this.indice][0]['categoriaName']+"</span></li><li><span class='titulo_dato_home'>Enfermedad:</span><span> "+x['objeto'][0][this.indice][0]['name']+"</span></li><li><span class='titulo_dato_home'>Usuario que Reporta:</span><span> "+x['objeto'][0][this.indice][0]['alias']+"</span></li><li><span class='titulo_dato_home'>Reportado el:</span><span> "+x['objeto'][0][this.indice][0]['created_at']+"</span></li></ul>";*/
+
+var contenido =  "<ul class='list-group'><li class='list-group-item'><span class='titulo_dato_home'>Tipo de reporte:<span> "+x['objeto'][0][this.indice][0]['categoriaName']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Enfermedad:<span> "+x['objeto'][0][this.indice][0]['name']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Usuario que Reporta:<span> "+x['objeto'][0][this.indice][0]['alias']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Reportado el:<span> "+x['objeto'][0][this.indice][0]['created_at']+"</li></ul>";
+
 							/*$('#info_evento_home img').fadeIn();*/
 							$('#info_evento_home').css('height','0px');
 							$('#info_evento_home').css('height','100%');
 							$('#cerrar_datos_reporte_home').fadeIn('slow');
 							$('#datos_reporte_home').html(contenido);
 							$('#datos_reporte_home').fadeIn('slow');
+							etiquetasConsejo(x['objeto'][0][this.indice][0]["idEvento"]);
 						 } );
 
 					}
