@@ -106,6 +106,8 @@ $f3->route('GET  @descarga: /descarga',
 		//Se indica que el contenido del template lo tomara de home.html
 		$f3->set('content','descargar.html');
 		$f3->set('menu','menu.html');
+                
+                $f3->set('flash',NULL);
 		
 		/*Se obtiene el arreglo de la sesion para saber si existe el key user*/
 	$sesion = $f3->get('SESSION');
