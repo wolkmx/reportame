@@ -273,6 +273,9 @@ $(document).ready(function(){
 	evento[0] = L.marker(e.latlng,{animate: true}).addTo(map);
 	evento[0].bindPopup("<b>&iquestEsta no es tu ubicaci\u00f3n?</b><br> Prueba dando clic en <br/>otra parte del mapa ;) <br/>").openPopup()
 	cuestionario(evento[0].getLatLng().lng+','+evento[0].getLatLng().lat);
+	$('#datos_reporte_home').hide('slow');
+	$("cerrar_datos_reporte_home").hide('slow');
+	$('#info_evento_home').css('height','0px');
 	$("#reporte_panel").show();
 }
 

@@ -1,26 +1,26 @@
 $(document).ready(function(){
-	$('.usuario1').mouseover(function(){ 
+	$('.usuario1').click(function(){ 
 		$('#popover').show('slow');
 	});
 
-	$('.usuario1').mouseleave(function(){ 
+	$('.cierratep').click(function(){ 
 		$('#popover').hide('slow');
 	});
 
-	$(".usuario2").mouseover(function(){
+	$(".usuario2").click(function(){
 		$('#popover2').show('slow');
 
 	});
 
-	$('.usuario2').mouseleave(function(){
+	$('.cierratep').click(function(){
 		$('#popover2').hide('slow');
 	});
 
-	$('.usuario3').mouseover(function(){
+	$('.usuario3').click(function(){
 		$('#popover3').show('slow');
 	});
 
-	$('.usuario3').mouseleave(function(){
+	$('.cierratep').click(function(){
 		$('#popover3').hide('slow');
 	});
 
