@@ -110,10 +110,6 @@ $f3->route('GET  @descarga: /descarga',
 		/*Se obtiene el arreglo de la sesion para saber si existe el key user*/
 	$sesion = $f3->get('SESSION');
 
-/*echo '---'.$f3->get('SESSION.user');
-die();*/
-
-//if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')) ){
 	/*Si no existe se declara nula*/
 	if(!array_key_exists("user",$sesion)){
 		$f3->set('usuario','');
@@ -2341,19 +2337,19 @@ $f3->route('POST @descargar: /descargar',
                 e.created_at >= '".$fecha."'";
         
         if( $request['enfermedad'] != '' ):
-            $consulta .= " AND en.name = '".$request['enfermedad']."'";
+            $consulta .= " AND en.name LIKE '".$request['enfermedad']."'";
         endif;
         
         if( $request['pais'] != '' ):
-            $consulta .= " AND p.country = '".$request['pais']."'";
+            $consulta .= " AND p.country LIKE '".$request['pais']."'";
         endif;
         
         if( $request['municipio'] != '' ):
-            $consulta .= " AND p.municipio = '".$request['municipio']."'";
+            $consulta .= " AND p.municipio LIKE '".$request['municipio']."'";
         endif;
         
         if( $request['ciudad'] != '' ):
-            $consulta .= " AND p.ciudad = '".$request['ciudad']."'";
+            $consulta .= " AND p.city LIKE '".$request['ciudad']."'";
         endif;
         
         //-- Se hace la consulta
@@ -2387,11 +2383,153 @@ $f3->route('POST @descargar: /descargar',
             fclose($fp);
             
         else:
-            //-- Carga el arreglo de respuesta en 'SESSION'
-            //$f3->set( 'todosLosRegistros', 0 );
+            
+            //Se indica que el contenido del template lo tomara de home.html
+            $f3->set('content','descargar.html');
+            $f3->set('menu','menu.html');
+
+            /*Se obtiene el arreglo de la sesion para saber si existe el key user*/
+            $sesion = $f3->get('SESSION');
+
+            /*Si no existe se declara nula*/
+            if(!array_key_exists("user",$sesion)){
+                    $f3->set('usuario','');
+            }else{
+                $f3->set('usuario',$f3->get('SESSION.user'));
+                // Inicializamos la variable
+                $f3->set('flash',"Algo no esta bien, verifique el valos de los campos ya algunos no coinciden");
+            }
+
+            echo Template::instance()->render('layout.html');
+            
         endif;
         
     }
+);
+
+
+/**
+ * @author Oscar Galindez <oscarabreu19@gmail.com>
+ * @todo Controlador para el manejo de 'Mi Cuenta' para
+ * el usuario en sesion
+ */
+$f3->route('GET|POST @miCuenta: /miCuenta',
+	function($f3) use ($db) {
+    
+            //-- Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!
+            new Session();
+            
+            //-- Obtiene la peticion
+            $request = $f3->get("REQUEST");
+            
+            /**
+             * ---
+             * 1:   Mostrar: formulario con los dato del usuario en sesion.
+             * -
+             * 
+             * 2:   Editar: edita los datos en la bd.
+             */
+            switch ( $request['menuOpc'] )
+            {
+                case '1':   //-- Mostrar los datos
+                    
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        //--    Llama al modelo
+                        $f3->set('misDatos',new DB\SQL\Mapper($db,'Usuario'));
+
+                        //-- Carga al objeto
+                        $f3->get('misDatos')->load(array('idUsuario=?',$f3->get('SESSION.id')));
+                        
+                        //-- Prepara los datos para la vista
+                        $f3->get('misDatos')->copyTo('POST');
+                        
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+
+                        //-- Preparamos la vista
+                        $f3->set('content','miCuenta/index.html');
+                        
+                        //-- Carga el menu
+                        $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash',null);
+                        
+                        //-- Llama la vista
+                        echo Template::instance()->render('layout.html');
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
+                    break;
+
+                case '2':   //-- Editar 
+                    
+                    //-- Se verifica si el usuario tiene la sesion iniciada
+                    if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+                    {
+                        
+                        //--    Llama al modelo
+                        $f3->set('misDatos',new DB\SQL\Mapper($db,'Usuario'));
+
+                        //-- Carga al objeto
+                        $f3->get('misDatos')->load(array('idUsuario=?',$f3->get('SESSION.id')));
+                        
+                        //--    Cargamos los valores que tenemos del formulario
+                        //-- Modifica los valores que convienen
+                        $f3->get('misDatos')->set('email',$request['email']);
+                        $f3->get('misDatos')->set('password',$request['password']);
+                        
+                        //--    Salva en BD
+                        $f3->get('misDatos')->save();
+                        
+                        //--    Cargamos los valores que tenemos del formulario
+                        $f3->get('misDatos')->copyTo('POST');
+                        
+                        //-- Datos del usuario en sesion
+                        $f3->set('usuario',$f3->get('SESSION.user'));
+                        
+                        //-- Preparamos la vista
+                        $f3->set('content','miCuenta/index.html');
+                        
+                        //-- Carga el menu
+                        $f3->set('menu','menu.html');
+                        
+                        // Inicializamos la variable
+                        $f3->set('flash','Sus datos fueron modificados satisfactoriamente');
+                        
+                        //-- Llama la vista
+                        echo Template::instance()->render('layout.html');
+                    }
+                    else
+                    {
+                        //Se destruye la sesion del usuario
+                        $f3->clear('SESSION.user');
+                        $f3->clear('SESSION.id');
+                        $f3->clear('SESSION');
+                        
+                        /*Si no se reenvia al home*/
+                        $f3->reroute('@home'); 
+                    }
+                    
+                    break;
+               
+                    
+                default:
+                    break;
+            }
+		
+	}
 );
 
 $f3->run();

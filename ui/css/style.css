@@ -2,6 +2,7 @@ body{
 	padding: 0;
 	margin: 0;
 	font-family: 'Roboto';
+	overflow-x: hidden;
 }
 .navbar-nav > li > span{
 	  padding-bottom: 15px;
@@ -15,6 +16,10 @@ body{
 #search_home_input{
 	margin-bottom: 5px;
     margin-right: 46px;
+}
+
+.espacio h1{
+	text-align: center;
 }
 
 .bck-parallax{
@@ -443,12 +448,19 @@ h5{
 
 #popover,#popover2,#popover3{
     background-color: #e2e2e2;
-    display: none;
-    height: 241px;
+    display: none; 
     position: absolute;
     top: 60px;
-    width: 360px;
+    width: 91%;
     opacity: 0.8;
+    min-height: 24px;
+}
+
+#popover p,#popover2 p, #popover3 p{
+	padding: 30px 30px;
+	text-align: center;
+	color: #108dd1;
+	font-size: 17px;
 }
 
 
