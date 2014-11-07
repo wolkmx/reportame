@@ -2419,7 +2419,7 @@ $f3->route('GET|POST @miCuenta: /miCuenta',
 	function($f3) use ($db) {
     
             //-- Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!
-            new Session();
+            //new Session();
             
             //-- Obtiene la peticion
             $request = $f3->get("REQUEST");
