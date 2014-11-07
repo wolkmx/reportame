@@ -16,12 +16,21 @@
 		<script type="text/javascript" src='/ui/js/funcioneshome.js' ></script>
 		<script src="ui/leaflet/leaflet.js"></script>
 		<script src="ui/js/jquery.bpopup.min.js"></script>
-		
+		<script type="text/javascript" src="ui/js/botones.js"></script>
 	<script src="ui/js/bootstrap.min.js"></script>
-	</head>
 	
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
+	  ga('create', 'UA-56430208-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
 	
+	</head>
 	<body>
 
 		<header id="moverlo">
@@ -33,21 +42,25 @@
 							<span class="icon-bar"></span>
 							<span class="icon-bar"></span>
 						  </button>
-					<a href="#" class="navbar-brand"><img src="ui/images/logo.png" width="300" alt="" class="img-responsive"></a>
+					<a href="<check if="{{ @usuario !== '' }}"><true>/mipanel</true><false>/</false></check>" class="navbar-brand"><img src="ui/images/logo.png" width="300" alt="" class="img-responsive"></a>
 				</div>
 				<div id="acomodat" class="collapse navbar-collapse">
 						<ul class="nav navbar-nav pull-right">
-							<li><a href="/quienessomos" id="">¿Quiénes Somos?</a></li>
+							<li><a href="/porquelohacemos" id="">¿Por qué lo hacemos?</a></li>
 							<li><a href="/descarga" id="">Descargar Datos</a></li>
 							<check if="{{ @usuario !== '' }}">
 								<true>
-									<li><a class="activar_panel" href="#" >Opciones</a></li>
+									<li><span class="activar_panel menu_boton" >Opciones</span></li>
 									<li><a href="#" class="form_inicio_registro" >Mi Cuenta</a></li>
-									<li><a href="/logout">Cerrar Sesion</a></li>
+									<li><a href="/logout">Cerrar Sesión</a></li>
 								</true>
 								<false>
-									<li><a id="is" href="#" class="form_inicio_registro" >Iniciar Sesión</a></li>
-									<li><a id="re" href="#" class="form_inicio_registro" >Registrarse</a></li>
+									<li>
+										<span id="is" class="form_inicio_registro activar_panel menu_boton" style="padding-right: 20px;">Iniciar Sesión</span>
+									</li>
+									<li>
+										<span id="re" class="form_inicio_registro activar_panel menu_boton" >Registrarse</span>
+									</li>
 								</false>
 							</check>
 						</ul>
@@ -58,7 +71,8 @@
 		<check if="{{ @usuario !== '' }}">
 			<true><include href="{{ @menu }}" /></true>
 		</check>
-		
+<div id="content" style="left: 432px; position: absolute; top: 304.5px; z-index: 9999; opacity: 0; display: none;background-color: #fff; border-radius: 10px; ">
+</div>		
 	</body>
 	<footer>
 		<div class="container">

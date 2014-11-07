@@ -3,6 +3,19 @@ body{
 	margin: 0;
 	font-family: 'Roboto';
 }
+.navbar-nav > li > span{
+	  padding-bottom: 15px;
+    padding-top: 15px;
+    line-height: 20px;
+    color: whitesmoke;
+    display: block;
+    font-size: 17px;
+    cursor: pointer;
+}
+#search_home_input{
+	margin-bottom: 5px;
+    margin-right: 46px;
+}
 
 .bck-parallax{
 	
@@ -17,13 +30,37 @@ body{
 }
 .alto{
 	min-height: 700px;
-	background-image: url(../images/fondo.jpg);
+	background-image: url(../images/fondo.jpg);fondoquienes.png
 }
 
 .azul{
 background-color: #108dd1;
 min-height: 500px;
 }
+
+.blanco p{
+	font-family: 'Arial';
+	 font-size: 17px;
+	 text-align: justify;
+	 font-weight: 300;
+	
+}
+
+.gris{
+	background-image: url(../images/fondoquienes.png);
+	color: whitesmoke;
+	 font-weight:500;
+	   font-size: 20px;
+	   font-family: 'Roboto';
+	   text-align: left;
+	      text-shadow: 4px 3px 3px #000;
+
+}
+
+.gris li{
+	margin-bottom: 10px;
+}
+
 h1{
 	color: whitesmoke !important;
 }
@@ -73,11 +110,11 @@ margin: 10px auto;
 
 #mapa{
 width:100%;
-min-height: 700px;
+min-height: 489px;
 }
 
 .leaflet-container{
-	min-height: 700px !important;
+	min-height: 489px !important;
 }
 
 #info_evento_home{
@@ -91,7 +128,7 @@ background-color:#595a5b;
 	color: white;
 }
 .espacio-interno{
- padding: 20px 50px;
+/*  padding: 20px 50px; */
 }
 
 #cerrar_datos_reporte_home{
@@ -210,7 +247,7 @@ text-align: center;
 footer{
 background-color:#999999;
 color:whitesmoke;
-margin:40px 0 0 auto;
+/* margin:40px 0 0 auto; */
 padding: 20px 40px;
   text-align: center;
 }
@@ -228,6 +265,14 @@ footer .container img{
 	.medio {
 	top:0;	
 	font-size: 34px;
+	}
+
+	.navbar-brand img{
+		width: 195px !important;
+	}
+
+	.navbar-toggle {
+		margin-top: 17px !important;
 	}
 }
 
@@ -328,6 +373,10 @@ left: 432px;
 }
  */
 
+ .caras-ocultas{
+ 	padding: 10px;
+ }
+
  .popup{
  	padding: 10px 40px;
     left: 76px !important;
@@ -386,4 +435,20 @@ h5{
   fieldset { display: table-cell; }
 }
 
- 
+.panel-body{
+	margin: 0 !important;
+	padding: 0 !important;
+}
+/* texto botones */
+
+#popover,#popover2,#popover3{
+    background-color: #e2e2e2;
+    display: none;
+    height: 241px;
+    position: absolute;
+    top: 60px;
+    width: 360px;
+    opacity: 0.8;
+}
+
+

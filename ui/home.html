@@ -10,12 +10,14 @@
 					
 				<div class="espacio-interno panel-body">
 				
-						<div class="col-md-11">
-							<div id='datos_reporte_home' style='display:none;' ></div>
-							<img src='/ui/images/loading.GIF' style='display:none;' />
-						</div>
-						<div class="col-md-1">
-						<button type="button" class="btn btn-default btn-lg"  id='cerrar_datos_reporte_home' style='display:none;'>Cerrar</button>
+				<div class="container">
+							<div class="col-md-11">
+						<div id='datos_reporte_home' style='display:none;' ></div>
+						<img src='/ui/images/loading.GIF' style='display:none;' />
+					</div>
+					<div class="col-md-1">
+					<button type="button" class="btn btn-default btn-lg"  id='cerrar_datos_reporte_home' style='display:none;'>Cerrar</button>
+					</div>
 				</div>
 				</div>
 				</div>
@@ -26,7 +28,7 @@
 			<div id='mapa'>
 
 				<div id='search_home'>
-					<input id='search_home_input' name='search' input type="text" x-webkit-speech />
+					<input id='search_home_input' name='search' placeholder="Gripe, Dengue, etc" input type="text" x-webkit-speech />
 					<input id='search_ciudadano' type="checkbox" name="ciudadano" value="c" checked>Ciudadano
 					<input id='search_gobierno' type="checkbox" name="gobierno" value="g">Gobierno 
 					<input id='search_home_send' type='button' value='Buscar' />
@@ -40,11 +42,14 @@
 		<div class="container ">
 			<div class="row espacio">
 				<div class="col-md-12">
-					<h1><span class="lai">Lorem Ipsum is simply dummy text</span> of the printing and typesetting industry.<span class="lai"> Lorem Ipsum has been the industry's standard</span></h1>
+					<h1>Reportame <span class="lai">te ayuda a obtener informacion</span> en tiempo real de manera abierta, transparente y amigable<span class="lai"> sobre todos los eventos relacionados con la salud en tu </span>comunidad, <span class="lai">con tu ayuda construiremos una </span>sociedad abierta y participativa</h1>
 
 				</div>
 					<div class="col-md-12 medio">
-						<button type="button" class=" color-grande btn btn-default btn-lg" >Leer Más</buttom>
+						<a href="quienessomos">
+							<button type="button" class=" color-grande btn btn-default btn-lg" >Leer Más</button>
+						</a>
+						
 					</div>
 			</div>
 
@@ -53,22 +58,23 @@
 	<section class="bck-parallax usuarios">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-4 pt20"><a href="">
-					<img src="ui/images/ninas.jpg" height="400" width="660" alt="" class="img-responsive">
-					<div class="usuario1 tipografia color-fondo">
-						<h3><span class="lai">Reportar como</span> CUIDADANO</h3>
-					</div></a>
-				</div>
-				<div class="col-md-4 pt20"><a href="">
-					<img src="ui/images/gobierno.jpg" height="400" width="660" alt="" class="img-responsive">
-					<div class="usuario2 tipografia color-fondo">
-						<h3><span class="lai">Reportar como</span> OFICIAL</h3>
-					</div></a>
-				</div>
 				<div class="col-md-4 pt20">
-					<img src="ui/images/edificio.jpg" height="400" width="660" alt="" class="img-responsive" style="opacity:0.8;">
-					<div class="usuario3 tipografia color-dos">
-						<h3><span class="lai">Reportar como</span> EMPRESA</h3>
+					<img src="ui/images/ninas.jpg" height="400" width="660" alt="" class="img-responsive">
+					<div id="popover"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat perferendis, incidunt dolor debitis.</p></div>
+					<div class="usuario1 tipografia color-fondo">
+						<h3><span class="lai">Reportar como</span> CIUDADANO</h3>
+					</div>
+				</div>
+				<div class="col-md-4 pt20"><a href="">
+					<img src="ui/images/gobierno.jpg" height="400" width="660" alt="" class="img-responsive" style="opacity:0.8;"><div id="popover2"></div>
+					<div class="usuario2 tipografia color-fondo">
+						<h3><span class="lai">Reportar como</span> OFICIAL</h3></a>
+					</div>
+				</div>
+				<div class="col-md-4 pt20"><a href="">
+					<img src="ui/images/edificio.jpg" height="400" width="660" alt="" class="img-responsive" style="opacity:0.8;"><div id="popover3"></div>
+					<div class="usuario3 tipografia color-fondo">
+						<h3><span class="lai">Reportar como</span> EMPRESA</h3></a>
 					</div>
 				</div>
 			</div>
@@ -119,28 +125,12 @@
 
 
 
-<div id="content" style="left: 432px; position: absolute; top: 304.5px; z-index: 9999; opacity: 0; display: none;background-color: #fff; border-radius: 10px; ">
-</div>
+
 <script type="text/javascript">
 //Se declaran globalmente los markers y el mapa para que pueda ser referenciado a lo largo de los scripts
 var evento = [];
 var map = null;
 $(document).ready(function(){
-
-
- /*Codigo javascript para refrescar la seccion principal "content" para mostrar el formulario de registro/inicio de sesion */
-	$(".form_inicio_registro").click(function(){
-		var data = {"tipo": $(this).attr("id")};
-		 $.ajax({
-			type: 'POST',
-			url: '/login',
-			data: data,
-			}).done(function(html){
-				$( "#content" ).html( html );
-				$('#content').bPopup();
-				
-			});
-	});
 
 //Se declara un arreglo vacio de elementos para guardar todos los markers
 var eventosrecientes = [];

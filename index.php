@@ -45,7 +45,11 @@ $f3->route('GET @home: /',
 	/*Si no existe se declara nula*/
 	if(!array_key_exists("user",$sesion)){
 		$f3->set('usuario','');
-	}
+		//echo "entro";
+	}/*else{
+		echo "no entro--";
+		echo $f3->get('SESSION.user');
+	}*/
 	
 	/*echo "---<pre>";
 	print_r($sesion);
@@ -89,30 +93,39 @@ $f3->route('POST @login: /login [ajax]',
 		$formulario = $f3->get("REQUEST");
 		//Se declara la variable flash como nula para que no aparesca la primera vez que se muestra el formulario pero si la segunda vez si es que hay un error.
 		$f3->set('flash',null);
+		$f3->set('flashr',null);
 		$f3->set("tipo", $formulario["tipo"]);
 		echo Template::instance()->render('loginform.html');
 	}
 );
 
-/*Ruta para cerrar la seccion quienes somos */
+/*Ruta para cerrar la seccion descarga */
 $f3->route('GET  @descarga: /descarga',
 	function($f3) {
 	
 		//Se indica que el contenido del template lo tomara de home.html
 		$f3->set('content','descargar.html');
+		$f3->set('menu','menu.html');
 		
 		/*Se obtiene el arreglo de la sesion para saber si existe el key user*/
 	$sesion = $f3->get('SESSION');
+
+/*echo '---'.$f3->get('SESSION.user');
+die();*/
+
+//if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')) ){
 	/*Si no existe se declara nula*/
 	if(!array_key_exists("user",$sesion)){
 		$f3->set('usuario','');
+	}else{
+		$f3->set('usuario',$f3->get('SESSION.user'));
 	}
 		
 		echo Template::instance()->render('layout.html');
 	}
 );
 
-/*Ruta para cerrar la seccion quienes somos */
+/*Ruta para cerrar la seccion email */
 $f3->route('GET  @email: /email',
 	function($f3) {
 	
@@ -146,13 +159,15 @@ $f3->route('POST @iniciarsesion: /iniciarsesion [ajax]',
 		$usuario = $db->exec('SELECT * FROM Usuario WHERE (alias LIKE "'.$formulario['user'].'" OR email LIKE "'.$formulario['user'].'") AND password="'.$formulario['clave'].'"');
 		
 		$f3->set('flash',Null);
+		$f3->set('flashr',Null);
 		
 		if(count($usuario)){
 			//Si encuentra el usuario se inicia la sesion con los datos del usuario.
-			new Session();
+			//new Session();
 			
 			$f3->set('SESSION.user',$usuario[0]['alias']);
 			$f3->set('SESSION.id',$usuario[0]['idUsuario']);
+			$f3->set('SESSION.tipo',$usuario[0]['tipoUsuario']);
 			
 			//echo "--".$f3->get('SESSION.user')."--";
 			
@@ -185,10 +200,13 @@ $f3->route('POST @registrousuario: /registrousuario [ajax]',
 	function($f3) use ($db) {
                 
 		$formulario = $f3->get("REQUEST");
+		$f3->set('flash',Null);
+		$f3->set('flashr',Null);		
 		
 		$user=new DB\SQL\Mapper($db,'Usuario');
 		$user->set('alias',$formulario['user']);
 		$user->set('email',$formulario['email']);
+		$user->set('tipoUsuario',2);
 		$user->set('password',$formulario['clave']);
                 
 		//Se guarda el usuario creado
@@ -204,9 +222,38 @@ $f3->route('POST @registrousuario: /registrousuario [ajax]',
                 $smtp->set('Errors-to', '<usuario@dominio.com>');  
 
                 $message = 'Usuario: '. $user->get('alias'); 
-                $message .= '<br>Clave: '. $user->get('password'); 
+                $message .= '<br>Clave: '. $user->get('password');
+				
+				/*$message = "<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<meta charset='UTF-8'>
+	<link rel='stylesheet' href='http://reportame.ohsioh.com/ui/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='http://reportame.ohsioh.com/ui/css/style_email.css'>
+	<script src='http://reportame.ohsioh.com/ui/js/jquery-2.1.1.min.js'></script>
+</head>
+<body>
+	<div class='container borde'>
+		<div class='row'>
+			<div class='col-md-12'>
+				<div class='logo'><img src='http://reportame.ohsioh.com/ui/images/logo.png' width='300' alt='' class='img-responsive'></div>
+				<div class='texto'>
+					<h3>¡Bienvenido a Reportame!</h3>
+					<p>Para comenzar a formar parte de una comunidad transparente e informada debes verificar tu dirección de email. </p>
+				</div>
+				<button class='btn btn-primary send' type='buttom' >Verificar Email</button><br>
+				<p style='margin-top:10px; color:#999;'>También puedes verificarla a través de este enlace:
+					<a href='#'>http://reportame.org/account/email/verify/w2ZPJUpQQmE_LQmCw-Jv</a>
+				</p>
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>";*/
 
                 $sent = $smtp->send($message, TRUE);
+				//$sent = $smtp->send(Template::instance()->render('email.txt','text/html'));
 
                 $mylog = $smtp->log();
 
@@ -229,10 +276,25 @@ $f3->route('POST @registrousuario: /registrousuario [ajax]',
 		/*@todo falta agregar la logica para verificar si ya existe le usuario o si se pudo guardar correctamente por ejemplo que no exista el usuario y el email antes*/
 		
 		//Si encuentra el usuario se inicia la sesion con los datos del usuario.
-                new Session();
+                //new Session();
 
                 $f3->set('SESSION.user',$user->get('alias'));
                 $f3->set('SESSION.id',$user->get('idUsuario'));
+				$f3->set('SESSION.tipo',$user->get('tipoUsuario'));
+				
+				/*echo $f3->get('SESSION.user');
+				echo $f3->get('SESSION.id');
+				echo $f3->get('SESSION.tipo');
+				echo "*****";*/
+			/*$f3->set('SESSION.user',$formulario['user']);
+			$f3->set('SESSION.id',1);
+			$f3->set('SESSION.tipo',2);
+			
+			echo $f3->get('SESSION.user');
+				echo $f3->get('SESSION.id');
+				echo $f3->get('SESSION.tipo');*/
+				
+				
 
 
 		//Se redirecciona al panel de control
@@ -240,11 +302,32 @@ $f3->route('POST @registrousuario: /registrousuario [ajax]',
 	}
 );
 
+/*Ruta para recibir la peticion ajax para buscar si existe el usuario*/
+$f3->route('POST @checkUser: /checkUser [ajax]',
+	function($f3) use ($db) {
+	/*Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!*/
+
+		$formulario = $f3->get("REQUEST");	
+		/*Se consulta la base de datos para ver si existe un perfil propio para este usuario*/
+		$usuario = $db->exec('SELECT count(u.idUsuario) AS total FROM Usuario AS u WHERE alias LIKE "'.$formulario['alias'].'" AND email LIKE "'.$formulario['email'].'"');
+		//Si trae un registro debe regresar el valor de este perfil
+		if($usuario[0]['total'] > 0){
+			
+			echo '{"existe": "1"}';
+			
+		}else{
+			echo '{"existe": "0"}';
+		}
+		
+	}
+
+);
+
 /*Ruta para recibir la peticion ajax para buscar si existe el perfil del usuario*/
 $f3->route('POST @existeMiPerfil: /existeMiPerfil [ajax]',
 	function($f3) use ($db) {
 	/*Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!*/
-	new Session();
+	//new Session();
 	//echo "--".$f3->get('SESSION.user')."--";
 		/*Se verifica si el usuario tiene la sesion iniciada*/
 		if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user'))){
@@ -289,7 +372,7 @@ $f3->route('POST @existeMiPerfil: /existeMiPerfil [ajax]',
 $f3->route('POST @existenPerfiles: /existenPerfiles [ajax]',
 	function($f3) use ($db) {
 	/*Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!*/
-	new Session();
+	//new Session();
 	//echo "--".$f3->get('SESSION.user')."--";
 		/*Se verifica si el usuario tiene la sesion iniciada*/
 		if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user'))){
@@ -344,7 +427,7 @@ $f3->route('POST @existenPerfiles: /existenPerfiles [ajax]',
 $f3->route('POST @getPerfil: /getPerfil [ajax]',
 	function($f3) use ($db) {
 	/*Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!*/
-	new Session();
+	//new Session();
 	//echo "--".$f3->get('SESSION.user')."--";
 		/*Se verifica si el usuario tiene la sesion iniciada*/
 		if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user'))){
@@ -389,7 +472,7 @@ $f3->route('POST @getPerfil: /getPerfil [ajax]',
 $f3->route('POST @guardarEvento: /guardarEvento [ajax]',
 	function($f3) use ($db) {
 	/*Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!*/
-	new Session();
+	//new Session();
 	//echo "--".$f3->get('SESSION.user')."--";
 		/*Se verifica si el usuario tiene la sesion iniciada*/
 		if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user'))){
@@ -412,6 +495,7 @@ $f3->route('POST @guardarEvento: /guardarEvento [ajax]',
 					$perfil->city=$formulario['ciudad_reporte'];
 					$perfil->municipio=$formulario['municipio_reporte'];
 					$perfil->sex=$formulario['sexo_reporte'];
+
 					$perfil->profesion=$formulario['profesion_reporte'];
 					$perfil->usuario_id=$f3->get('SESSION.id');
 					$perfil->documentType=$formulario['documentType_reporte'];
@@ -540,11 +624,7 @@ $f3->route('POST @busquedaHome: /busquedaHome [ajax]',
 		
 		/*$eventos = $db->exec('SELECT e.*, p.*, en.name, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario WHERE (e.created_at BETWEEN "'.$fechaanterior.'" AND "'.$fechainicial.'") AND UPPER(en.name) LIKE "'.$busqueda['busquedaajax'].'" '.$tipousuario);*/
 		
-		$eventos = $db->exec('SELECT e.*, p.*, en.name, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario WHERE UPPER(en.name) LIKE "'.$busqueda['busquedaajax'].'" '.$tipousuario);
-
-echo 'SELECT e.*, p.*, en.name, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario WHERE UPPER(en.name) LIKE "'.$busqueda['busquedaajax'].'" '.$tipousuario;
-
-die();
+		$eventos = $db->exec('SELECT e.*, p.*, en.name, en.imagePing, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario WHERE UPPER(en.name) LIKE "'.$busqueda['busquedaajax'].'" '.$tipousuario);
 	
 	//Se inicia la cadena con el formato de json
 	$objetojson = '{"objeto": [{';
@@ -675,7 +755,7 @@ $f3->route('POST @formularioEtiquetas: /formularioEtiquetas [ajax]',
 /*Ruta guardar las etiquetas del evento*/
 $f3->route('POST @guardarEtiquetasEvento: /guardarEtiquetasEvento [ajax]',
 	function($f3) use ($db) {
-		new Session();
+		//new Session();
 		$formulario = $f3->get("REQUEST");
 		//Se crea un array con todas las etiquetas que llegan del formulario
 		$etiquetas = explode ( ' ' , $formulario['etiquetas'] );
@@ -783,8 +863,9 @@ $f3->route('POST @todosLosEventos: /todosLosEventos [ajax]',
 $f3->route('GET  @miPanel: /mipanel',
 	function($f3) use ($db) {
 	/*Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!*/
-	new Session();
-	//echo "--".$f3->get('SESSION.user')."--";
+	//new Session();
+	/*echo "----".$f3->get('SESSION.user')."---";
+	die();*/
 		/*Se verifica si el usuario tiene la sesion iniciada*/
 		if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user'))){
 			$f3->set('content','panel/paneldecontrol.html');
@@ -846,10 +927,11 @@ $f3->route('GET  @logout: /logout',
 	function($f3) {
 	
 		//Se inicializa la sesion para poder acceder a los valores anteriores
-		new Session();
+		//new Session();
 		//Se destruye la sesion del usuario
 		$f3->clear('SESSION.user');
 		$f3->clear('SESSION.id');
+		$f3->clear('SESSION.tipo');
 		$f3->clear('SESSION');
 		//session_destroy();
 		$f3->reroute('@home'); 
@@ -857,18 +939,21 @@ $f3->route('GET  @logout: /logout',
 	}
 );
 
-/*Ruta para cerrar la seccion quienes somos */
-$f3->route('GET  @quienessomos: /quienessomos',
+/*Ruta para cerrar la seccion por que lo hacemos */
+$f3->route('GET  @porquelohacemos: /porquelohacemos',
 	function($f3) {
 	
 		//Se indica que el contenido del template lo tomara de home.html
-		$f3->set('content','quienessomos.html');
+		$f3->set('content','porquelohacemos.html');
+		$f3->set('menu','menu.html');
 		
 		/*Se obtiene el arreglo de la sesion para saber si existe el key user*/
 	$sesion = $f3->get('SESSION');
 	/*Si no existe se declara nula*/
 	if(!array_key_exists("user",$sesion)){
 		$f3->set('usuario','');
+	}else{
+		$f3->set('usuario',$f3->get('SESSION.user'));
 	}
 		
 		echo Template::instance()->render('layout.html');
@@ -954,7 +1039,7 @@ $f3->route('GET|POST @perfil: /perfil',
 	function($f3) use ($db) {
     
             //-- Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!
-            new Session();
+            //new Session();
             
             //-- Obtiene la peticion
             $request = $f3->get("REQUEST");
@@ -994,7 +1079,7 @@ $f3->route('GET|POST @perfil: /perfil',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //-- Se arma la consulta
-                        $consulta = 'SELECT * FROM perfil WHERE usuario_id= '. $f3->get('SESSION.id') .';';
+                        $consulta = 'SELECT * FROM Perfil WHERE usuario_id= '. $f3->get('SESSION.id') .';';
                         
                         //-- Se hace la consulta
                         $todosLosRegistros = $db->exec( $consulta );
@@ -1080,7 +1165,7 @@ $f3->route('GET|POST @perfil: /perfil',
                         $fecha = date("Y-m-d H:i:s");
                         
                         //--    Llama al modelo
-                        $f3->set('perfil',new DB\SQL\Mapper($db,'perfil'));
+                        $f3->set('perfil',new DB\SQL\Mapper($db,'Perfil'));
                         
                         //--    Cargamos los valores que tenemos del formulario
                         $f3->get('perfil')->copyFrom('POST');
@@ -1132,7 +1217,7 @@ $f3->route('GET|POST @perfil: /perfil',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //-- Llama al modelo
-                        $f3->set('perfil',new DB\SQL\Mapper($db,'perfil'));
+                        $f3->set('perfil',new DB\SQL\Mapper($db,'Perfil'));
 
                         //-- Carga al objeto
                         $f3->get('perfil')->load(array('idPerfil=?',$request['id']));
@@ -1175,7 +1260,7 @@ $f3->route('GET|POST @perfil: /perfil',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //--    Llama al modelo
-                        $f3->set('perfil',new DB\SQL\Mapper($db,'perfil'));
+                        $f3->set('perfil',new DB\SQL\Mapper($db,'Perfil'));
                         
                         //-- Carga al objeto
                         $f3->get('perfil')->load(array('idPerfil=?',$request['id']));
@@ -1228,7 +1313,7 @@ $f3->route('GET|POST @perfil: /perfil',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //--    Llama al modelo
-                        $f3->set('perfil',new DB\SQL\Mapper($db,'perfil'));
+                        $f3->set('perfil',new DB\SQL\Mapper($db,'Perfil'));
                         
                         //-- Carga al objeto
                         $f3->get('perfil')->load(array('idPerfil=?',$request['id']));
@@ -1271,10 +1356,10 @@ $f3->route('GET|POST @perfil: /perfil',
                     if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
                     {
                         //--    Llama al modelo
-                        $f3->set('perfil',new DB\SQL\Mapper($db,'perfil'));
+                        $f3->set('perfil',new DB\SQL\Mapper($db,'Perfil'));
                         
                         //-- Arma la consulta
-                        $consulta = 'DELETE FROM perfil WHERE idPerfil='.$request['id'].';';
+                        $consulta = 'DELETE FROM Perfil WHERE idPerfil='.$request['id'].';';
                         
                         //-- Eliminar el registro
                         $db->exec($consulta);
@@ -1289,7 +1374,7 @@ $f3->route('GET|POST @perfil: /perfil',
                         $f3->set('menu','menu.html');
                         
                         //-- Se arma la consulta
-                        $consulta = 'SELECT * FROM perfil WHERE usuario_id= '. $f3->get('SESSION.id') .';';
+                        $consulta = 'SELECT * FROM Perfil WHERE usuario_id= '. $f3->get('SESSION.id') .';';
                         
                         //-- Se hace la consulta
                         $todosLosRegistros = $db->exec( $consulta );
@@ -1345,7 +1430,7 @@ $f3->route('GET|POST @categoria: /categoria',
 	function($f3) use ($db) {
     
             //-- Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!
-            new Session();
+            //new Session();
             
             //-- Obtiene la peticion
             $request = $f3->get("REQUEST");
@@ -1733,7 +1818,7 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
 	function($f3) use ($db) {
     
             //-- Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!
-            new Session();
+            //new Session();
             
             //-- Obtiene la peticion
             $request = $f3->get("REQUEST");
@@ -2284,14 +2369,14 @@ $f3->route('POST @descargar: /descargar',
             
             //-- Monta el encabezado 'latitud,longitud,fecha,enfermedad,sexo,pais,ciudad,numicipio'
             $encabezado = 
-                    array('latitud',
-                        'longitud',
-                        'fecha',
-                        'enfermedad',
-                        'sexo',
-                        'pais',
-                        'ciudad',
-                        'numicipio');
+                    array('Latitud',
+                        'Longitud',
+                        'Reportado el',
+                        'Enfermedad',
+                        'Sexo',
+                        'Pais',
+                        'Ciudad',
+                        'Municipio');
             
             fputcsv($fp, $encabezado);
             
