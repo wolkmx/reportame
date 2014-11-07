@@ -110,10 +110,6 @@ $f3->route('GET  @descarga: /descarga',
 		/*Se obtiene el arreglo de la sesion para saber si existe el key user*/
 	$sesion = $f3->get('SESSION');
 
-/*echo '---'.$f3->get('SESSION.user');
-die();*/
-
-//if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')) ){
 	/*Si no existe se declara nula*/
 	if(!array_key_exists("user",$sesion)){
 		$f3->set('usuario','');
@@ -2341,19 +2337,19 @@ $f3->route('POST @descargar: /descargar',
                 e.created_at >= '".$fecha."'";
         
         if( $request['enfermedad'] != '' ):
-            $consulta .= " AND en.name = '".$request['enfermedad']."'";
+            $consulta .= " AND en.name LIKE '".$request['enfermedad']."'";
         endif;
         
         if( $request['pais'] != '' ):
-            $consulta .= " AND p.country = '".$request['pais']."'";
+            $consulta .= " AND p.country LIKE '".$request['pais']."'";
         endif;
         
         if( $request['municipio'] != '' ):
-            $consulta .= " AND p.municipio = '".$request['municipio']."'";
+            $consulta .= " AND p.municipio LIKE '".$request['municipio']."'";
         endif;
         
         if( $request['ciudad'] != '' ):
-            $consulta .= " AND p.ciudad = '".$request['ciudad']."'";
+            $consulta .= " AND p.city LIKE '".$request['ciudad']."'";
         endif;
         
         //-- Se hace la consulta
@@ -2387,8 +2383,25 @@ $f3->route('POST @descargar: /descargar',
             fclose($fp);
             
         else:
-            //-- Carga el arreglo de respuesta en 'SESSION'
-            //$f3->set( 'todosLosRegistros', 0 );
+            
+            //Se indica que el contenido del template lo tomara de home.html
+            $f3->set('content','descargar.html');
+            $f3->set('menu','menu.html');
+
+            /*Se obtiene el arreglo de la sesion para saber si existe el key user*/
+            $sesion = $f3->get('SESSION');
+
+            /*Si no existe se declara nula*/
+            if(!array_key_exists("user",$sesion)){
+                    $f3->set('usuario','');
+            }else{
+                $f3->set('usuario',$f3->get('SESSION.user'));
+                // Inicializamos la variable
+                $f3->set('flash',"Algo no esta bien, verifique el valos de los campos ya algunos no coinciden");
+            }
+
+            echo Template::instance()->render('layout.html');
+            
         endif;
         
     }

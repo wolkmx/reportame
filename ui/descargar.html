@@ -20,11 +20,11 @@
 
                 </div>
         </div>
-
+        
         <form action="descargar" method="post" class="form-inline" role="form">
         
             <div class="row">
-
+                
                 <div class="col-md-6">
                         <select class="form-control" name="anio">
                           <option value="2014">2014</option>
@@ -81,8 +81,10 @@
                          <input name="municipio" type="text" class="form-control" id="exampleInputPassword2" placeholder="Municipio"> 
                 </div>
 
+                
                 <div class="col-md-12 espacio" >
                         <button type="submit" class="btn btn-default">Descargar Datos</button>
+                        <span class="error" style="color: whitesmoke;">{{ @flash }}</span>
                 </div>
 
             </div>
