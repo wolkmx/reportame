@@ -1940,7 +1940,7 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
                         $fecha = date("Y-m-d H:i:s");
                         
                         //--    Llama al modelo
-                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'enfermedad'));
+                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'Enfermedad'));
                         
                         //--    Cargamos los valores que tenemos del formulario
                         $f3->get('enfermedad')->copyFrom('POST');
