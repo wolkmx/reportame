@@ -106,6 +106,8 @@ $f3->route('GET  @descarga: /descarga',
 		//Se indica que el contenido del template lo tomara de home.html
 		$f3->set('content','descargar.html');
 		$f3->set('menu','menu.html');
+                
+                $f3->set('flash',NULL);
 		
 		/*Se obtiene el arreglo de la sesion para saber si existe el key user*/
 	$sesion = $f3->get('SESSION');
@@ -1938,7 +1940,7 @@ $f3->route('GET|POST @enfermedad: /enfermedad',
                         $fecha = date("Y-m-d H:i:s");
                         
                         //--    Llama al modelo
-                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'enfermedad'));
+                        $f3->set('enfermedad',new DB\SQL\Mapper($db,'Enfermedad'));
                         
                         //--    Cargamos los valores que tenemos del formulario
                         $f3->get('enfermedad')->copyFrom('POST');
@@ -2417,7 +2419,7 @@ $f3->route('GET|POST @miCuenta: /miCuenta',
 	function($f3) use ($db) {
     
             //-- Se debe volver a instanciar el objeto de tipo sesion para poder acceder a los datos globales si no no funcionara!!!
-            new Session();
+            //new Session();
             
             //-- Obtiene la peticion
             $request = $f3->get("REQUEST");
