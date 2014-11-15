@@ -148,10 +148,25 @@ evento[index].indice = index;
 				<li><span class='titulo_dato_home'>Reportado el:<span> "+eventosrecientes[this.indice]['created_at']+"</li>
 			</ul>
 		"
-
+                
 		*/
-		var contenido =  "<ul class='list-group'><li class='list-group-item'><span class='titulo_dato_home'>Tipo de reporte:<span> "+eventosrecientes[this.indice]['categoriaName']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Enfermedad:<span> "+eventosrecientes[this.indice]['name']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Usuario que Reporta:<span> "+eventosrecientes[this.indice]['alias']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Reportado el:<span> "+eventosrecientes[this.indice]['created_at']+"</li></ul>";
-			/*$('#info_evento_home img').fadeIn();*/
+                
+                var contenido =  "<ul class='list-group'><li class='list-group-item'><span class='titulo_dato_home'>Tipo de reporte:<span> "+eventosrecientes[this.indice]['categoriaName']+"</li>";
+                
+                if( eventosrecientes[this.indice]['categoria_id'] == 2 )
+                {
+                    contenido += "<li class='list-group-item'><span class='titulo_dato_home'>Tipo de Operativo:<span> "+eventosrecientes[this.indice]['name']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Descripción:<span> "+eventosrecientes[this.indice]['descripcion']+"</li>";
+                }
+                else
+                {
+                    contenido += "<li class='list-group-item'><span class='titulo_dato_home'>Enfermedad:<span> "+eventosrecientes[this.indice]['name']+"</li>";
+                }
+                
+                contenido += "<li class='list-group-item'><span class='titulo_dato_home'>Usuario que Reporta:<span> "+eventosrecientes[this.indice]['alias']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Reportado el:<span> "+eventosrecientes[this.indice]['created_at']+"</li></ul>";
+                
+		//var contenido =  "<ul class='list-group'><li class='list-group-item'><span class='titulo_dato_home'>Tipo de reporte:<span> "+eventosrecientes[this.indice]['categoriaName']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Enfermedad:<span> "+eventosrecientes[this.indice]['name']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Usuario que Reporta:<span> "+eventosrecientes[this.indice]['alias']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Reportado el:<span> "+eventosrecientes[this.indice]['created_at']+"</li></ul>";
+			
+                        /*$('#info_evento_home img').fadeIn();*/
 			$('#info_evento_home').css('height','0px');
 			$('#info_evento_home').css('height','100%');
 			$('#cerrar_datos_reporte_home').fadeIn('slow');

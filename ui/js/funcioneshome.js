@@ -101,8 +101,20 @@ $(document).ready(function(){
 
 						/*var contenido =  "<ul><li><span class='titulo_dato_home'>Tipo de reporte:</span><span> "+x['objeto'][0][this.indice][0]['categoriaName']+"</span></li><li><span class='titulo_dato_home'>Enfermedad:</span><span> "+x['objeto'][0][this.indice][0]['name']+"</span></li><li><span class='titulo_dato_home'>Usuario que Reporta:</span><span> "+x['objeto'][0][this.indice][0]['alias']+"</span></li><li><span class='titulo_dato_home'>Reportado el:</span><span> "+x['objeto'][0][this.indice][0]['created_at']+"</span></li></ul>";*/
 
-var contenido =  "<ul class='list-group'><li class='list-group-item'><span class='titulo_dato_home'>Tipo de reporte:<span> "+x['objeto'][0][this.indice][0]['categoriaName']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Enfermedad:<span> "+x['objeto'][0][this.indice][0]['name']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Usuario que Reporta:<span> "+x['objeto'][0][this.indice][0]['alias']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Reportado el:<span> "+x['objeto'][0][this.indice][0]['created_at']+"</li></ul>";
+                                        //var contenido =  "<ul class='list-group'><li class='list-group-item'><span class='titulo_dato_home'>Tipo de reporte:<span> "+x['objeto'][0][this.indice][0]['categoriaName']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Enfermedad:<span> "+x['objeto'][0][this.indice][0]['name']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Usuario que Reporta:<span> "+x['objeto'][0][this.indice][0]['alias']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Reportado el:<span> "+x['objeto'][0][this.indice][0]['created_at']+"</li></ul>";
+                                        var contenido =  "<ul class='list-group'><li class='list-group-item'><span class='titulo_dato_home'>Tipo de reporte:<span> "+x['objeto'][0][this.indice][0]['categoriaName']+"</li>";
+                
+                                        if( x['objeto'][0][this.indice][0]['categoria_id'] == 2 )
+                                        {
+                                            contenido += "<li class='list-group-item'><span class='titulo_dato_home'>Tipo de Operativo:<span> "+x['objeto'][0][this.indice][0]['name']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Descripción:<span> "+eventosrecientes[this.indice]['descripcion']+"</li>";
+                                        }
+                                        else
+                                        {
+                                            contenido += "<li class='list-group-item'><span class='titulo_dato_home'>Enfermedad:<span> "+x['objeto'][0][this.indice][0]['name']+"</li>";
+                                        }
 
+                                        contenido += "<li class='list-group-item'><span class='titulo_dato_home'>Usuario que Reporta:<span> "+x['objeto'][0][this.indice][0]['alias']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Reportado el:<span> "+eventosrecientes[this.indice]['created_at']+"</li></ul>";
+                
 							/*$('#info_evento_home img').fadeIn();*/
 							$('#info_evento_home').css('height','0px');
 							$('#info_evento_home').css('height','100%');
@@ -249,8 +261,22 @@ function cargarEventos(){
 	
 					evento[j].on('click', function(){ 
 
-						var contenido =  "<ul><li><span class='titulo_dato_home'>Tipo de reporte:</span><span> "+x['objeto'][0][this.indice][0]['categoriaName']+"</span></li><li><span class='titulo_dato_home'>Enfermedad:</span><span> "+x['objeto'][0][this.indice][0]['name']+"</span></li><li><span class='titulo_dato_home'>Usuario que Reporta:</span><span> "+x['objeto'][0][this.indice][0]['alias']+"</span></li><li><span class='titulo_dato_home'>Reportado el:</span><span> "+x['objeto'][0][this.indice][0]['created_at']+"</span></li></ul>";
-							/*$('#info_evento_home img').fadeIn();*/
+						//var contenido =  "<ul><li><span class='titulo_dato_home'>Tipo de reporte:</span><span> "+x['objeto'][0][this.indice][0]['categoriaName']+"</span></li><li><span class='titulo_dato_home'>Enfermedad:</span><span> "+x['objeto'][0][this.indice][0]['name']+"</span></li><li><span class='titulo_dato_home'>Usuario que Reporta:</span><span> "+x['objeto'][0][this.indice][0]['alias']+"</span></li><li><span class='titulo_dato_home'>Reportado el:</span><span> "+x['objeto'][0][this.indice][0]['created_at']+"</span></li></ul>";
+							var contenido =  "<ul class='list-group'><li class='list-group-item'><span class='titulo_dato_home'>Tipo de reporte:<span> "+x['objeto'][0][this.indice][0]['categoriaName']+"</li>";
+                
+                                                        if( x['objeto'][0][this.indice][0]['categoria_id'] == 2 )
+                                                        {
+                                                            contenido += "<li class='list-group-item'><span class='titulo_dato_home'>Tipo de Operativo:<span> "+x['objeto'][0][this.indice][0]['name']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Descripción:<span> "+x['objeto'][0][this.indice][0]['descripcion']+"</li>";
+                                                        }
+                                                        else
+                                                        {
+                                                            contenido += "<li class='list-group-item'><span class='titulo_dato_home'>Enfermedad:<span> "+x['objeto'][0][this.indice][0]['name']+"</li>";
+                                                        }
+
+                                                        contenido += "<li class='list-group-item'><span class='titulo_dato_home'>Usuario que Reporta:<span> "+x['objeto'][0][this.indice][0]['alias']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Reportado el:<span> "+x['objeto'][0][this.indice][0]['created_at']+"</li></ul>";
+                                                        
+                                                        
+                                                        /*$('#info_evento_home img').fadeIn();*/
 							$('#info_evento_home').css('height','0px');
 							$('#info_evento_home').css('height','100%');
 							$('#cerrar_datos_reporte_home').fadeIn('slow');

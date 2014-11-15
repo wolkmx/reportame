@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-	//Funcion para cerrrar el formulario
+        //Funcion para cerrrar el formulario
 	$("#cerrar_formulario").click(function(){ $("#reporte_panel").hide(); });
 	
 	//Funcion para actualizar el mapa
@@ -44,7 +44,7 @@ $(document).ready(function(){
 				}
 				break;
 			default:
-				alert("Opción no valida");
+				alert("Opciï¿½n no valida");
 				break;
 		} 
 		
@@ -92,10 +92,14 @@ $(document).ready(function(){
  
   //Funcion para verificar el paso 3
  function pasoTres(event){
-	if($("#descripcion_reporte").val() == "" || $("#descripcion_reporte").val() == null ){
+     //--   Si es de tipo 'operativo'
+     if( $("#categoria_reporte").val() == 2 )
+     {
+         if($("#descripcion_reporte").val() == "" || $("#descripcion_reporte").val() == null ){
 		alert("Comparte un poco de informacion sobre este evento, hace cuanto lo detectaron, es recurrente, etc.");
 		return '0';
 	}
+     }	
  }
  
    //Funcion para verificar el paso 4
@@ -237,8 +241,20 @@ $(document).ready(function(){
 					evento[0] = L.marker([x['objeto'][0]["lat"], x['objeto'][0]["lon"]],{animate: true, icon: icono}).addTo(map);
 
 					//Se abre la informacion del evento
-					var contenido =  "<ul class='list-group'><li class='list-group-item'><span class='titulo_dato_home'>Tipo de reporte:<span> "+x['objeto'][0]["tipo_reporte"]+"</span></span></li><li class='list-group-item'><span class='titulo_dato_home'>Enfermedad:<span>"+x['objeto'][0]["enfermedad"]+"</span></span></li><li class='list-group-item'><span class='titulo_dato_home'>Usuario que Reporta:<span> "+x['objeto'][0]["usuario"]+"</span></span></li><li class='list-group-item'><span class='titulo_dato_home'>Reportado el:<span> "+x['objeto'][0]['created']+"</span></span></li></ul>";
-					/*$('#info_evento_home img').fadeIn();*/
+                            var contenido =  "<ul class='list-group'><li class='list-group-item'><span class='titulo_dato_home'>Tipo de reporte:<span> "+x['objeto'][0][this.indice][0]['categoriaName']+"</li>";
+                
+                                            if( x['objeto'][0][this.indice][0]['categoria_id'] == 2 )
+                                            {
+                                                contenido += "<li class='list-group-item'><span class='titulo_dato_home'>Tipo de Operativo:<span> "+x['objeto'][0][this.indice][0]['name']+"</li><li class='list-group-item'><span class='titulo_dato_home'>DescripciÃ³n:<span> "+x['objeto'][0][this.indice][0]['descripcion']+"</li>";
+                                            }
+                                            else
+                                            {
+                                                contenido += "<li class='list-group-item'><span class='titulo_dato_home'>Enfermedad:<span> "+x['objeto'][0][this.indice][0]['name']+"</li>";
+                                            }
+
+                                            contenido += "<li class='list-group-item'><span class='titulo_dato_home'>Usuario que Reporta:<span> "+x['objeto'][0][this.indice][0]['alias']+"</li><li class='list-group-item'><span class='titulo_dato_home'>Reportado el:<span> "+x['objeto'][0][this.indice][0]['created_at']+"</li></ul>";
+                                                        
+                                        /*$('#info_evento_home img').fadeIn();*/
 					$('#info_evento_home').css('height','0px');
 					$('#info_evento_home').css('height','100%');
 					$('#cerrar_datos_reporte_home').fadeIn('slow');

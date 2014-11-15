@@ -29,61 +29,69 @@ $f3->route('GET /user/new',
 //Home page
 $f3->route('GET @home: /',
     function($f3) use  ($db) {
-	//Se indica que el contenido del template lo tomara de home.html
-	$f3->set('content','home.html');
-	
-	/*@todo crear if inicio sesion para que vaya a su panel*/
-	
-	//Se realiza una consulta a la base de datos
-	//$f3->set('result',$db->exec('SELECT alias FROM usuario'));
-	
-	$user=new DB\SQL\Mapper($db,'Usuario');
-	$user->load(array('alias=?','wolkmx'));
-	
-	/*Se obtiene el arreglo de la sesion para saber si existe el key user*/
-	$sesion = $f3->get('SESSION');
-	/*Si no existe se declara nula*/
-	if(!array_key_exists("user",$sesion)){
-		$f3->set('usuario','');
-		//echo "entro";
-	}/*else{
-		echo "no entro--";
-		echo $f3->get('SESSION.user');
-	}*/
-	
-	/*echo "---<pre>";
-	print_r($sesion);
-	echo "</pre>---";*/
-	
-	$f3->set('nombre',$user);
-	
-	//Consulta a la base de datos para obtener una lista con los eventos
-	
-	$fechainicial = date ("Y-m-d H:i:s",time());
-	$fechaanterior = date('Y-m-d H:i:s', strtotime('-1 day', strtotime( date("Y-m-d H:i:s",time()) )));
-	
-	//Se hace una consulta para recuperar el evento, el perfil, la categoria y la enfermedad, asi como el usuario
-	//Esta consulta se debe simplificar solo obtener la informacion del evento y luego con ajax hacer una consulta especifica cuando se de clic en el evento.
-	/*$eventos = $db->exec('SELECT e.*, p.*, en.name, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario WHERE (e.created_at BETWEEN "'.$fechaanterior.'" AND "'.$fechainicial.'")');*/
-	
-	$eventos = $db->exec('SELECT e.*, p.*, en.name, en.imagePing, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario');
-	
-	$f3->set('eventosrecientes',$eventos);
-	
-	//echo count($eventos);
-	/*foreach($eventos as $evento):
-		echo $evento['idEvento'];
-	endforeach;
-	
-	
-	echo "<pre>";
-	print_r($eventos);
-	echo "</pre>";
-	die();*/
+    
+        //-- Se verifica si el usuario tiene la sesion iniciada
+        if( ('' !== $f3->get('SESSION.user')) && (NULL !== $f3->get('SESSION.user')))
+        {
+            $f3->reroute('@miPanel'); 
+        }
+        else
+        {
+            
+            //Se indica que el contenido del template lo tomara de home.html
+            $f3->set('content','home.html');
 
-	echo Template::instance()->render('layout.html');
-	
-	
+            /*@todo crear if inicio sesion para que vaya a su panel*/
+
+            //Se realiza una consulta a la base de datos
+            //$f3->set('result',$db->exec('SELECT alias FROM usuario'));
+
+            $user=new DB\SQL\Mapper($db,'Usuario');
+            $user->load(array('alias=?','wolkmx'));
+
+            /*Se obtiene el arreglo de la sesion para saber si existe el key user*/
+            $sesion = $f3->get('SESSION');
+            /*Si no existe se declara nula*/
+            if(!array_key_exists("user",$sesion)){
+                    $f3->set('usuario','');
+                    //echo "entro";
+            }/*else{
+                    echo "no entro--";
+                    echo $f3->get('SESSION.user');
+            }*/
+
+            /*echo "---<pre>";
+            print_r($sesion);
+            echo "</pre>---";*/
+
+            $f3->set('nombre',$user);
+
+            //Consulta a la base de datos para obtener una lista con los eventos
+
+            $fechainicial = date ("Y-m-d H:i:s",time());
+            $fechaanterior = date('Y-m-d H:i:s', strtotime('-1 day', strtotime( date("Y-m-d H:i:s",time()) )));
+
+            //Se hace una consulta para recuperar el evento, el perfil, la categoria y la enfermedad, asi como el usuario
+            //Esta consulta se debe simplificar solo obtener la informacion del evento y luego con ajax hacer una consulta especifica cuando se de clic en el evento.
+            /*$eventos = $db->exec('SELECT e.*, p.*, en.name, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario WHERE (e.created_at BETWEEN "'.$fechaanterior.'" AND "'.$fechainicial.'")');*/
+
+            $eventos = $db->exec('SELECT e.*, p.*, en.name, en.imagePing, c.name as categoriaName, u.alias FROM Evento AS e LEFT JOIN Perfil p ON e.perfil_id = p.idPerfil LEFT JOIN Enfermedad en ON e.enfermedad_id = en.idEnfermedad LEFT JOIN Categoria c ON e.categoria_id = c.idCategoria LEFT JOIN Usuario u ON e.usuario_id = u.idUsuario');
+
+            $f3->set('eventosrecientes',$eventos);
+
+            //echo count($eventos);
+            /*foreach($eventos as $evento):
+                    echo $evento['idEvento'];
+            endforeach;
+
+
+            echo "<pre>";
+            print_r($eventos);
+            echo "</pre>";
+            die();*/
+
+            echo Template::instance()->render('layout.html');
+        }
     }
 );
 
