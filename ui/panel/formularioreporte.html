@@ -1,5 +1,13 @@
 ﻿<!-- <span id="cerrar_formulario" style="border-radius: 7px; box-shadow: none;font: bold 131% sans-serif; padding: 0 6px 2px; position: relative;margin-top:9px;background-color: #2b91af; z-index: 100;float:right;" class='b-close'>X</span> -->
-
+<!--Calendario Dinamico-->
+<link href="lib/calendario_dw/calendario_dw-estilos.css" type="text/css" rel="STYLESHEET">
+<style type="text/css">
+body{
+        font-family: tahoma, verdana, sans-serif;
+}
+</style>
+<script type="text/javascript" src="lib/calendario_dw/calendario_dw.js"></script>
+<!--Calendario Dinamico-->
 <img src="../ui/images/close.png" style="cursor: pointer;
     float: right;margin: 0 0 1px;padding: 5px 5px 20px;
     position: absolute;right: 0;z-index:90;" id="cerrar_formulario" class='b-close'>
@@ -84,9 +92,7 @@
 				<p><strong>Datos obligatorios:</strong><p>
 				<p><input id="opcion_mujer" type="radio" name="sexo" value="0"> Mujer<br>
 				<input id="opcion_hombre" type="radio" name="sexo" value="1" checked>Hombre</p>
-                                    
-                                <p>Cumpleaños:<input placeholder="1990-12-30" type="text" id="cumple_reporte"></p>
-				
+				<p>Cumpleaños:<input placeholder="1990-12-30" type="text" id="cumple_reporte" class="campofecha"></p>
 				<p>Pais:<input placeholder="Pais" type="text" id="pais_reporte"></p>
 				<p>Ciudad:<input placeholder="Cuidad" type="text" id="ciudad_reporte"></p>
 				<p>Municipio:<input placeholder="Municipio" type="text" id="municipio_reporte"></p>
@@ -114,3 +120,9 @@
 		</div>
 </form>
 	<button type="button" id='cerrar_datos_reporte_home' class="btn btn-default" style='display:none;'>Cerrar</button>
+
+<script type="text/javascript">
+$(document).ready(function(){
+        $(".campofecha").calendarioDW();
+})
+</script>
